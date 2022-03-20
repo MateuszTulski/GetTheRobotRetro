@@ -1,11 +1,9 @@
 #include "App.h"
 #include "GameScene.h"
-#include "ArcadeScene.h"
-#include "BreakOutGame.h"
-#include <memory>
 #include "InputController.h"
 #include <cassert>
 #include <iostream>
+#include <memory>
 
 App& App::Singleton(){
 	static App theApp;
@@ -16,10 +14,6 @@ bool App::Init(uint32_t width, uint32_t height, uint32_t mag){
 
 //	std::unique_ptr<ArcadeScene> arcadeScene = std::make_unique<ArcadeScene>();
 //	PushScene(std::move(arcadeScene));
-	// TEMP
-	std::unique_ptr<BreakOutGame> breakoutGame = std::make_unique<BreakOutGame>();
-	std::unique_ptr<GameScene> breakoutScene = std::make_unique<GameScene>(std::move(breakoutGame));
-	PushScene(std::move(breakoutScene));
 
 	return mnoptrWindow != nullptr;
 }
@@ -75,7 +69,7 @@ void App::PushScene(std::unique_ptr<Scene> scene){
 		// Set GameController
 		mInputController.SetGameController(scene->GetGameController());
 		// Set title
-		SDL_SetWindowTitle(mnoptrWindow, scene->GetSceneName().c_str());
+//		SDL_SetWindowTitle(mnoptrWindow, scene->GetSceneName().c_str());
 		// Push scene to the stack
 		mSceneStack.emplace_back(std::move(scene));
 	}
@@ -86,7 +80,7 @@ void App::PopScene(){
 	}
 	if(TopScene()){
 		mInputController.SetGameController(TopScene()->GetGameController());
-		SDL_SetWindowTitle(mnoptrWindow, TopScene()->GetSceneName().c_str());
+//		SDL_SetWindowTitle(mnoptrWindow, TopScene()->GetSceneName().c_str());
 	}
 }
 Scene* App::TopScene(){	// Current
