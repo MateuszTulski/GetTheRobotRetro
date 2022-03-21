@@ -10,12 +10,15 @@ class BoundaryEdge;
 class Player : public Rigidbody {
 public:
 	Player();
+	void Init(const Vec2D& startPosition);
 	void Update(uint32_t deltaTime);
 	void Draw(Screen& screen);
 	void MakeFlushWithEdge(const BoundaryEdge& edge, Vec2D& point, bool limitToEdge);
 
 	void Run();
 	void Jump(const BoundaryEdge& edge);
+	void SetPosition(Vec2D bottomMiddlePoint);
+
 private:
 	const float RUN_SPEED = 50.0f;
 	const float MASS = 50.0f;

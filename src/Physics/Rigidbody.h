@@ -5,13 +5,20 @@
 #include "AARectangle.h"
 #include "Excluder.h"
 #include "Vec2D.h"
+#include "Screen.h"
 
 class Rigidbody : public Excluder{
 public:
 	Rigidbody();
 	Rigidbody(AARectangle rect, float mass, bool useGravity = true, bool isCollider = true);
+
+	//// TEMP
+	inline void Draw(Screen& screen){ screen.Draw(mAARect, Color::Red(), true, Color::Red());}
+
+	bool operator==(const Rigidbody& other);
+
 	void Init(AARectangle rect, float mass, bool useGravity = true, bool isCollider = true);
-	void Update(uint32_t deltaTime);
+	void UpdateRigdbody(uint32_t deltaTime);
 
 	void MakeFlushWithEdge(const BoundaryEdge& edge);
 
@@ -27,11 +34,17 @@ public:
 	inline void SetCollider(bool on) {mIsCollider = on;}
 	inline void SetGravity(bool use) {mUseGravity = use;}
 
+	inline int GetRigidbodyID() const {return mID;}
+
+	static int InitializedRigidbody;
+
 private:
 	Vec2D mVelocity;
 	bool mUseGravity;
 	bool mIsCollider;
 	float mMass;
+	int mID;
+	int test = 0;
 };
 
 

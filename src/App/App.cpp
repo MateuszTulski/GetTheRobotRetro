@@ -69,7 +69,7 @@ void App::PushScene(std::unique_ptr<Scene> scene){
 		// Set GameController
 		mInputController.SetGameController(scene->GetGameController());
 		// Set title
-//		SDL_SetWindowTitle(mnoptrWindow, scene->GetSceneName().c_str());
+		SDL_SetWindowTitle(mnoptrWindow, scene->GetSceneName().c_str());
 		// Push scene to the stack
 		mSceneStack.emplace_back(std::move(scene));
 	}
