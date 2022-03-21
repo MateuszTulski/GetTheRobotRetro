@@ -12,8 +12,8 @@ App& App::Singleton(){
 bool App::Init(uint32_t width, uint32_t height, uint32_t mag){
 	mnoptrWindow = mScreen.Init(width, height, mag);
 
-//	std::unique_ptr<ArcadeScene> arcadeScene = std::make_unique<ArcadeScene>();
-//	PushScene(std::move(arcadeScene));
+	std::unique_ptr<GameScene> gameScene = std::make_unique<GameScene>();
+	PushScene(std::move(gameScene));
 
 	return mnoptrWindow != nullptr;
 }

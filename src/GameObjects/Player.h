@@ -7,8 +7,9 @@
 class Screen;
 class BoundaryEdge;
 
-class Player {
+class Player : public Rigidbody {
 public:
+	Player();
 	void Update(uint32_t deltaTime);
 	void Draw(Screen& screen);
 	void MakeFlushWithEdge(const BoundaryEdge& edge, Vec2D& point, bool limitToEdge);
@@ -16,10 +17,11 @@ public:
 	void Run();
 	void Jump(const BoundaryEdge& edge);
 private:
-	Rigidbody mRigidbody;
-	AARectangle mBoundary;
-	const float mRunSpeed = 50.0f;
-	const float mMass = 50.0f;
+	const float RUN_SPEED = 50.0f;
+	const float MASS = 50.0f;
+	const float WIDTH = 24;
+	const float HEIGHT = 56;
+	const AARectangle PLAYER_RECT = {Vec2D::Zero, WIDTH, HEIGHT};
 };
 
 

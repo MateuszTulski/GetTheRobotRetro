@@ -14,10 +14,10 @@ public:
 	void MoveBy(const Vec2D& delta);
 	void MoveTo(const Vec2D& point);
 	const BoundaryEdge& GetEdge(EdgeType edge) const;
-
+protected:
+	AARectangle mAARect;
 private:
 	void SetUpEdges();
-	AARectangle mAARect;
 	BoundaryEdge mEdges[NUM_EDGES];
 	bool mReverseNormals;
 };

@@ -3,26 +3,35 @@
 
 #include <stdint.h>
 #include "AARectangle.h"
+#include "Excluder.h"
 #include "Vec2D.h"
 
-class Rigidbody{
+class Rigidbody : public Excluder{
 public:
 	Rigidbody();
-	void Init(const AARectangle& rect, const float& mass, bool isKinematic);
-	void Update(uint32_t deltaTime, const Vec2D position);
-	Vec2D GetPhysicsMoveResult(const Vec2D offset) const;
+	Rigidbody(AARectangle rect, float mass, bool useGravity = true, bool isCollider = true);
+	void Init(AARectangle rect, float mass, bool useGravity = true, bool isCollider = true);
+	void Update(uint32_t deltaTime);
+
+	void MakeFlushWithEdge(const BoundaryEdge& edge);
 
 	void AddForce(const Vec2D& force);
-	void SetVelocity(const Vec2D& velocity);
+	void AddGravityForce(const float gravity);
+	void SetHorizontalVelocity(float velocity);
 	inline Vec2D GetVelocity() const {return mVelocity;}
-	void Stop();
+	void StopOnObstacle(const Vec2D normal);
 
+	inline bool IsCollider() const {return mIsCollider;}
+	inline bool IsUseingGravity() const {return mUseGravity;}
+
+	inline void SetCollider(bool on) {mIsCollider = on;}
+	inline void SetGravity(bool use) {mUseGravity = use;}
 
 private:
-	AARectangle mAARect;
 	Vec2D mVelocity;
+	bool mUseGravity;
+	bool mIsCollider;
 	float mMass;
-	bool mIsKinematic;
 };
 
 
