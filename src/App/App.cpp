@@ -1,5 +1,6 @@
 #include "App.h"
 #include "GameScene.h"
+#include "PursuitScene.h"
 #include "InputController.h"
 #include <cassert>
 #include <iostream>
@@ -12,8 +13,10 @@ App& App::Singleton(){
 bool App::Init(uint32_t width, uint32_t height, uint32_t mag){
 	mnoptrWindow = mScreen.Init(width, height, mag);
 
-	std::unique_ptr<GameScene> gameScene = std::make_unique<GameScene>();
-	PushScene(std::move(gameScene));
+//	std::unique_ptr<GameScene> gameScene = std::make_unique<GameScene>();
+
+	std::unique_ptr<PursuitScene> pursuitScene = std::make_unique<PursuitScene>();
+	PushScene(std::move(pursuitScene));
 
 	return mnoptrWindow != nullptr;
 }
@@ -80,7 +83,7 @@ void App::PopScene(){
 	}
 	if(TopScene()){
 		mInputController.SetGameController(TopScene()->GetGameController());
-//		SDL_SetWindowTitle(mnoptrWindow, TopScene()->GetSceneName().c_str());
+		SDL_SetWindowTitle(mnoptrWindow, TopScene()->GetSceneName().c_str());
 	}
 }
 Scene* App::TopScene(){	// Current

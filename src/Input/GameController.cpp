@@ -55,6 +55,10 @@ InputKey GameController::DownKey(){
 	return static_cast<InputKey>(SDLK_DOWN);
 }
 
+InputKey GameController::JumpKey(){
+	return static_cast<InputKey>(SDLK_SPACE);
+}
+
 MouseButton GameController::LeftMouseButton(){
 	return static_cast<MouseButton>(SDL_BUTTON_LEFT);
 }

@@ -2,13 +2,12 @@
 #define SCENES_GAMESCENE_H_
 
 #include "Scene.h"
-#include "PhysicsWorld.h"
-#include "Player.h"
+#include "Game.h"
 #include <memory>
 
 class GameScene : public Scene{
 public:
-	GameScene();
+	GameScene(std::unique_ptr<Scene> optrGame);
 	virtual ~GameScene(){};
 	void Init() override;
 	void Update(uint32_t deltaTime) override;
@@ -16,10 +15,7 @@ public:
 
 	const std::string& GetSceneName() const override;
 private:
-	PhysicsWorld world;
-	Player mPlayer;
-	Rigidbody floor;
-	void ResetGame();
+	std::unique_ptr<Scene> mGame;
 };
 
 #endif /* SCENES_GAMESCENE_H_ */

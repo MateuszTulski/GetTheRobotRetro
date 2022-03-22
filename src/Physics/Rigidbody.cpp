@@ -14,6 +14,16 @@ Rigidbody::Rigidbody(AARectangle rect, float mass, bool useGravity, bool isColli
 	Excluder::Init(rect);
 }
 
+Rigidbody::~Rigidbody(){
+	if(mUseGravity){
+		PhysicsWorld::Singleton().RemoveKinematicRigidbody(this);
+	}else{
+		PhysicsWorld::Singleton().RemoveStaticRigidbody(this);
+	}
+
+//	PhysicsWorld::Singleton().
+}
+
 bool Rigidbody::operator==(const Rigidbody& other){
 	return this->mID == other.GetRigidbodyID();
 }
@@ -24,7 +34,12 @@ void Rigidbody::Init(AARectangle rect, float mass, bool useGravity, bool isColli
 	mMass = mass;
 	Excluder::Init(rect);
 	// Add this rigigbody to the world
-	PhysicsWorld::Singleton().AddKinematicRigidbody(this);
+	if(mUseGravity){
+		PhysicsWorld::Singleton().AddKinematicRigidbody(this);
+	}else{
+		PhysicsWorld::Singleton().AddStaticRigidbody(this);
+	}
+
 }
 
 void Rigidbody::UpdateRigdbody(uint32_t deltaTime){
@@ -33,8 +48,6 @@ void Rigidbody::UpdateRigdbody(uint32_t deltaTime){
 	}
 	// Move rigidbody  based on last frame velocity
 	Vec2D offset = mVelocity * MilisecondsToSeconds(deltaTime);
-
-	MoveBy(offset);
 
 	BoundaryEdge collisionEdge;		// Save collision edge if there is a collision
 
@@ -46,27 +59,37 @@ void Rigidbody::UpdateRigdbody(uint32_t deltaTime){
 				StopOnObstacle(collisionEdge.normal);
 				return;
 			}
+			// Check collision after offset
+			Excluder offsetRect;
+			offsetRect.Init(GetAARectangle());
+			offsetRect.MoveBy(offset);
+			if(offsetRect.HasCollided(collider->GetAARectangle(), collisionEdge)){
+				// Movement will cause a collision! Return
+				StopOnObstacle(collisionEdge.normal);
+				return;
+			}
 		}
 	}
+	MoveBy(offset);
 }
 
 void Rigidbody::MakeFlushWithEdge(const BoundaryEdge& edge){
 
 	if(edge.normal == DIR_UP)
 	{
-		MoveTo(Vec2D(mAARect.GetTopLeft().GetX(), edge.edge.GetP0().GetY() - mAARect.GetHeight() - 3));
+		MoveTo(Vec2D(mAARect.GetTopLeft().GetX(), edge.edge.GetP0().GetY() - mAARect.GetHeight() - COLLISION_OFFSET));
 	}
 	else if(edge.normal == DIR_DOWN)
 	{
-		MoveTo(Vec2D(mAARect.GetTopLeft().GetX(), edge.edge.GetP0().GetY() + 1));
+		MoveTo(Vec2D(mAARect.GetTopLeft().GetX(), edge.edge.GetP0().GetY() + COLLISION_OFFSET));
 	}
 	else if(edge.normal == DIR_LEFT)
 	{
-		MoveTo(Vec2D(edge.edge.GetP0().GetX() - mAARect.GetWidth() - 1, mAARect.GetTopLeft().GetY()));
+		MoveTo(Vec2D(edge.edge.GetP0().GetX() - mAARect.GetWidth() - COLLISION_OFFSET, mAARect.GetTopLeft().GetY()));
 	}
 	else if(edge.normal == DIR_RIGHT)
 	{
-		MoveTo(Vec2D(edge.edge.GetP0().GetX() + 1, mAARect.GetTopLeft().GetY()));
+		MoveTo(Vec2D(edge.edge.GetP0().GetX() + COLLISION_OFFSET, mAARect.GetTopLeft().GetY()));
 	}
 
 }
@@ -88,6 +111,7 @@ void Rigidbody::AddGravityForce(const float gravity){
 
 void Rigidbody::SetHorizontalVelocity(float velocity){
 	mVelocity.SetX(velocity);
+	std::cout << mVelocity << std::endl;
 }
 
 void Rigidbody::StopOnObstacle(const Vec2D normal){

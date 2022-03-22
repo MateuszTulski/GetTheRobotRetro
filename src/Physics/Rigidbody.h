@@ -11,6 +11,7 @@ class Rigidbody : public Excluder{
 public:
 	Rigidbody();
 	Rigidbody(AARectangle rect, float mass, bool useGravity = true, bool isCollider = true);
+	~Rigidbody();
 
 	//// TEMP
 	inline void Draw(Screen& screen){ screen.Draw(mAARect, Color::Red(), true, Color::Red());}
@@ -45,6 +46,8 @@ private:
 	float mMass;
 	int mID;
 	int test = 0;
+
+	float const COLLISION_OFFSET = 0.5f;
 };
 
 

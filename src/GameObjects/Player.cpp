@@ -2,7 +2,7 @@
 #include "Color.h"
 #include "Screen.h"
 
-Player::Player(){
+Player::Player() : mJumpPressed(false){
 	Rigidbody::Init(PLAYER_RECT, MASS, true, true);
 }
 
@@ -12,6 +12,17 @@ void Player::Init(const Vec2D& startPosition){
 }
 
 void Player::Update(uint32_t deltaTime){
+	if(RIGHT_KEY_PRESSED && !LEFT_KEY_PRESSED){
+		SetHorizontalVelocity(200);
+	}
+	else if(LEFT_KEY_PRESSED && !RIGHT_KEY_PRESSED)
+	{
+		SetHorizontalVelocity(-200);
+	}
+	else
+	{
+		SetHorizontalVelocity(0);
+	}
 
 }
 
@@ -23,12 +34,38 @@ void Player::MakeFlushWithEdge(const BoundaryEdge& edge, Vec2D& point, bool limi
 
 }
 
-void Player::Run(){
+void Player::Run(signed int direction, bool released){
 
+	// Set right or left key (depending on direction)
+	if(direction > 0){
+		if(!RIGHT_KEY_PRESSED && !released){
+			RIGHT_KEY_PRESSED = true;
+		}else if(released){
+			RIGHT_KEY_PRESSED = false;
+		}
+	}
+	else
+	{
+		if(!LEFT_KEY_PRESSED && !released){
+			LEFT_KEY_PRESSED = true;
+		}else if(released){
+			LEFT_KEY_PRESSED = false;
+		}
+	}
 }
 
-void Player::Jump(const BoundaryEdge& edge){
-
+void Player::Jump(bool jumpPressed)
+{
+	if(jumpPressed && !mJumpPressed)
+	{
+		mJumpPressed = true;
+		AddForce(Vec2D(0, -10000));
+	}
+	else if(!jumpPressed)
+	{
+		// False means jump button have been released
+		mJumpPressed = false;
+	}
 }
 
 void Player::SetPosition(Vec2D bottomMiddlePoint){

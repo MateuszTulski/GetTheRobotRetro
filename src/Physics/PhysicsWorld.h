@@ -16,6 +16,9 @@ public:
 	inline void AddStaticRigidbody(Rigidbody* rigidbody) {mStaticRB.push_back(rigidbody);}
 	inline void AddKinematicRigidbody(Rigidbody* rigidbody) {mKinematicRB.push_back(rigidbody);}
 
+	void RemoveStaticRigidbody(const Rigidbody* rigidbody);
+	void RemoveKinematicRigidbody(const Rigidbody* rigidbody);
+
 	inline std::vector<Rigidbody*> GetStaticRigidbodyObjects() {return mStaticRB;}
 	inline std::vector<Rigidbody*> GetKinematicRigidbodyObjects() {return mKinematicRB;}
 	std::vector<Rigidbody*> GetAllRigidbodyObjects();

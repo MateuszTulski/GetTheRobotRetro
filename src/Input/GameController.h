@@ -21,6 +21,7 @@ public:
 	static InputKey RightKey();
 	static InputKey UpKey();
 	static InputKey DownKey();
+	static InputKey JumpKey();
 
 	static MouseButton LeftMouseButton();
 	static MouseButton RigthMouseButton();
