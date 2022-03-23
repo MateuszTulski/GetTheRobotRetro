@@ -1,6 +1,8 @@
 #ifndef _UTILS_H_
 #define _UTILS_H_
 
+#include <string>
+
 static const float EPSILON = 0.0001f;
 
 static const float PI = 3.14159265359;
@@ -13,5 +15,9 @@ bool IsGreaterThanOrEqual(float x, float y);
 bool IsLessThanOrEqual(float x, float y);
 
 float MilisecondsToSeconds(unsigned int miliseconds);
+
+int GetPixelIndex(unsigned int col, unsigned int row, unsigned int imgWidth);
+
+std::string StringToUpper(const std::string& inputString);
 
 #endif

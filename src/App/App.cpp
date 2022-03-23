@@ -92,3 +92,9 @@ Scene* App::TopScene(){	// Current
 	}
 	return mSceneStack.back().get();
 }
+
+const std::string& App::GetBasePath()
+{
+	static std::string path = "src/";
+	return path;
+}

@@ -1,4 +1,5 @@
 #include "PursuitScene.h"
+#include "BMPImage.h"
 #include "App.h"
 #include <stdint.h>
 
@@ -52,6 +53,16 @@ void PursuitScene::Init(){
 	AARectangle floorRec(Vec2D(0, App::Singleton().GetHeight()-20), Vec2D(App::Singleton().GetWidht(), App::Singleton().GetHeight()));
 	floor.Init(floorRec, 0, false, true);
 
+	//////// ---- TEMP --------- ///////////
+	BMPImage image;
+	if(image.LoadImage("src/Assets/HemiFont.bmp")){
+//	if(image.LoadImage("src/Assets/wallpaper.bmp")){
+		mImage = image;
+	}
+
+	SpriteSheet sheet;
+	sheet.LoadSprite("HemiFont");
+	sheet.GetSprite("g");
 }
 
 void PursuitScene::Update(uint32_t deltaTime){
@@ -62,6 +73,7 @@ void PursuitScene::Update(uint32_t deltaTime){
 void PursuitScene::Draw(Screen& screen){
 	mPlayer.Draw(screen);
 	floor.Draw(screen);
+	screen.Draw(mImage, Vec2D(0, 0));
 }
 
 const std::string& PursuitScene::GetSceneName() const{

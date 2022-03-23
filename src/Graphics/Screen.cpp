@@ -1,19 +1,47 @@
-#include <iostream>
 #include <cassert>
 #include <algorithm>
+#include "Utils.h"
 #include "Screen.h"
+#include "Vec2D.h"
+#include "Line2D.h"
+#include "Color.h"
+#include "Shape.h"
+#include "Circle.h"
+#include "BMPImage.h"
 
-Screen::Screen() : mWidth{0}, mHeight{}, moptrWindow{nullptr}, mnoptrWindowSurface{nullptr}{}
+Screen::Screen() : mWidth(0), mHeight(0), moptrWindow(nullptr), mnoptrWindowSurface(nullptr), mRenderer(nullptr), mPixelFormat(nullptr), mTexture(nullptr), mFast(true){
+
+}
+
 Screen::~Screen(){
-	assert(moptrWindow);
+
+	if(mPixelFormat){
+		SDL_FreeFormat(mPixelFormat);
+		mPixelFormat = nullptr;
+	}
+
+	if(mTexture){
+		SDL_DestroyTexture(mTexture);
+		mTexture = nullptr;
+	}
+
+	if(mRenderer){
+		SDL_DestroyRenderer(mRenderer);
+		mRenderer = nullptr;
+	}
+
 	if(moptrWindow){
 		SDL_DestroyWindow(moptrWindow);
 	}
 	SDL_Quit();
 }
 
-SDL_Window* Screen::Init(uint32_t windowWidth, uint32_t windowHeight, uint32_t mag){
-	if(SDL_Init(SDL_INIT_VIDEO)){
+SDL_Window* Screen::Init(uint32_t windowWidth, uint32_t windowHeight, uint32_t mag, bool fast)
+{
+	mFast = fast;
+
+	if(SDL_Init(SDL_INIT_VIDEO))
+	{
 		std::cout << "SDL Init failed!" << std::endl;
 		return nullptr;
 	}
@@ -24,35 +52,93 @@ SDL_Window* Screen::Init(uint32_t windowWidth, uint32_t windowHeight, uint32_t m
 	mHeight = windowHeight;
 
 	// Check that the window was successfully created
-	if (moptrWindow == nullptr) {
+	if (moptrWindow == nullptr)
+	{
 		// In the case that the window could not be made...
 		std::cout << "Could not create window: %s\n: " << SDL_GetError() << std::endl;
 		return nullptr;
 	}
-	if(moptrWindow){
-		mnoptrWindowSurface = SDL_GetWindowSurface(moptrWindow);
 
-		SDL_PixelFormat * pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
-		Color::InitColorFormat(pixelFormat);
+	if(moptrWindow)
+	{
+		uint8_t rClear = 0;
+		uint8_t gClear = 0;
+		uint8_t bClear = 0;
+		uint8_t aClear = 255;
 
-		mClearColor = Color::Black();
-		mBackBuffer.Init(pixelFormat->format, windowWidth, windowHeight);
+		if(mFast)
+		{
+			mRenderer = SDL_CreateRenderer(moptrWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+			if(mRenderer == nullptr)
+			{
+				std::cout << "Creating renderer faild!" << std::endl;
+			}
+
+			SDL_SetRenderDrawColor(mRenderer, rClear, gClear, bClear, aClear);
+		}
+		else
+		{
+			mnoptrWindowSurface = SDL_GetWindowSurface(moptrWindow);
+		}
+
+		mPixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
+
+		if(mFast)
+		{
+			mTexture = SDL_CreateTexture(mRenderer, mPixelFormat->format, SDL_TEXTUREACCESS_STREAMING, windowWidth, windowHeight);
+		}
+
+		Color::InitColorFormat(mPixelFormat);
+
+		mClearColor = Color(rClear, gClear, bClear, aClear);
+
+		mBackBuffer.Init(mPixelFormat->format, mWidth, mHeight);
+
 		mBackBuffer.Clear(mClearColor);
+
 	}
 	return moptrWindow;
 }
-void Screen::SwapScreens(){
+
+void Screen::SwapScreens()
+{
 	assert(moptrWindow);
-	if(moptrWindow){
+	if(moptrWindow)
+	{
 		// Clear front screen
 		ClearScreen();
-		// Copy pixels from back buffer to front
-		SDL_BlitScaled(mBackBuffer.GetSurface(), nullptr, mnoptrWindowSurface, nullptr);
-		SDL_UpdateWindowSurface(moptrWindow);
+
+		if(mFast)
+		{
+			uint8_t* textureData = nullptr;
+			int texturePitch = 0;
+
+			if(SDL_LockTexture(mTexture, nullptr, (void**)&textureData, &texturePitch) >= 0)
+			{
+				SDL_Surface* surface = mBackBuffer.GetSurface();
+
+				memcpy(textureData, surface->pixels, surface->w* surface->h * mPixelFormat->BytesPerPixel);
+
+				SDL_UnlockTexture(mTexture);
+
+				SDL_RenderCopy(mRenderer, mTexture, nullptr, nullptr);
+
+				SDL_RenderPresent(mRenderer);
+			}
+		}
+		else
+		{
+			// Copy pixels from back buffer to front
+			SDL_BlitScaled(mBackBuffer.GetSurface(), nullptr, mnoptrWindowSurface, nullptr);
+			SDL_UpdateWindowSurface(moptrWindow);
+		}
+
 		// Clear back buffer
 		mBackBuffer.Clear(mClearColor);
 	}
 }
+
 // Draw Methods
 void Screen::Draw(int x, int y, const Color& color){
 
@@ -61,12 +147,14 @@ void Screen::Draw(int x, int y, const Color& color){
 		mBackBuffer.SetPixel(color, x, y);
 	}
 }
+
 void Screen::Draw(const Vec2D& vec, const Color& color){
 	assert(moptrWindow);
 	if(moptrWindow){
 		mBackBuffer.SetPixel(color, vec.GetX(), vec.GetY());
 	}
 }
+
 void Screen::Draw(const Line2D& line, const Color& color){
 	assert(moptrWindow);
 	if(moptrWindow){
@@ -122,6 +210,7 @@ void Screen::Draw(const Line2D& line, const Color& color){
 		}
 	}
 }
+
 void Screen::Draw(const Shape& shape, const Color& color, bool fillShape, const Color& fillColor){
 
 	if(fillShape){
@@ -140,6 +229,7 @@ void Screen::Draw(const Shape& shape, const Color& color, bool fillShape, const 
 		Draw(line, color);
 	}
 }
+
 void Screen::Draw(const Circle& circle, const Color& color, bool fillShape, const Color& fillColor){
 
 	unsigned const int numberOfSegments = 30;
@@ -172,6 +262,31 @@ void Screen::Draw(const Circle& circle, const Color& color, bool fillShape, cons
 		FillPoly(points, fillColor);
 	}
 
+}
+
+void Screen::Draw(const BMPImage& image, const Vec2D& position)
+{
+	uint32_t rows = image.GetImageHeight();
+	uint32_t columns = image.GetImageWidth();
+
+	unsigned int index = 0;
+
+	const std::vector<Color>& pixels = image.GetPixels();
+
+	for(uint32_t r = 0; r < rows; ++r)
+	{
+		for(uint32_t c = 0; c < columns; ++c)
+		{
+
+			Color color = pixels[index];
+
+			int pixelX = position.GetX() + c;
+			int pixelY = position.GetY() + r;
+
+			Draw(pixelX, pixelY, color);
+			++index;
+		}
+	}
 }
 
 void Screen::FillPoly(const std::vector<Vec2D>& points, const Color& color){
@@ -254,7 +369,14 @@ void Screen::FillPoly(const std::vector<Vec2D>& points, const Color& color){
 
 }
 
-
-void Screen::ClearScreen(){
-	SDL_FillRect(mnoptrWindowSurface, nullptr, mClearColor.GetPixelColor());
+void Screen::ClearScreen()
+{
+	if(mFast)
+	{
+		SDL_RenderClear(mRenderer);
+	}
+	else
+	{
+		SDL_FillRect(mnoptrWindowSurface, nullptr, mClearColor.GetPixelColor());
+	}
 }

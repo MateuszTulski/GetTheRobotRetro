@@ -1,0 +1,53 @@
+:key A
+:xPos 0
+:yPos 0
+:width 29
+:height 33
+
+:key B
+:xPos 39
+:yPos 0
+:width 30
+:height 33
+
+:key C
+:xPos 75
+:yPos 0
+:width 28
+:height 33
+
+:key D
+:xPos 107
+:yPos 0
+:width 32
+:height 33
+
+:key E
+:xPos 144
+:yPos 0
+:width 30
+:height 33
+
+:key F
+:xPos 178
+:yPos 0
+:width 30
+:height 33
+
+:key G
+:xPos 212
+:yPos 0
+:width 30
+:height 33
+
+:key H
+:xPos 247
+:yPos 0
+:width 33
+:height 33
+
+:key I
+:xPos 285
+:yPos 0
+:width 14
+:height 33

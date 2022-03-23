@@ -111,7 +111,6 @@ void Rigidbody::AddGravityForce(const float gravity){
 
 void Rigidbody::SetHorizontalVelocity(float velocity){
 	mVelocity.SetX(velocity);
-	std::cout << mVelocity << std::endl;
 }
 
 void Rigidbody::StopOnObstacle(const Vec2D normal){
