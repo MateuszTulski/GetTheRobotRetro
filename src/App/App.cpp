@@ -1,5 +1,4 @@
 #include "App.h"
-#include "GameScene.h"
 #include "PursuitScene.h"
 #include "InputController.h"
 #include <cassert>
@@ -10,7 +9,12 @@ App& App::Singleton(){
 	static App theApp;
 	return theApp;
 }
-bool App::Init(uint32_t width, uint32_t height, uint32_t mag){
+bool App::Init(uint32_t width, uint32_t height, uint32_t mag)
+{
+	if(!mFont.LoadFont("HemiFont")){
+		return false;
+	}
+
 	mnoptrWindow = mScreen.Init(width, height, mag);
 
 //	std::unique_ptr<GameScene> gameScene = std::make_unique<GameScene>();
@@ -29,7 +33,7 @@ void App::Run(){
 	uint32_t deltaTime = 10;
 	uint32_t accumulator = 0;
 
-	mInputController.Init([&running](uint32_t deltaTime, InputState state){
+	mInputController.InitInputController([&running](uint32_t deltaTime, InputState state){
 		running = false;
 	});
 

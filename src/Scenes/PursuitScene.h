@@ -17,7 +17,7 @@ public:
 
 	const std::string& GetSceneName() const override;
 private:
-	BMPImage mImage;
+	SpriteSheet mSprite;
 	PhysicsWorld world;
 	Player mPlayer;
 	Rigidbody floor;

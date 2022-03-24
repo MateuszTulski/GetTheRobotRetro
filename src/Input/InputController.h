@@ -9,7 +9,7 @@ class InputController{
 
 public:
 	InputController();
-	void Init(InputAction quitAction);
+	void InitInputController(InputAction quitAction);
 	void Update(uint32_t deltaTime);
 	void SetGameController(GameController* controller);
 

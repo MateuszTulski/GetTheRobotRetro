@@ -1,5 +1,4 @@
 #include "AARectangle.h"
-#include <iostream>
 
 AARectangle::AARectangle(): AARectangle(Vec2D::Zero, Vec2D::Zero){};
 AARectangle::AARectangle(const Vec2D& topLeft, const Vec2D& bottomRight){

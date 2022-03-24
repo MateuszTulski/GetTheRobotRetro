@@ -20,4 +20,8 @@ int GetPixelIndex(unsigned int col, unsigned int row, unsigned int imgWidth);
 
 std::string StringToUpper(const std::string& inputString);
 
+struct Size{
+	unsigned int width = 0, height = 0;
+};
+
 #endif

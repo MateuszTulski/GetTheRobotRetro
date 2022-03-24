@@ -1,5 +1,6 @@
 #include "PursuitScene.h"
 #include "BMPImage.h"
+#include "BitmapFont.h"
 #include "App.h"
 #include <stdint.h>
 
@@ -14,7 +15,7 @@ void PursuitScene::Init(){
 
 		mPlayer.Jump(true);
 
-		if(GameController::IsReleased(state)){
+		if(GameController::IsReleased(state)){ // @suppress("Ambiguous problem")
 			mPlayer.Jump(false);
 		}
 	};
@@ -27,7 +28,7 @@ void PursuitScene::Init(){
 
 		mPlayer.Run(1);
 
-		if(GameController::IsReleased(state)){
+		if(GameController::IsReleased(state)){ // @suppress("Ambiguous problem")
 			mPlayer.Run(1, true);
 		}
 	};
@@ -40,7 +41,7 @@ void PursuitScene::Init(){
 
 		mPlayer.Run(-1);
 
-		if(GameController::IsReleased(state)){
+		if(GameController::IsReleased(state)){ // @suppress("Ambiguous problem")
 			mPlayer.Run(-1, true);
 		}
 	};
@@ -54,29 +55,30 @@ void PursuitScene::Init(){
 	floor.Init(floorRec, 0, false, true);
 
 	//////// ---- TEMP --------- ///////////
-	BMPImage image;
-	if(image.LoadImage("src/Assets/HemiFont.bmp")){
-//	if(image.LoadImage("src/Assets/wallpaper.bmp")){
-		mImage = image;
-	}
+	mSprite.LoadSprite("HemiFont");
 
-	SpriteSheet sheet;
-	sheet.LoadSprite("HemiFont");
-	sheet.GetSprite("g");
 }
 
-void PursuitScene::Update(uint32_t deltaTime){
+void PursuitScene::Update(uint32_t deltaTime)
+{
 	PhysicsWorld::Singleton().Update(deltaTime);
 	mPlayer.Update(deltaTime);
 }
 
-void PursuitScene::Draw(Screen& screen){
+void PursuitScene::Draw(Screen& screen)
+{
 	mPlayer.Draw(screen);
 	floor.Draw(screen);
-	screen.Draw(mImage, Vec2D(0, 0));
+//	screen.Draw(mSprite, "i", Vec2D(10,10));
+	AARectangle titleRect(Vec2D::Zero, Vec2D(App::Singleton().GetWidht(), App::Singleton().GetHeight()));
+	BitmapFont titleFont = App::Singleton().GetAppFont();
+	std::string titleText = "abcdiiefgfghi";
+	Vec2D titlePos = titleFont.GetDrawPosition(titleText, titleRect, FHA_Center , FVA_Middle);
+	screen.Draw(titleFont, titleText, titlePos);
 }
 
-const std::string& PursuitScene::GetSceneName() const{
+const std::string& PursuitScene::GetSceneName() const
+{
 	const static std::string gameName = {"GetTheRobot Retro!"};
 	return gameName;
 }

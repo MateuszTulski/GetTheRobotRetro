@@ -5,7 +5,7 @@
 :height 33
 
 :key B
-:xPos 39
+:xPos 38
 :yPos 0
 :width 30
 :height 33

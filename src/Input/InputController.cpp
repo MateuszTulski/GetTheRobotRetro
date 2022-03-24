@@ -5,7 +5,7 @@
 InputController::InputController():mQuit(nullptr), mnoptrGameController(nullptr){
 }
 
-void InputController::Init(InputAction quitAction){
+void InputController::InitInputController(InputAction quitAction){
 	mQuit = quitAction;
 }
 
