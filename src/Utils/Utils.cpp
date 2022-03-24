@@ -25,6 +25,17 @@ int GetPixelIndex(unsigned int col, unsigned int row, unsigned int imgWidth)
 	return row * imgWidth + col;
 }
 
+float Clamp(float val, float min, float max)
+{
+	if(val < min){
+		val = min;
+	}
+	if(val > max){
+		val = max;
+	}
+	return val;
+}
+
 std::string StringToUpper(const std::string& inputString)
 {
 	std::string upper = "";

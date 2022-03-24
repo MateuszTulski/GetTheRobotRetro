@@ -18,6 +18,8 @@ float MilisecondsToSeconds(unsigned int miliseconds);
 
 int GetPixelIndex(unsigned int col, unsigned int row, unsigned int imgWidth);
 
+float Clamp(float val, float min, float max);
+
 std::string StringToUpper(const std::string& inputString);
 
 struct Size{

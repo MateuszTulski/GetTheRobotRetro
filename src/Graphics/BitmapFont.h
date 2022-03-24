@@ -21,18 +21,19 @@ enum FontHorizontalAlign{
 
 class BitmapFont {
 public:
-	BitmapFont(unsigned int letterSpace = 2, unsigned int wordSpace = 5);
+	BitmapFont();
+	BitmapFont(unsigned int letterSpace, unsigned int wordSpace);
 
 	bool LoadFont(const std::string& fontName);
 	Size GetTextSize(const std::string& text) const;
-	Vec2D GetDrawPosition(const std::string&text, const AARectangle& rect, FontHorizontalAlign hAlign = FHA_Left, FontVerticalAlign vAlign = FVA_Top);
+	Vec2D GetDrawPosition(const std::string&text, const AARectangle& rect, FontHorizontalAlign hAlign = FHA_Left, FontVerticalAlign vAlign = FVA_Top) const;
 
 	inline SpriteSheet GetSpriteSheet() const {return mFontSheet;}
 	inline unsigned int GetFontLetterSpace() const {return mLetterSpace;}
 	inline unsigned int GetFontWordSpace() const {return mWordSpace;}
 
 private:
-	unsigned int mLetterSpace = 2, mWordSpace = 5;
+	unsigned int mLetterSpace, mWordSpace;
 	SpriteSheet mFontSheet;
 };
 

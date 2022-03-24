@@ -9,6 +9,7 @@
 #include "Circle.h"
 #include "BMPImage.h"
 #include "SpriteSheet.h"
+#include "ColorManipulation.h"
 
 #include "BitmapFont.h"
 
@@ -267,7 +268,7 @@ void Screen::Draw(const Circle& circle, const Color& color, bool fillShape, cons
 
 }
 
-void Screen::Draw(const BMPImage& image, const Sprite& sprite, const Vec2D& position)
+void Screen::Draw(const BMPImage& image, const Sprite& sprite, const Vec2D& position, ColorManipulation& manipulator)
 {
 	uint32_t rows = sprite.height;
 	uint32_t columns = sprite.width;
@@ -280,6 +281,8 @@ void Screen::Draw(const BMPImage& image, const Sprite& sprite, const Vec2D& posi
 		for(uint32_t c = 0; c < columns; ++c)
 		{
 			Color color = pixels[GetPixelIndex(c + sprite.xPos , r + sprite.yPos , image.GetImageWidth())];
+			manipulator.ModifyColor(color);
+
 
 			int pixelX = position.GetX() + c;
 			int pixelY = position.GetY() + r;
@@ -289,18 +292,18 @@ void Screen::Draw(const BMPImage& image, const Sprite& sprite, const Vec2D& posi
 	}
 }
 
-void Screen::Draw(const BMPImage& image, const Vec2D& position)
+void Screen::Draw(const BMPImage& image, const Vec2D& position, ColorManipulation& manipulator)
 {
 	Sprite sprite;
-	Draw(image, sprite, position);
+	Draw(image, sprite, position, manipulator);
 }
 
-void Screen::Draw(const SpriteSheet& sprite, const std::string& name,  const Vec2D& position)
+void Screen::Draw(const SpriteSheet& sprite, const std::string& name,  const Vec2D& position, ColorManipulation& manipulator)
 {
-	Draw(sprite.GetImage(), sprite.GetSprite(name), position);
+	Draw(sprite.GetImage(), sprite.GetSprite(name), position, manipulator);
 }
 
-void Screen::Draw(const BitmapFont font, const std::string& text, const Vec2D& position)
+void Screen::Draw(const BitmapFont& font, const std::string& text, const Vec2D& position, ColorManipulation& manipulator)
 {
 	unsigned int xPos = position.GetX();
 
@@ -313,11 +316,17 @@ void Screen::Draw(const BitmapFont font, const std::string& text, const Vec2D& p
 
 		SpriteSheet spriteSheet = font.GetSpriteSheet();
 
-		Draw(spriteSheet, std::string("")+c, Vec2D(xPos, position.GetY()));
+		Draw(spriteSheet, std::string("")+c, Vec2D(xPos, position.GetY()), manipulator);
 
 		xPos += spriteSheet.GetSprite(std::string("")+c).width;
 		xPos += font.GetFontLetterSpace();
 	}
+}
+
+void Screen::Draw(const BitmapFont& font, const std::string& text, const Vec2D& position)
+{
+	ColorManipulation manip;
+	Draw(font, text, position, manip);
 }
 
 void Screen::FillPoly(const std::vector<Vec2D>& points, const Color& color){

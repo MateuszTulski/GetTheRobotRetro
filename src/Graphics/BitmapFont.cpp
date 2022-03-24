@@ -1,6 +1,7 @@
 #include "BitmapFont.h"
 #include "AARectangle.h"
-#include "SpriteSheet.h"
+
+BitmapFont::BitmapFont() : BitmapFont(1, 7){}
 
 BitmapFont::BitmapFont(unsigned int letterSpace, unsigned int wordSpace) : mLetterSpace(letterSpace), mWordSpace(wordSpace){
 }
@@ -32,7 +33,7 @@ Size BitmapFont::GetTextSize(const std::string& text) const
 	return textSize;
 }
 
-Vec2D BitmapFont::GetDrawPosition(const std::string&text, const AARectangle& rect, FontHorizontalAlign hAlign, FontVerticalAlign vAlign)
+Vec2D BitmapFont::GetDrawPosition(const std::string&text, const AARectangle& rect, FontHorizontalAlign hAlign, FontVerticalAlign vAlign) const
 {
 	Size textSize = GetTextSize(text);
 

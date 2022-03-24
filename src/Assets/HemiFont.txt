@@ -1,5 +1,5 @@
 :key A
-:xPos 0
+:xPos 1
 :yPos 0
 :width 29
 :height 33
@@ -41,13 +41,109 @@
 :height 33
 
 :key H
-:xPos 247
+:xPos 248
 :yPos 0
-:width 33
+:width 32
 :height 33
 
 :key I
 :xPos 285
 :yPos 0
 :width 14
+:height 33
+
+:key J
+:xPos 1
+:yPos 35
+:width 28
+:height 33
+
+:key K
+:xPos 33
+:yPos 35
+:width 34
+:height 33
+
+:key L
+:xPos 70
+:yPos 35
+:width 24
+:height 33
+
+:key M
+:xPos 102
+:yPos 35
+:width 39
+:height 33
+
+:key N
+:xPos 146
+:yPos 35
+:width 32
+:height 33
+
+:key O
+:xPos 185
+:yPos 35
+:width 30
+:height 33
+
+:key P
+:xPos 221
+:yPos 35
+:width 30
+:height 33
+
+:key Q
+:xPos 256
+:yPos 35
+:width 32
+:height 33
+
+:key R
+:xPos 2
+:yPos 72
+:width 31
+:height 33
+
+:key S
+:xPos 39
+:yPos 72
+:width 31
+:height 33
+
+:key T
+:xPos 78
+:yPos 72
+:width 24
+:height 33
+
+:key U
+:xPos 106
+:yPos 72
+:width 32
+:height 33
+
+:key V
+:xPos 147
+:yPos 72
+:width 27
+:height 33
+
+:key W
+:xPos 182
+:yPos 72
+:width 43
+:height 33
+
+:key Y
+:xPos 233
+:yPos 72
+:width 27
+:height 33
+
+:key Z
+:xPos 263
+:yPos 72
+:width 29
 :height 33

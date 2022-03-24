@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "BMPImage.h"
 #include "SpriteSheet.h"
+#include "Button.h"
 
 class PursuitScene : public Scene {
 public:
@@ -17,7 +18,7 @@ public:
 
 	const std::string& GetSceneName() const override;
 private:
-	SpriteSheet mSprite;
+	Button mTempButton;
 	PhysicsWorld world;
 	Player mPlayer;
 	Rigidbody floor;

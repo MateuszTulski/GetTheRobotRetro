@@ -1,4 +1,5 @@
 #include "PursuitScene.h"
+#include "Utils.h"
 #include "BMPImage.h"
 #include "BitmapFont.h"
 #include "App.h"
@@ -55,7 +56,10 @@ void PursuitScene::Init(){
 	floor.Init(floorRec, 0, false, true);
 
 	//////// ---- TEMP --------- ///////////
-	mSprite.LoadSprite("HemiFont");
+	Size buttonSize;
+	buttonSize.width = 230;
+	buttonSize.height = 60;
+	mTempButton.InitButton(buttonSize, "play", Vec2D(App::Singleton().GetWidht()/2, App::Singleton().GetHeight()/2));
 
 }
 
@@ -69,12 +73,8 @@ void PursuitScene::Draw(Screen& screen)
 {
 	mPlayer.Draw(screen);
 	floor.Draw(screen);
-//	screen.Draw(mSprite, "i", Vec2D(10,10));
-	AARectangle titleRect(Vec2D::Zero, Vec2D(App::Singleton().GetWidht(), App::Singleton().GetHeight()));
-	BitmapFont titleFont = App::Singleton().GetAppFont();
-	std::string titleText = "abcdiiefgfghi";
-	Vec2D titlePos = titleFont.GetDrawPosition(titleText, titleRect, FHA_Center , FVA_Middle);
-	screen.Draw(titleFont, titleText, titlePos);
+	mTempButton.Draw(screen);
+
 }
 
 const std::string& PursuitScene::GetSceneName() const
