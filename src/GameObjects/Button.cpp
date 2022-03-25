@@ -22,13 +22,19 @@ void Button::InitButton(const Size& buttonSize, const std::string& text, Vec2D p
 	mButtonText = text;
 
 	mTextPosition = mButtonFont.GetDrawPosition(mButtonText, mAARect, FHA_Center, FVA_Middle);
-	mBaseColor = Color().White();
-}
+	mBaseColor.SetModifier(COL_MULTIPLY, Color().White());
+};
 
 void Button::Draw(Screen& screen)
 {
-	screen.Draw(mAARect, mBaseColor, mIsActive, mHighlightColor);
-	screen.Draw(mButtonFont, mButtonText, mTextPosition);
+	screen.Draw(mAARect, mBaseColor.GetModifierColor(), mIsActive, mHighlightColor.GetModifierColor());
+
+	if(mIsActive){
+		screen.Draw(mButtonFont, mButtonText, mTextPosition, mHighlightColor);
+	}else{
+		screen.Draw(mButtonFont, mButtonText, mTextPosition, mBaseColor);
+	}
+
 }
 
 void Button::ExecuteAction()
@@ -38,5 +44,5 @@ void Button::ExecuteAction()
 
 void Button::SetButtonActive(const bool& active)
 {
-
+	mIsActive = active;
 }

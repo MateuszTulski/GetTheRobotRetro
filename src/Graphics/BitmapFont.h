@@ -26,9 +26,9 @@ public:
 
 	bool LoadFont(const std::string& fontName);
 	Size GetTextSize(const std::string& text) const;
-	Vec2D GetDrawPosition(const std::string&text, const AARectangle& rect, FontHorizontalAlign hAlign = FHA_Left, FontVerticalAlign vAlign = FVA_Top) const;
+	Vec2D GetDrawPosition(const std::string& text, const AARectangle& rect, FontHorizontalAlign hAlign = FHA_Left, FontVerticalAlign vAlign = FVA_Top) const;
 
-	inline SpriteSheet GetSpriteSheet() const {return mFontSheet;}
+	inline const SpriteSheet& GetSpriteSheet() const {return mFontSheet;}
 	inline unsigned int GetFontLetterSpace() const {return mLetterSpace;}
 	inline unsigned int GetFontWordSpace() const {return mWordSpace;}
 

@@ -11,6 +11,12 @@ ColorManipulation::ColorManipulation(ColorModifier modifier, const Color& color)
 	mColor = color;
 }
 
+void ColorManipulation::SetModifier(ColorModifier modifier, const Color& color)
+{
+	mModifier = modifier;
+	mColor = color;
+}
+
 void ColorManipulation::ModifyColor(Color& inputColor)
 {
 	switch(mModifier)

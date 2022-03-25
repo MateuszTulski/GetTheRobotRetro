@@ -5,6 +5,7 @@
 #include "AARectangle.h"
 #include <functional>
 #include "Color.h"
+#include "ColorManipulation.h"
 #include "BitmapFont.h"
 
 class Screen;
@@ -23,14 +24,11 @@ public:
 
 	void ExecuteAction();
 
-	inline void SetBaseColor(const Color& color) {mBaseColor = color;}
-	inline void SetHighlitColor(const Color& color) {mHighlightColor = color;}
+	inline void SetBaseColor(const Color& color) {mBaseColor.SetModifier(COL_MULTIPLY, color);}
+	inline void SetHighlitColor(const Color& color) {mHighlightColor.SetModifier(COL_MULTIPLY, color);}
 
 	void SetButtonActive(const bool& active);
 	inline bool IsActive() const {return mIsActive;}
-
-	inline Color GetButtonBaseColor() const {return mBaseColor;}
-	inline Color GetButtonHighlightColor() const {return mHighlightColor;}
 
 private:
 	const BitmapFont mButtonFont;
@@ -38,8 +36,10 @@ private:
 	std::string mButtonText;
 	bool mIsActive;
 	ButtonAction mAction;
-	Color mBaseColor;
-	Color mHighlightColor;
+
+	ColorManipulation mBaseColor;
+	ColorManipulation mHighlightColor;
+
 	Vec2D mTextPosition;
 };
 
