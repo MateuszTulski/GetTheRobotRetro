@@ -1,5 +1,6 @@
 #include "App.h"
 #include "PursuitScene.h"
+#include "MenuScene.h"
 #include "InputController.h"
 #include <cassert>
 #include <iostream>
@@ -19,8 +20,11 @@ bool App::Init(uint32_t width, uint32_t height, uint32_t mag)
 
 //	std::unique_ptr<GameScene> gameScene = std::make_unique<GameScene>();
 
-	std::unique_ptr<PursuitScene> pursuitScene = std::make_unique<PursuitScene>();
-	PushScene(std::move(pursuitScene));
+//	std::unique_ptr<PursuitScene> pursuitScene = std::make_unique<PursuitScene>();
+//	PushScene(std::move(pursuitScene));
+
+	std::unique_ptr<MenuScene> menuScene = std::make_unique<MenuScene>();
+	PushScene(std::move(menuScene));
 
 	return mnoptrWindow != nullptr;
 }
@@ -81,6 +85,7 @@ void App::PushScene(std::unique_ptr<Scene> scene){
 		mSceneStack.emplace_back(std::move(scene));
 	}
 }
+
 void App::PopScene(){
 	if(mSceneStack.size()>1){
 		mSceneStack.pop_back();

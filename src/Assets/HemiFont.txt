@@ -147,3 +147,165 @@
 :yPos 72
 :width 29
 :height 33
+
+:key !
+:xPos 3
+:yPos 108
+:width 13
+:height 33
+
+:key 0
+:xPos 22
+:yPos 108
+:width 30
+:height 33
+
+:key 1
+:xPos 61
+:yPos 108
+:width 13
+:height 33
+
+:key 2
+:xPos 79
+:yPos 108
+:width 30
+:height 33
+
+:key 3
+:xPos 115
+:yPos 108
+:width 29
+:height 33
+
+:key 4
+:xPos 150
+:yPos 108
+:width 27
+:height 33
+
+:key 5
+:xPos 185
+:yPos 108
+:width 29
+:height 33
+
+:key 6
+:xPos 221
+:yPos 108
+:width 29
+:height 33
+
+:key 7
+:xPos 257
+:yPos 108
+:width 26
+:height 33
+
+:key 8
+:xPos 3
+:yPos 147
+:width 29
+:height 33
+
+:key 9
+:xPos 39
+:yPos 147
+:width 29
+:height 33
+
+:key .
+:xPos 74
+:yPos 147
+:width 8
+:height 33
+
+:key ,
+:xPos 90
+:yPos 147
+:width 10
+:height 33
+
+:key ?
+:xPos 114
+:yPos 147
+:width 26
+:height 33
+
+:key $
+:xPos 146
+:yPos 147
+:width 24
+:height 33
+
+:key %
+:xPos 179
+:yPos 147
+:width 30
+:height 33
+
+:key (
+:xPos 221
+:yPos 145
+:width 17
+:height 37
+
+:key )
+:xPos 241
+:yPos 145
+:width 17
+:height 37
+
+:key +
+:xPos 268
+:yPos 147
+:width 25
+:height 33
+
+:key -
+:xPos 3
+:yPos 186
+:width 18
+:height 33
+
+:key *
+:xPos 29
+:yPos 186
+:width 23
+:height 33
+
+:key +
+:xPos 
+:yPos 186
+:width 
+:height 33
+
+:key /
+:xPos 56 
+:yPos 186
+:width 23
+:height 33
+
+:key =
+:xPos 85
+:yPos 186
+:width 27
+:height 33
+
+:key @
+:xPos 117
+:yPos 186
+:width 31
+:height 33
+
+:key #
+:xPos 153
+:yPos 186
+:width 25
+:height 33
+
+:key X
+:xPos 182
+:yPos 186
+:width 36
+:height 33

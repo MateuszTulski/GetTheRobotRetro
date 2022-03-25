@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "InputController.h"
 #include "BitmapFont.h"
+#include "Vec2D.h"
 #include <stdint.h>
 #include <memory>
 #include <vector>
@@ -19,6 +20,8 @@ public:
 
 	inline uint32_t GetWidht(){return mScreen.GetWidth();}
 	inline uint32_t GetHeight(){return mScreen.GetHeight();}
+
+	inline Vec2D GetScreenCenter() const {return Vec2D(mScreen.GetWidth()/2, mScreen.GetHeight()/2);}
 
 	inline BitmapFont GetAppFont() const {return mFont;}
 
