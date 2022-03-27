@@ -52,15 +52,9 @@ void PursuitScene::Init(){
 	mPlayer.Init(Vec2D(App::Singleton().GetWidht()/2, App::Singleton().GetHeight()/2));
 
 	// Init the floor (temporary)
-	AARectangle floorRec(Vec2D(0, App::Singleton().GetHeight()-20), Vec2D(App::Singleton().GetWidht(), App::Singleton().GetHeight()));
+//	AARectangle floorRec(Vec2D(0, App::Singleton().GetHeight()-20), Vec2D(App::Singleton().GetWidht(), App::Singleton().GetHeight()));
+	AARectangle floorRec(Vec2D(0, 400), 1000, 40);
 	floor.Init(floorRec, 0, false, true);
-
-	//////// ---- TEMP --------- ///////////
-	Size buttonSize;
-	buttonSize.width = 230;
-	buttonSize.height = 60;
-	mTempButton.InitButton(buttonSize, "play", Vec2D(App::Singleton().GetWidht()/2, App::Singleton().GetHeight()/2));
-
 }
 
 void PursuitScene::Update(uint32_t deltaTime)
@@ -73,8 +67,6 @@ void PursuitScene::Draw(Screen& screen)
 {
 	mPlayer.Draw(screen);
 	floor.Draw(screen);
-	mTempButton.Draw(screen);
-
 }
 
 const std::string& PursuitScene::GetSceneName() const

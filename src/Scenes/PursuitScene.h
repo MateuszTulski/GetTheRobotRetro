@@ -18,7 +18,6 @@ public:
 
 	const std::string& GetSceneName() const override;
 private:
-	Button mTempButton;
 	PhysicsWorld world;
 	Player mPlayer;
 	Rigidbody floor;

@@ -39,7 +39,10 @@ void Button::Draw(Screen& screen)
 
 void Button::ExecuteAction()
 {
-
+	if(mAction)
+	{
+		mAction();
+	}
 }
 
 void Button::SetButtonActive(const bool& active)

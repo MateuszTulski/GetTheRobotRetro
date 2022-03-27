@@ -66,7 +66,13 @@ void Rigidbody::UpdateRigdbody(uint32_t deltaTime){
 			if(offsetRect.HasCollided(collider->GetAARectangle(), collisionEdge)){
 				// Movement will cause a collision! Return
 				StopOnObstacle(collisionEdge.normal);
-				return;
+				if(!IsEqual(collisionEdge.normal.GetX(), 0))
+				{
+					offset.SetX(0);
+				}
+				if(!IsEqual(collisionEdge.normal.GetY(), 0)){
+					offset.SetY(0);
+				}
 			}
 		}
 	}
@@ -104,7 +110,7 @@ void Rigidbody::AddGravityForce(const float gravity){
 	if(mUseGravity){
 		Vec2D oldVel = mVelocity;
 		Vec2D momentumForce = mMass * mVelocity;
-		momentumForce += gravity * mMass * Vec2D(0, 1);
+		momentumForce += gravity * mGravityScale * mMass * Vec2D(0, 1);
 		mVelocity = momentumForce / mMass;
 	}
 }

@@ -35,6 +35,8 @@ public:
 	inline void SetCollider(bool on) {mIsCollider = on;}
 	inline void SetGravity(bool use) {mUseGravity = use;}
 
+	inline void SetGravityScale(const float& gravityScale) { mGravityScale = gravityScale;}
+
 	inline int GetRigidbodyID() const {return mID;}
 
 	static int InitializedRigidbody;
@@ -44,6 +46,7 @@ private:
 	bool mUseGravity;
 	bool mIsCollider;
 	float mMass;
+	float mGravityScale = 1;
 	int mID;
 	int test = 0;
 

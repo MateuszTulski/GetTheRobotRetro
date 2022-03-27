@@ -9,6 +9,7 @@ Player::Player() : mJumpPressed(false){
 void Player::Init(const Vec2D& startPosition){
 	// Start position is BOTTOM MIDDLE
 	SetPosition(startPosition);
+	SetGravityScale(1.5f);
 }
 
 void Player::Update(uint32_t deltaTime){
@@ -59,7 +60,7 @@ void Player::Jump(bool jumpPressed)
 	if(jumpPressed && !mJumpPressed)
 	{
 		mJumpPressed = true;
-		AddForce(Vec2D(0, -10000));
+		AddForce(Vec2D(0, -JUMP_FORCE));
 	}
 	else if(!jumpPressed)
 	{

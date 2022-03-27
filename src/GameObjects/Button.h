@@ -27,6 +27,8 @@ public:
 	inline void SetBaseColor(const Color& color) {mBaseColor.SetModifier(COL_MULTIPLY, color);}
 	inline void SetHighlitColor(const Color& color) {mHighlightColor.SetModifier(COL_MULTIPLY, color);}
 
+	inline std::string GetButtonName() const { return mButtonText;}
+
 	void SetButtonActive(const bool& active);
 	inline bool IsActive() const {return mIsActive;}
 

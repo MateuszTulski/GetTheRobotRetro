@@ -1,4 +1,5 @@
 #include "MenuScene.h"
+#include "PursuitScene.h"
 #include "Screen.h"
 #include "AARectangle.h"
 #include "App.h"
@@ -29,6 +30,20 @@ void MenuScene::Init()
 
 	ResetButtons();
 
+	// SET ACTIONS FOR BUTTONS
+	for(auto& btn : mButtons)
+	{
+		std::string name = btn.GetButtonName();
+		if(name == "Start")
+		{
+			Button::ButtonAction acttion = [](){
+					std::unique_ptr<PursuitScene> pursuitScene = std::make_unique<PursuitScene>();
+					App::Singleton().PushScene(std::move(pursuitScene));
+			};
+			btn.SetButtonAction(acttion);
+		}
+	}
+
 	// SCENE NAVIGATION
 	ButtonAction upArrow;
 	upArrow.key = GameController::UpKey();
@@ -47,6 +62,18 @@ void MenuScene::Init()
 		}
 	};
 	mGameController.AddInputActionForKey(downArrow);
+
+	ButtonAction executeButton;
+	executeButton.key = GameController::JumpKey();
+	executeButton.action = [this](uint32_t detlatime, InputState state){
+		if(GameController::IsPressed(state)){
+			for(auto& btn : mButtons){
+				if(btn.IsActive())
+					btn.ExecuteAction();
+			}
+		}
+	};
+	mGameController.AddInputActionForKey(executeButton);
 
 }
 void MenuScene::Update(uint32_t dt)
