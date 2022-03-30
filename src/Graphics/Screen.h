@@ -7,6 +7,7 @@
 #include <cmath>
 #include "Utils.h"
 #include "ScreenBuffer.h"
+#include "ColorManipulation.h"
 
 struct SDL_Renderer;
 struct SDL_PixelFormat;
@@ -22,7 +23,6 @@ class Sprite;
 class SpriteSheet;
 class AARectangle;
 class BitmapFont;
-class ColorManipulation;
 
 class Screen{
 public:

@@ -51,10 +51,27 @@ void PursuitScene::Init(){
 	// Set player start position
 	mPlayer.Init(Vec2D(App::Singleton().GetWidht()/2, App::Singleton().GetHeight()/2));
 
-	// Init the floor (temporary)
-//	AARectangle floorRec(Vec2D(0, App::Singleton().GetHeight()-20), Vec2D(App::Singleton().GetWidht(), App::Singleton().GetHeight()));
+	/// FLOOR ---- TEMP -----
 	AARectangle floorRec(Vec2D(0, 400), 1000, 40);
 	floor.Init(floorRec, 0, false, true);
+
+	if(platformSpriteTemp.LoadSprite("platform"))
+	{
+		std::string name("platform-left");
+		platformSpriteTemp.GetSprite(name);
+
+//		platformSprite = std::make_shared<SpriteSheet>();
+//		Platform plat(Line2D(Vec2D(10, 10), Vec2D(300, 10)), platformSprite);
+	}
+
+
+	// LOAD LEVEL
+	if(mLevelLoader.LoadGraphics()){
+		if(mLevelLoader.LoadPlatforms()){
+
+		}
+	}
+
 }
 
 void PursuitScene::Update(uint32_t deltaTime)
@@ -67,6 +84,10 @@ void PursuitScene::Draw(Screen& screen)
 {
 	mPlayer.Draw(screen);
 	floor.Draw(screen);
+
+	// Draw Level
+	mLevelLoader.DrawObjects(screen);
+
 }
 
 const std::string& PursuitScene::GetSceneName() const

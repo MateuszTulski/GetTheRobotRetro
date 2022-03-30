@@ -1,0 +1,17 @@
+:key platform-left
+:xPos 1
+:yPos 0
+:width 300
+:height 45
+
+:key platform-middle
+:xPos 1
+:yPos 0
+:width 29
+:height 33
+
+:key platform-right
+:xPos 1
+:yPos 0
+:width 29
+:height 33

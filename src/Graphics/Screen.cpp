@@ -273,6 +273,11 @@ void Screen::Draw(const BMPImage& image, const Sprite& sprite, const Vec2D& posi
 	uint32_t rows = sprite.height;
 	uint32_t columns = sprite.width;
 
+	if(rows == 0 && columns == 0){
+		rows = image.GetImageHeight();
+		columns = image.GetImageWidth();
+	}
+
 
 	const std::vector<Color>& pixels = image.GetPixels();
 

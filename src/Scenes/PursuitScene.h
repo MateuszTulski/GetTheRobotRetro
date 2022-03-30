@@ -7,6 +7,8 @@
 #include "BMPImage.h"
 #include "SpriteSheet.h"
 #include "Button.h"
+#include "Platform.h"
+#include "LevelLoader.h"
 
 class PursuitScene : public Scene {
 public:
@@ -21,6 +23,12 @@ private:
 	PhysicsWorld world;
 	Player mPlayer;
 	Rigidbody floor;
+
+	LevelLoader mLevelLoader;
+
+	SpriteSheet platformSpriteTemp;
+	Platform mPlatform;
+
 	void ResetGame();
 };
 

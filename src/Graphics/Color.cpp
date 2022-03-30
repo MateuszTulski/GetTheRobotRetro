@@ -76,4 +76,3 @@ std::ostream& operator<<(std::ostream& os, const Color& color){
 	return os;
 }
 
-//	os << "Vec2D ( X:"<< vec.mX << " Y:"<< vec.mY << " )\n";
