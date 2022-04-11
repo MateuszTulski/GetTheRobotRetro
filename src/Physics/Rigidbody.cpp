@@ -8,32 +8,35 @@ int Rigidbody::InitializedRigidbody = 0;
 Rigidbody::Rigidbody() : Rigidbody(AARectangle(Vec2D::Zero, Vec2D::Zero), 0, true, true){
 }
 
-Rigidbody::Rigidbody(AARectangle rect, float mass, bool useGravity, bool isCollider) : mVelocity(Vec2D::Zero), mUseGravity(useGravity), mIsCollider(isCollider), mMass(mass){
+Rigidbody::Rigidbody(AARectangle rect, float mass, bool useGravity, bool isCollider) : mVelocity(Vec2D::Zero), mUseGravity(useGravity), mIsCollider(isCollider), mMass(mass)
+{
 	InitializedRigidbody++;
 	mID = InitializedRigidbody;
 	Excluder::Init(rect);
 }
 
-Rigidbody::~Rigidbody(){
-	if(mUseGravity){
-		PhysicsWorld::Singleton().RemoveKinematicRigidbody(this);
-	}else{
-		PhysicsWorld::Singleton().RemoveStaticRigidbody(this);
-	}
-
-//	PhysicsWorld::Singleton().
+Rigidbody::Rigidbody(const Rigidbody& other) : mVelocity(Vec2D::Zero), mUseGravity(std::move(other.mUseGravity)), mIsCollider(std::move(other.mIsCollider)), mMass(std::move(other.mMass))
+{
+	mID = other.GetRigidbodyID();
 }
 
-bool Rigidbody::operator==(const Rigidbody& other){
+Rigidbody::~Rigidbody()
+{
+
+}
+
+bool Rigidbody::operator==(const Rigidbody& other)
+{
 	return this->mID == other.GetRigidbodyID();
 }
 
-void Rigidbody::Init(AARectangle rect, float mass, bool useGravity, bool isCollider){
+void Rigidbody::InitRigidbody(AARectangle rect, float mass, bool useGravity, bool isCollider){
+
 	mUseGravity = useGravity;
 	mIsCollider = isCollider;
 	mMass = mass;
 	Excluder::Init(rect);
-	// Add this rigigbody to the world
+	// Add this Rigidbody to the world
 	if(mUseGravity){
 		PhysicsWorld::Singleton().AddKinematicRigidbody(this);
 	}else{

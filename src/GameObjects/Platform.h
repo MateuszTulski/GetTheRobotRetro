@@ -14,19 +14,18 @@ class Platform : public Rigidbody{
 public:
 	Platform();
 	Platform(const Line2D& line, std::shared_ptr<SpriteSheet> sprite);
+
+	Platform(const Platform& other);
+
 	~Platform() override;
 
 	void Draw(Screen& screen);
-	void Update(uint32_t deltaTime);
 
 private:
 	Line2D mLine;
+	unsigned int mSegments;
 	std::shared_ptr<SpriteSheet> mnoptrSprite;
 	ColorManipulation mColorManipulator;
-
-	// TEMP
-	SpriteSheet tempPlatforms;
-	BMPImage tempImage;
 };
 
 

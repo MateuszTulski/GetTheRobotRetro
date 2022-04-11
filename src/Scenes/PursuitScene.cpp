@@ -49,21 +49,11 @@ void PursuitScene::Init(){
 	mGameController.AddInputActionForKey(left);
 
 	// Set player start position
-	mPlayer.Init(Vec2D(App::Singleton().GetWidht()/2, App::Singleton().GetHeight()/2));
+	mPlayer.Init(Vec2D(100, 100));
 
 	/// FLOOR ---- TEMP -----
 	AARectangle floorRec(Vec2D(0, 400), 1000, 40);
-	floor.Init(floorRec, 0, false, true);
-
-	if(platformSpriteTemp.LoadSprite("platform"))
-	{
-		std::string name("platform-left");
-		platformSpriteTemp.GetSprite(name);
-
-//		platformSprite = std::make_shared<SpriteSheet>();
-//		Platform plat(Line2D(Vec2D(10, 10), Vec2D(300, 10)), platformSprite);
-	}
-
+	floor.InitRigidbody(floorRec, 0, false, true);
 
 	// LOAD LEVEL
 	if(mLevelLoader.LoadGraphics()){

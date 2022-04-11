@@ -3,7 +3,7 @@
 #include "Screen.h"
 
 Player::Player() : mJumpPressed(false){
-	Rigidbody::Init(PLAYER_RECT, MASS, true, true);
+	Rigidbody::InitRigidbody(PLAYER_RECT, MASS, true, true);
 }
 
 void Player::Init(const Vec2D& startPosition){

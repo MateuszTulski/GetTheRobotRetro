@@ -20,7 +20,6 @@ public:
 
 	const std::string& GetSceneName() const override;
 private:
-	PhysicsWorld world;
 	Player mPlayer;
 	Rigidbody floor;
 

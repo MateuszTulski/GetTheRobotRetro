@@ -1,17 +1,17 @@
-:key platform-left
-:xPos 1
+:key LEFT
+:xPos 0
 :yPos 0
-:width 300
-:height 45
+:width 20
+:height 20
 
-:key platform-middle
-:xPos 1
+:key MIDDLE
+:xPos 20
 :yPos 0
-:width 29
-:height 33
+:width 20
+:height 20
 
-:key platform-right
-:xPos 1
+:key RIGTH
+:xPos 40
 :yPos 0
-:width 29
-:height 33
+:width 20
+:height 20

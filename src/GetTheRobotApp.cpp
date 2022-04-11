@@ -2,9 +2,9 @@
 #include "Utils.h"
 #include "App.h"
 
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
-const int MAGNIFICATION = 2;
+const int SCREEN_WIDTH = 320;
+const int SCREEN_HEIGHT = 224;
+const int MAGNIFICATION = 4;
 
 int main() {
 

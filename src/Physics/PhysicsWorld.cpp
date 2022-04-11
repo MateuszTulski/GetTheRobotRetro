@@ -13,7 +13,7 @@ PhysicsWorld& PhysicsWorld::Singleton(){
 }
 
 void PhysicsWorld::Update(uint32_t deltaTime){
-	// Add gravity force to all kinematic objects
+	// Add gravity force to all Kinematic objects
 	for(auto kRB : mKinematicRB){
 		kRB->AddGravityForce(GLOBAL_GRAVITY);
 		kRB->UpdateRigdbody(deltaTime);

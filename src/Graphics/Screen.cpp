@@ -13,7 +13,7 @@
 
 #include "BitmapFont.h"
 
-Screen::Screen() : mWidth(0), mHeight(0), moptrWindow(nullptr), mnoptrWindowSurface(nullptr), mRenderer(nullptr), mPixelFormat(nullptr), mTexture(nullptr), mFast(true){
+Screen::Screen() : mWidth(0), mHeight(0), mCameraPosition(Vec2D::Zero), moptrWindow(nullptr), mnoptrWindowSurface(nullptr), mRenderer(nullptr), mPixelFormat(nullptr), mTexture(nullptr), mFast(true){
 
 }
 
@@ -145,10 +145,17 @@ void Screen::SwapScreens()
 
 // Draw Methods
 void Screen::Draw(int x, int y, const Color& color){
+	Vec2D screenPoint = GetScreenPoint(Vec2D(x, y));
+
+	float spx = screenPoint.GetX();
+	float spy = screenPoint.GetY();
+	if(spx > mWidth || spx < 0 || spy > mHeight || spy < 0){
+		return;
+	}
 
 	assert(moptrWindow);
 	if(moptrWindow){
-		mBackBuffer.SetPixel(color, x, y);
+		mBackBuffer.SetPixel(color, screenPoint.GetX(), screenPoint.GetY());
 	}
 }
 
@@ -330,6 +337,8 @@ void Screen::Draw(const BitmapFont& font, const std::string& text, const Vec2D& 
 
 void Screen::Draw(const BitmapFont& font, const std::string& text, const Vec2D& position)
 {
+	// Draw text without color manipulation
+
 	ColorManipulation manip;
 	Draw(font, text, position, manip);
 }
@@ -424,4 +433,8 @@ void Screen::ClearScreen()
 	{
 		SDL_FillRect(mnoptrWindowSurface, nullptr, mClearColor.GetPixelColor());
 	}
+}
+
+Vec2D Screen::GetScreenPoint(const Vec2D globalPoint) const{
+	return Vec2D(globalPoint.GetX() - mCameraPosition.GetX(), globalPoint.GetY() - mCameraPosition.GetY());
 }

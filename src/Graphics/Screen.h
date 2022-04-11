@@ -8,12 +8,12 @@
 #include "Utils.h"
 #include "ScreenBuffer.h"
 #include "ColorManipulation.h"
+#include "Vec2D.h"
 
 struct SDL_Renderer;
 struct SDL_PixelFormat;
 struct SDL_Texture;
 
-class Vec2D;
 class Line2D;
 class Color;
 class Shape;
@@ -51,10 +51,15 @@ public:
 
 	void FillPoly(const std::vector<Vec2D>& points, const Color& color);
 
+	AARectangle GetCameraBorder() const;
+
 private:
 	void Draw(const BMPImage& image, const Sprite& sprite, const Vec2D& position, ColorManipulation& manipulator);
+	Vec2D GetScreenPoint(const Vec2D globalPoint) const;
 
 	uint32_t mWidth, mHeight;
+
+	Vec2D mCameraPosition;		// Screen center point on the scene
 
 	Color mClearColor;
 	ScreenBuffer mBackBuffer;

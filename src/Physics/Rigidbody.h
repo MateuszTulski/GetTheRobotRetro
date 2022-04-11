@@ -11,6 +11,9 @@ class Rigidbody : public Excluder{
 public:
 	Rigidbody();
 	Rigidbody(AARectangle rect, float mass, bool useGravity = true, bool isCollider = true);
+
+	Rigidbody(const Rigidbody& other);
+
 	~Rigidbody();
 
 	//// TEMP
@@ -18,7 +21,7 @@ public:
 
 	bool operator==(const Rigidbody& other);
 
-	void Init(AARectangle rect, float mass, bool useGravity = true, bool isCollider = true);
+	void InitRigidbody(AARectangle rect, float mass, bool useGravity = true, bool isCollider = true);
 	void UpdateRigdbody(uint32_t deltaTime);
 
 	void MakeFlushWithEdge(const BoundaryEdge& edge);
@@ -48,7 +51,6 @@ private:
 	float mMass;
 	float mGravityScale = 1;
 	int mID;
-	int test = 0;
 
 	float const COLLISION_OFFSET = 0.5f;
 };

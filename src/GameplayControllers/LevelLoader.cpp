@@ -24,14 +24,16 @@ bool LevelLoader::LoadPlatforms()
 	if(lines.LoadFile(fileName, LOT_Lines, 'x'))
 	{
 		mPlatformsLines = lines.GetLines();
+		mPlatforms.reserve(mPlatformsLines->size());
 
 		for(auto p : *mPlatformsLines)
 		{
-			Platform platform(p, moptrPlatformSprite);
-			Vec2D leftTop((p.GetP0().GetX()-1) * 40, (p.GetP0().GetY()-1) * 40);
-			Vec2D rightBottom(p.GetP1().GetX() * 40, p.GetP1().GetY() * 40);
-			platform.Init(AARectangle(leftTop, rightBottom), 10, false, true);
-			mPlatforms.push_back(platform);
+			mPlatforms.emplace_back(Platform(p, moptrPlatformSprite));
+
+			Vec2D leftTop((p.GetP0().GetX()-1) * LevelLoader::LEVEL_GRID_SIZE, (p.GetP0().GetY()-1) * LevelLoader::LEVEL_GRID_SIZE);
+			Vec2D rightBottom(p.GetP1().GetX() * LevelLoader::LEVEL_GRID_SIZE, p.GetP1().GetY() * LevelLoader::LEVEL_GRID_SIZE);
+
+			mPlatforms.back().InitRigidbody(AARectangle(leftTop, rightBottom), 10, false, true);
 		}
 
 	}else{
@@ -43,8 +45,12 @@ bool LevelLoader::LoadPlatforms()
 
 void LevelLoader::DrawObjects(Screen& screen)
 {
-	for(auto p : mPlatforms)
+	for(auto& p : mPlatforms)
 	{
+		if(p.GetAARectangle().GetTopLeft().GetX() > 640 || p.GetAARectangle().GetBottomRight().GetX() < 0){
+			continue;
+		}
 		p.Draw(screen);
 	}
 }
+
