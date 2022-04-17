@@ -57,17 +57,21 @@ void PursuitScene::Init(){
 
 	// LOAD LEVEL
 	if(mLevelLoader.LoadGraphics()){
-		if(mLevelLoader.LoadPlatforms()){
-
+		if(!mLevelLoader.LoadPlatforms()){
+			std::cout << "Error while loading level!" << std::endl;
 		}
 	}
 
+	// Load and set camera
+//	mCamera->Init();
+	App::Singleton().SetSceneCamera(Vec2D::Zero, mCamera);
 }
 
 void PursuitScene::Update(uint32_t deltaTime)
 {
 	PhysicsWorld::Singleton().Update(deltaTime);
 	mPlayer.Update(deltaTime);
+	mCamera->Update(mPlayer);
 }
 
 void PursuitScene::Draw(Screen& screen)

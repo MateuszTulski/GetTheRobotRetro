@@ -47,7 +47,7 @@ void LevelLoader::DrawObjects(Screen& screen)
 {
 	for(auto& p : mPlatforms)
 	{
-		if(p.GetAARectangle().GetTopLeft().GetX() > 640 || p.GetAARectangle().GetBottomRight().GetX() < 0){
+		if(p.GetAARectangle().GetTopLeft().GetX() > screen.GetScreenRect().GetBottomRight().GetX() || p.GetAARectangle().GetBottomRight().GetX() < screen.GetScreenRect().GetTopLeft().GetX()){
 			continue;
 		}
 		p.Draw(screen);

@@ -70,6 +70,13 @@ Vec2D Vec2D::operator-=(const Vec2D &rhs){
 	this->mY -= rhs.mY;
 	return *this;
 }
+
+Vec2D Vec2D::operator=(const Vec2D &rhs){
+	this->mX = rhs.mX;
+	this->mY = rhs.mY;
+	return *this;
+}
+
 Vec2D Vec2D::GetUnitVec() const{
 	return *this / Mag();
 }

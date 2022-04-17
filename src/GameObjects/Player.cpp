@@ -6,6 +6,16 @@ Player::Player() : mJumpPressed(false){
 	Rigidbody::InitRigidbody(PLAYER_RECT, MASS, true, true);
 }
 
+Player::Player(const Player& other) : mJumpPressed(false)
+{
+	std::cout << "Player copy constructor\n";
+}
+
+Player::Player(Player&& other) : mJumpPressed(false)
+{
+	std::cout << "Player move constructor\n";
+}
+
 void Player::Init(const Vec2D& startPosition){
 	// Start position is BOTTOM MIDDLE
 	SetPosition(startPosition);

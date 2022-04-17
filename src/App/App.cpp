@@ -2,6 +2,7 @@
 #include "PursuitScene.h"
 #include "MenuScene.h"
 #include "InputController.h"
+#include "Camera.h"
 #include <cassert>
 #include <iostream>
 #include <memory>
@@ -23,6 +24,7 @@ bool App::Init(uint32_t width, uint32_t height, uint32_t mag)
 
 	return mnoptrWindow != nullptr;
 }
+
 void App::Run(){
 	bool running = true;
 
@@ -83,6 +85,9 @@ void App::PushScene(std::unique_ptr<Scene> scene){
 
 void App::PopScene(){
 	if(mSceneStack.size()>1){
+		mScreen.RemoveSceneCamera();
+		mActiveCameraPtr = nullptr;
+		// Remove scene from stack
 		mSceneStack.pop_back();
 	}
 	if(TopScene()){
@@ -90,6 +95,7 @@ void App::PopScene(){
 		SDL_SetWindowTitle(mnoptrWindow, TopScene()->GetSceneName().c_str());
 	}
 }
+
 Scene* App::TopScene(){	// Current
 	if(mSceneStack.empty()){
 		return nullptr;
@@ -101,4 +107,15 @@ const std::string& App::GetBasePath()
 {
 	static std::string path = "src/";
 	return path;
+}
+
+void App::SetSceneCamera(const Vec2D& position, std::shared_ptr<Camera>& cameraPtr)
+{
+	Camera camera;
+	camera.Init(position);
+
+	mActiveCameraPtr = std::make_shared<Camera>(camera);
+	mScreen.SetSceneCamera(mActiveCameraPtr);
+
+	cameraPtr = mActiveCameraPtr;
 }

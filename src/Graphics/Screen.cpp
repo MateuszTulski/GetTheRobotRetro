@@ -1,5 +1,7 @@
 #include <cassert>
 #include <algorithm>
+#include <iostream>
+
 #include "Utils.h"
 #include "Screen.h"
 #include "Vec2D.h"
@@ -10,10 +12,10 @@
 #include "BMPImage.h"
 #include "SpriteSheet.h"
 #include "ColorManipulation.h"
-
+#include "Camera.h"
 #include "BitmapFont.h"
 
-Screen::Screen() : mWidth(0), mHeight(0), mCameraPosition(Vec2D::Zero), moptrWindow(nullptr), mnoptrWindowSurface(nullptr), mRenderer(nullptr), mPixelFormat(nullptr), mTexture(nullptr), mFast(true){
+Screen::Screen() : mWidth(0), mHeight(0), moptrWindow(nullptr), mnoptrWindowSurface(nullptr), mRenderer(nullptr), mPixelFormat(nullptr), mTexture(nullptr), mFast(true){
 
 }
 
@@ -46,7 +48,7 @@ SDL_Window* Screen::Init(uint32_t windowWidth, uint32_t windowHeight, uint32_t m
 
 	if(SDL_Init(SDL_INIT_VIDEO))
 	{
-		std::cout << "SDL Init failed!" << std::endl;
+		printf("SDL_Init failed: %s\n", SDL_GetError());
 		return nullptr;
 	}
 	// Create window
@@ -143,6 +145,22 @@ void Screen::SwapScreens()
 	}
 }
 
+void Screen::SetSceneCamera(std::shared_ptr<Camera> camera)
+{
+	mCamera = camera;
+}
+void Screen::RemoveSceneCamera()
+{
+	mCamera = nullptr;
+}
+
+AARectangle Screen::GetScreenRect() const
+{
+	Vec2D topLeft(mCamera->GetCameraPosition());
+	Vec2D bottomRight(mCamera->GetCameraPosition().GetX()+mWidth, mCamera->GetCameraPosition().GetY()+mHeight);
+	return AARectangle(topLeft, bottomRight);
+
+}
 // Draw Methods
 void Screen::Draw(int x, int y, const Color& color){
 	Vec2D screenPoint = GetScreenPoint(Vec2D(x, y));
@@ -435,6 +453,15 @@ void Screen::ClearScreen()
 	}
 }
 
-Vec2D Screen::GetScreenPoint(const Vec2D globalPoint) const{
-	return Vec2D(globalPoint.GetX() - mCameraPosition.GetX(), globalPoint.GetY() - mCameraPosition.GetY());
+Vec2D Screen::GetScreenPoint(const Vec2D globalPoint) const
+{
+	if(mCamera!=nullptr)
+	{
+		return Vec2D(globalPoint.GetX() - mCamera->GetCameraPosition().GetX(), globalPoint.GetY() - mCamera->GetCameraPosition().GetY());
+	}
+	else
+	{
+		return Vec2D(globalPoint.GetX(), globalPoint.GetY());
+	}
+
 }

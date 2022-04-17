@@ -1,6 +1,8 @@
 #ifndef SRC_SCENES_PURSUITSCENE_H_
 #define SRC_SCENES_PURSUITSCENE_H_
 
+#include <memory>
+
 #include "Scene.h"
 #include "PhysicsWorld.h"
 #include "Player.h"
@@ -9,6 +11,7 @@
 #include "Button.h"
 #include "Platform.h"
 #include "LevelLoader.h"
+#include "Camera.h"
 
 class PursuitScene : public Scene {
 public:
@@ -21,6 +24,8 @@ public:
 	const std::string& GetSceneName() const override;
 private:
 	Player mPlayer;
+	std::shared_ptr<Camera> mCamera;
+
 	Rigidbody floor;
 
 	LevelLoader mLevelLoader;

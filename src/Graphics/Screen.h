@@ -5,6 +5,8 @@
 #include <stdint.h>
 #include <vector>
 #include <cmath>
+#include <memory>
+
 #include "Utils.h"
 #include "ScreenBuffer.h"
 #include "ColorManipulation.h"
@@ -23,6 +25,7 @@ class Sprite;
 class SpriteSheet;
 class AARectangle;
 class BitmapFont;
+class Camera;
 
 class Screen{
 public:
@@ -33,9 +36,14 @@ public:
 	void SwapScreens();
 	inline void SetClearColor(const Color& color){mClearColor = color;}
 
+	void SetSceneCamera(std::shared_ptr<Camera> camera);
+	void RemoveSceneCamera();
+
 	// Getters
 	inline uint32_t GetWidth()const{return mWidth;}
 	inline uint32_t GetHeight()const{return mHeight;}
+
+	AARectangle GetScreenRect() const;
 
 	// Draw Methods
 	void Draw(int x, int y, const Color& color);
@@ -51,15 +59,13 @@ public:
 
 	void FillPoly(const std::vector<Vec2D>& points, const Color& color);
 
-	AARectangle GetCameraBorder() const;
-
 private:
 	void Draw(const BMPImage& image, const Sprite& sprite, const Vec2D& position, ColorManipulation& manipulator);
 	Vec2D GetScreenPoint(const Vec2D globalPoint) const;
 
 	uint32_t mWidth, mHeight;
 
-	Vec2D mCameraPosition;		// Screen center point on the scene
+	std::shared_ptr<Camera> mCamera;
 
 	Color mClearColor;
 	ScreenBuffer mBackBuffer;

@@ -10,6 +10,10 @@ class BoundaryEdge;
 class Player : public Rigidbody {
 public:
 	Player();
+
+	Player(const Player& other);
+	Player(Player&& other);
+
 	void Init(const Vec2D& startPosition);
 	void Update(uint32_t deltaTime);
 	void Draw(Screen& screen);

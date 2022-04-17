@@ -33,6 +33,8 @@ public:
 	Vec2D operator+=(const Vec2D &rhs);
 	Vec2D operator-=(const Vec2D &rhs);
 
+	Vec2D operator=(const Vec2D &rhs);
+
 	///// CONTINUE WORK HERE
 
 	Vec2D GetUnitVec() const;

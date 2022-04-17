@@ -31,11 +31,14 @@ public:
 
 	static const std::string& GetBasePath();
 
+	void SetSceneCamera(const Vec2D& position, std::shared_ptr<Camera>& cameraPtr);
+
 private:
 	BitmapFont mFont;
 	Screen mScreen;
 	SDL_Window * mnoptrWindow;
 	std::vector<std::unique_ptr<Scene>> mSceneStack;
+	std::shared_ptr<Camera> mActiveCameraPtr;
 	InputController mInputController;
 };
 
