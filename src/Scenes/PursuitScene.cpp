@@ -62,9 +62,8 @@ void PursuitScene::Init(){
 		}
 	}
 
-	// Load and set camera
-//	mCamera->Init();
 	App::Singleton().SetSceneCamera(Vec2D::Zero, mCamera);
+	mCamera->SetFollowOffset(Vec2D(-80, -90));
 }
 
 void PursuitScene::Update(uint32_t deltaTime)

@@ -45,9 +45,12 @@ bool LevelLoader::LoadPlatforms()
 
 void LevelLoader::DrawObjects(Screen& screen)
 {
+	float rightScreenSide = screen.GetScreenRect().GetBottomRight().GetX();
+	float leftScreenSide = screen.GetScreenRect().GetTopLeft().GetX();
+
 	for(auto& p : mPlatforms)
 	{
-		if(p.GetAARectangle().GetTopLeft().GetX() > screen.GetScreenRect().GetBottomRight().GetX() || p.GetAARectangle().GetBottomRight().GetX() < screen.GetScreenRect().GetTopLeft().GetX()){
+		if(p.GetAARectangle().GetTopLeft().GetX() > rightScreenSide || p.GetAARectangle().GetBottomRight().GetX() < leftScreenSide ){
 			continue;
 		}
 		p.Draw(screen);
