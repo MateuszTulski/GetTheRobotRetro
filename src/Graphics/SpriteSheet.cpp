@@ -1,21 +1,40 @@
 #include <fstream>
 #include <sstream>
+
 #include "SpriteSheet.h"
 #include "App.h"
 
 SpriteSheet::SpriteSheet(){
+	mScale.xScale = 1;
+	mScale.yScale = 1;
 }
 
-bool SpriteSheet::LoadSprite(const std::string& name)
-{
+bool SpriteSheet::LoadSprite(const std::string& name){
+
 	bool imageLoaded = mImage.LoadImage(App::Singleton().GetBasePath() + std::string("Assets/") + name + ".bmp");
 	bool spriteSectionsLoaded = LoadSpriteSections(App::Singleton().GetBasePath() + std::string("Assets/") + name + ".txt");
 
 	return imageLoaded && spriteSectionsLoaded;
 }
 
-Sprite SpriteSheet::GetSpriteCoordinates(const std::string& name) const
-{
+void SpriteSheet::ScaleSpriteSheet(float xScale, float yScale, bool relative){
+
+	if(relative)
+	{
+		mScale.xScale *= xScale;
+		mScale.yScale *= yScale;
+	}
+	else
+	{
+		mScale.xScale = xScale;
+		mScale.yScale = yScale;
+	}
+
+	mImage.ScaleImage(xScale, yScale, relative);
+}
+
+Sprite SpriteSheet::GetSpriteCoordinates(const std::string& name) const{
+
 	std::string key = StringToUpper(name);
 	Sprite empty;
 
@@ -23,14 +42,20 @@ Sprite SpriteSheet::GetSpriteCoordinates(const std::string& name) const
 	{
 		if(el.key == key)
 		{
-			return el.sprite;
+			Sprite coordinates = el.sprite;
+			coordinates.xPos *= mScale.xScale;
+			coordinates.yPos *= mScale.yScale;
+			coordinates.width *= mScale.xScale;
+			coordinates.height *= mScale.yScale;
+
+			return coordinates;
 		}
 	}
 	return empty;
 }
 
-std::vector<std::string> SpriteSheet::GetSpritestNames() const
-{
+std::vector<std::string> SpriteSheet::GetSpritestNames() const{
+
 	std::vector<std::string> names;
 	for(const auto& n : mSpriteSections)
 	{
@@ -57,10 +82,12 @@ bool SpriteSheet::LoadSpriteSections(const std::string& path){
 		std::stringstream ss;
 		ss << line;
 
+		bool readValueInNextIteration {false};
 		while(ss >> command)
 		{
 			if(command == ":key")
 			{
+				readValueInNextIteration = true;
 				mReadField = [&](std::string command){
 					SpriteSection newSection;
 					newSection.key = command;
@@ -69,29 +96,33 @@ bool SpriteSheet::LoadSpriteSections(const std::string& path){
 			}
 			else if(command == ":xPos")
 			{
+				readValueInNextIteration = true;
 				mReadField = [&](std::string command){
 					mSpriteSections.back().sprite.xPos = std::stoi(command);
 				};
 			}
 			else if(command == ":yPos")
 			{
+				readValueInNextIteration = true;
 				mReadField = [&](std::string command){
 					mSpriteSections.back().sprite.yPos = std::stoi(command);
 				};
 			}
 			else if(command == ":width")
 			{
+				readValueInNextIteration = true;
 				mReadField = [&](std::string command){
 					mSpriteSections.back().sprite.width = std::stoi(command);
 				};
 			}
 			else if(command == ":height")
 			{
+				readValueInNextIteration = true;
 				mReadField = [&](std::string command){
 					mSpriteSections.back().sprite.height = std::stoi(command);
 				};
 			}
-			else
+			else if(readValueInNextIteration)
 			{
 				// Read the property
 				mReadField(command);

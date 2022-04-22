@@ -1,3 +1,5 @@
+:fontHeight 33
+
 :key A
 :xPos 1
 :yPos 0

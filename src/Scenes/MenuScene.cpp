@@ -21,7 +21,7 @@ void MenuScene::Init()
 		Button btn;
 		btn.InitButton(mButtonSize, name, buttonsPos);
 		btn.SetBaseColor(Color().Cyan());
-		btn.SetHighlitColor(Color().White());
+		btn.SetHighlitColor(Color(130, 130, 130, 255));
 
 		buttonsPos.SetY(buttonsPos.GetY() + mButtonSize.height + mButtonsSpace);
 

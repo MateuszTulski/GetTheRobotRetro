@@ -311,7 +311,12 @@ void Screen::Draw(const BMPImage& image, const Sprite& sprite, const Vec2D& posi
 			int pixelX = position.GetX() + c;
 			int pixelY = position.GetY() + r;
 
-			Draw(pixelX, pixelY, manipulator.ModifyColor(pixels.at(GetPixelIndex(c + sprite.xPos , r + sprite.yPos , image.GetImageWidth()))));
+			Color color = manipulator.ModifyColor(pixels.at(GetPixelIndex(c + sprite.xPos , r + sprite.yPos , image.GetImageWidth())));
+			if(color == Color::Black()){
+				color.SetAlpha(0);
+			}
+
+			Draw(pixelX, pixelY, color);
 		}
 	}
 }

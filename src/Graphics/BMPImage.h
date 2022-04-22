@@ -26,6 +26,9 @@ public:
 	inline uint32_t GetImageWidth() const { return mWidth; }
 	inline uint32_t GetImageHeight() const {return mHeight; }
 
+	inline uint32_t GetOriginalImageWidth() const { return originalWidth; }
+	inline uint32_t GetOriginalImageHeight() const { return originalHeight; }
+
 	void ScaleImage(float xScale, float yScale, bool relative=true);
 
 	void RotateAroundLocalPoint(const Vec2D& point, float angle);

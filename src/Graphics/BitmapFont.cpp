@@ -1,18 +1,23 @@
 #include "BitmapFont.h"
 #include "AARectangle.h"
+#include "App.h"
+#include <fstream>
+#include <sstream>
 
 BitmapFont::BitmapFont() : BitmapFont(1, 7){}
 
-BitmapFont::BitmapFont(unsigned int letterSpace, unsigned int wordSpace) : mLetterSpace(letterSpace), mWordSpace(wordSpace){
+BitmapFont::BitmapFont(unsigned int letterSpace, unsigned int wordSpace) : mLetterSpace(letterSpace), mWordSpace(wordSpace), fontHeight(0){
 }
 
-bool BitmapFont::LoadFont(const std::string& fontName)
-{
-	return mFontSheet.LoadSprite(fontName);
+bool BitmapFont::LoadFont(const std::string& fontName){
+
+	bool fontLoaded = mFontSheet.LoadSprite(fontName);
+
+	return fontLoaded && GetFontHeight(fontName);
 }
 
-Size BitmapFont::GetTextSize(const std::string& text) const
-{
+Size BitmapFont::GetTextSize(const std::string& text) const{
+
 	Size textSize;
 
 	for(char c : text){
@@ -33,8 +38,8 @@ Size BitmapFont::GetTextSize(const std::string& text) const
 	return textSize;
 }
 
-Vec2D BitmapFont::GetDrawPosition(const std::string&text, const AARectangle& rect, FontHorizontalAlign hAlign, FontVerticalAlign vAlign) const
-{
+Vec2D BitmapFont::GetDrawPosition(const std::string&text, const AARectangle& rect, FontHorizontalAlign hAlign, FontVerticalAlign vAlign) const{
+
 	Size textSize = GetTextSize(text);
 
 	// For default set top left corner
@@ -63,3 +68,45 @@ Vec2D BitmapFont::GetDrawPosition(const std::string&text, const AARectangle& rec
 	return Vec2D(x, y);
 }
 
+void BitmapFont::SetFontHeight(const unsigned int& heightInPixels){
+
+	float scale = heightInPixels / static_cast<float>(fontHeight);
+
+	mFontSheet.ScaleSpriteSheet(scale, scale, false);
+}
+
+bool BitmapFont::GetFontHeight(const std::string& fontName){
+
+	std::string fontPath(App::Singleton().GetBasePath() + std::string("Assets/") + fontName + ".txt");
+
+	std::fstream fs;
+	fs.open(fontPath);
+
+	if(!fs.is_open()){
+		return false;
+	}
+
+	std::string line;
+	while(std::getline(fs, line)){
+
+		std::string command;
+		std::stringstream ss;
+		ss << line;
+
+		bool getValueFromNextIteration {false};
+
+		while(ss >> command){
+			if(command == ":fontHeight")
+			{
+				getValueFromNextIteration = true;
+			}
+			else if(getValueFromNextIteration)
+			{
+				fontHeight = std::stoi(command);
+				return true;
+			}
+		}
+	}
+
+	return true;
+}

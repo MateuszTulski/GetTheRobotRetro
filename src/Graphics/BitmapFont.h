@@ -28,13 +28,16 @@ public:
 	Size GetTextSize(const std::string& text) const;
 	Vec2D GetDrawPosition(const std::string& text, const AARectangle& rect, FontHorizontalAlign hAlign = FHA_Left, FontVerticalAlign vAlign = FVA_Top) const;
 
+	void SetFontHeight(const unsigned int& heightInPixels);
+
 	inline const SpriteSheet& GetSpriteSheet() const {return mFontSheet;}
 	inline unsigned int GetFontLetterSpace() const {return mLetterSpace;}
 	inline unsigned int GetFontWordSpace() const {return mWordSpace;}
 
 private:
-	unsigned int mLetterSpace, mWordSpace;
+	unsigned int mLetterSpace, mWordSpace, fontHeight;
 	SpriteSheet mFontSheet;
+	bool GetFontHeight(const std::string& fontName);
 };
 
 

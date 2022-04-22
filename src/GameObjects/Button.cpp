@@ -30,7 +30,7 @@ void Button::Draw(Screen& screen)
 	screen.Draw(mAARect, mBaseColor.GetModifierColor(), mIsActive, mHighlightColor.GetModifierColor());
 
 	if(mIsActive){
-		screen.Draw(mButtonFont, mButtonText, mTextPosition, mHighlightColor);
+		screen.Draw(mButtonFont, mButtonText, mTextPosition, mHighlightedTextColor);
 	}else{
 		screen.Draw(mButtonFont, mButtonText, mTextPosition, mBaseColor);
 	}
@@ -43,6 +43,12 @@ void Button::ExecuteAction()
 	{
 		mAction();
 	}
+}
+
+void Button::SetHighlitColor(const Color& color){
+
+	mHighlightColor.SetModifier(COL_MULTIPLY, color);
+	mHighlightedTextColor.SetModifier(COL_MULTIPLY, Color(10, 10, 10, 255));
 }
 
 void Button::SetButtonActive(const bool& active)

@@ -25,7 +25,7 @@ public:
 	void ExecuteAction();
 
 	inline void SetBaseColor(const Color& color) {mBaseColor.SetModifier(COL_MULTIPLY, color);}
-	inline void SetHighlitColor(const Color& color) {mHighlightColor.SetModifier(COL_MULTIPLY, color);}
+	void SetHighlitColor(const Color& color);
 
 	inline std::string GetButtonName() const { return mButtonText;}
 
@@ -41,6 +41,7 @@ private:
 
 	ColorManipulation mBaseColor;
 	ColorManipulation mHighlightColor;
+	ColorManipulation mHighlightedTextColor;
 
 	Vec2D mTextPosition;
 };

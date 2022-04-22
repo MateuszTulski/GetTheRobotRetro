@@ -16,8 +16,8 @@ public:
 	const std::string& GetSceneName() const override;
 
 private:
-	const Size mButtonSize = {240, 50};
-	unsigned int mButtonsSpace = 30;
+	const Size mButtonSize = {150, 30};
+	unsigned int mButtonsSpace = 10;
 	std::vector<Button> mButtons;
 
 	unsigned int mActiveButton;

@@ -2,6 +2,7 @@
 #define SRC_GRAPHICS_SPRITESHEET_H_
 
 #include "BMPImage.h"
+#include "Utils.h"
 
 #include <vector>
 #include <functional>
@@ -20,6 +21,9 @@ class SpriteSheet {
 public:
 	SpriteSheet();
 	bool LoadSprite(const std::string& name);
+
+	void ScaleSpriteSheet(float xScale, float yScale, bool relative = true);
+
 	Sprite GetSpriteCoordinates(const std::string& name) const;
 
 	std::vector<std::string> GetSpritestNames() const;
@@ -39,6 +43,7 @@ private:
 	BMPImage mImage;
 	std::vector<SpriteSection> mSpriteSections;
 	ReadField mReadField = nullptr;
+	Scale2D mScale;
 };
 
 

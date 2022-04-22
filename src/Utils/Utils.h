@@ -28,4 +28,8 @@ struct Size{
 	unsigned int width = 0, height = 0;
 };
 
+struct Scale2D{
+	float xScale = 1, yScale =1;
+};
+
 #endif

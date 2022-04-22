@@ -16,6 +16,7 @@ bool App::Init(uint32_t width, uint32_t height, uint32_t mag)
 	if(!mFont.LoadFont("HemiFont")){
 		return false;
 	}
+	mFont.SetFontHeight(18);
 
 	mnoptrWindow = mScreen.Init(width, height, mag);
 
