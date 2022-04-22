@@ -3,6 +3,8 @@
 #include "BMPImage.h"
 #include "BitmapFont.h"
 #include "App.h"
+#include "AARectangle.h"
+
 #include <stdint.h>
 
 PursuitScene::PursuitScene(){
@@ -51,10 +53,6 @@ void PursuitScene::Init(){
 	// Set player start position
 	mPlayer.Init(Vec2D(100, 100));
 
-	/// FLOOR ---- TEMP -----
-	AARectangle floorRec(Vec2D(0, 400), 1000, 40);
-	floor.InitRigidbody(floorRec, 0, false, true);
-
 	// LOAD LEVEL
 	if(mLevelLoader.LoadGraphics()){
 		if(!mLevelLoader.LoadPlatforms()){
@@ -64,6 +62,10 @@ void PursuitScene::Init(){
 
 	App::Singleton().SetSceneCamera(Vec2D::Zero, mCamera);
 	mCamera->SetFollowOffset(Vec2D(-80, -90));
+
+	tempImage.LoadImage(App::Singleton().GetBasePath() + "Assets/rocket.bmp");
+//	tempImage.ScaleToCenter(1.2f);
+	tempImage.ScaleImage(0.5, 0.5, false);
 }
 
 void PursuitScene::Update(uint32_t deltaTime)
@@ -75,12 +77,11 @@ void PursuitScene::Update(uint32_t deltaTime)
 
 void PursuitScene::Draw(Screen& screen)
 {
-	mPlayer.Draw(screen);
-	floor.Draw(screen);
+	screen.Draw(tempImage, Vec2D(10, 10));
 
+	mPlayer.Draw(screen);
 	// Draw Level
 	mLevelLoader.DrawObjects(screen);
-
 }
 
 const std::string& PursuitScene::GetSceneName() const

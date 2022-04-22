@@ -1,12 +1,13 @@
 #ifndef SRC_GRAPHICS_SPRITESHEET_H_
 #define SRC_GRAPHICS_SPRITESHEET_H_
 
-#include <vector>
 #include "BMPImage.h"
+
+#include <vector>
 #include <functional>
 
-using ReadField = std::function<void(std::string field)>;
 
+using ReadField = std::function<void(std::string field)>;
 
 struct Sprite{
 	uint32_t xPos = 0;
@@ -19,7 +20,7 @@ class SpriteSheet {
 public:
 	SpriteSheet();
 	bool LoadSprite(const std::string& name);
-	Sprite GetSprite(const std::string& name) const;
+	Sprite GetSpriteCoordinates(const std::string& name) const;
 
 	std::vector<std::string> GetSpritestNames() const;
 

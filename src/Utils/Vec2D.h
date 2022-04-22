@@ -3,9 +3,8 @@
 
 #include <ostream>
 
-class Vec2D{
-private:
-	float mX, mY;
+class Vec2D
+{
 public:
 	Vec2D(): mX{0}, mY{0}{};
 	Vec2D(float x, float y): mX{x}, mY{y}{}
@@ -56,6 +55,8 @@ public:
 
 	friend std::ostream& operator<<(std::ostream& os, const Vec2D& vec);
 	friend Vec2D operator*(float scalar, const Vec2D& vec);
+private:
+	float mX, mY;
 };
 
 #endif

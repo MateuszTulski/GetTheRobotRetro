@@ -2,7 +2,6 @@
 #include <sstream>
 #include "SpriteSheet.h"
 #include "App.h"
-#include "BMPImage.h"
 
 SpriteSheet::SpriteSheet(){
 }
@@ -15,7 +14,7 @@ bool SpriteSheet::LoadSprite(const std::string& name)
 	return imageLoaded && spriteSectionsLoaded;
 }
 
-Sprite SpriteSheet::GetSprite(const std::string& name) const
+Sprite SpriteSheet::GetSpriteCoordinates(const std::string& name) const
 {
 	std::string key = StringToUpper(name);
 	Sprite empty;

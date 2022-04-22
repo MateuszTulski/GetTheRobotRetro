@@ -23,7 +23,7 @@ Size BitmapFont::GetTextSize(const std::string& text) const
 			continue;
 		}
 
-		Sprite sprite = mFontSheet.GetSprite(std::string("")+c);
+		Sprite sprite = mFontSheet.GetSpriteCoordinates(std::string("")+c);
 		textSize.height = textSize.height < sprite.height ? sprite.height : textSize.height;
 
 		textSize.width += sprite.width;				// Add word width

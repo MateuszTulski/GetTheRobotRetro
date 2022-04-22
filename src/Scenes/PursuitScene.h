@@ -26,12 +26,12 @@ private:
 	Player mPlayer;
 	std::shared_ptr<Camera> mCamera;
 
-	Rigidbody floor;
-
 	LevelLoader mLevelLoader;
 
 	SpriteSheet platformSpriteTemp;
 	Platform mPlatform;
+
+	BMPImage tempImage;
 
 	void ResetGame();
 };

@@ -27,6 +27,9 @@ public:
 
 	float Area() const;
 
+	void ScaleToPoint(const Vec2D& point, float scale);
+	void ScaleToCenter(float scale);
+
 	Vec2D GetCenterPoint() const override;
 	std::vector<Vec2D> GetPoints() const override;
 	void MoveTo(const Vec2D& point) override;

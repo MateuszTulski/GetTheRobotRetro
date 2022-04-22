@@ -22,10 +22,21 @@ float MilisecondsToSeconds(unsigned int miliseconds){
 
 int GetPixelIndex(unsigned int col, unsigned int row, unsigned int imgWidth)
 {
-	return row * imgWidth + col;
+	return (row * imgWidth) + col;
 }
 
 float Clamp(float val, float min, float max)
+{
+	if(val < min){
+		val = min;
+	}
+	if(val > max){
+		val = max;
+	}
+	return val;
+}
+
+int Clamp(int val, int min, int max)
 {
 	if(val < min){
 		val = min;

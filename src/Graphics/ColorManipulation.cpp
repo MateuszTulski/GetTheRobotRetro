@@ -1,14 +1,15 @@
-#include "ColorManipulation.h"
 #include <iostream>
+#include "Color.h"
+#include "ColorManipulation.h"
 
-ColorManipulation::ColorManipulation() : ColorManipulation(COL_MULTIPLY, Color().White())
+ColorManipulation::ColorManipulation() : mColor(), mModifier(COL_MULTIPLY)
 {
-
+	mColor = Color::White();
 }
 
-ColorManipulation::ColorManipulation(ColorModifier modifier, const Color& color) : mModifier(modifier)
+ColorManipulation::ColorManipulation(ColorModifier modifier, const Color& color) : mColor(color), mModifier(modifier)
 {
-	mColor = color;
+
 }
 
 void ColorManipulation::SetModifier(ColorModifier modifier, const Color& color)
@@ -17,23 +18,23 @@ void ColorManipulation::SetModifier(ColorModifier modifier, const Color& color)
 	mColor = color;
 }
 
-void ColorManipulation::ModifyColor(Color& inputColor)
+Color ColorManipulation::ModifyColor(const Color& inputColor) const
 {
 	switch(mModifier)
 	{
 	case COL_MULTIPLY:
-		ColorMultiply(inputColor);
-		break;
+		return ColorMultiply(inputColor);
+
 	case COL_SCREEN:
-		ColorScreen(inputColor);
-		break;
+		return ColorScreen(inputColor);
+
 	case COL_DESATURATE:
-		ColorDesaturate(inputColor);
-		break;
+		return ColorDesaturate(inputColor);
 	}
+	return inputColor;
 }
 
-void ColorManipulation::ColorMultiply(Color& inputColor)
+Color ColorManipulation::ColorMultiply(const Color& inputColor) const
 {
 	float rVal = static_cast<float>(mColor.GetRed()) / 255.0f;
 	float gVal = static_cast<float>(mColor.GetGreen()) / 255.0f;
@@ -45,16 +46,17 @@ void ColorManipulation::ColorMultiply(Color& inputColor)
 	uint8_t blue = static_cast<uint8_t>(inputColor.GetBlue() * bVal);
 	uint8_t alpha = static_cast<uint8_t>(inputColor.GetAlpha() * aVal);
 
-	inputColor = Color(red, green, blue, alpha);
+	return Color(red, green, blue, alpha);
 }
 
-void ColorManipulation::ColorScreen(Color& inputColor)
+Color ColorManipulation::ColorScreen(const Color& inputColor) const
 {
-
+	return inputColor;
 }
 
-void ColorManipulation::ColorDesaturate(Color& inputColor)
+Color ColorManipulation::ColorDesaturate(const Color& inputColor) const
 {
-
+	return inputColor;
 }
+
 

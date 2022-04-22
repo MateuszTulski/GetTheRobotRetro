@@ -1,9 +1,10 @@
 #ifndef SRC_GRAPHICS_COLORMANIPULATION_H_
 #define SRC_GRAPHICS_COLORMANIPULATION_H_
 
-#include "Color.h"
 #include "Utils.h"
 #include <stdint.h>
+
+class Color;
 
 enum ColorModifier{
 	COL_MULTIPLY = 0,
@@ -16,19 +17,25 @@ class ColorManipulation
 public:
 	ColorManipulation();
 	ColorManipulation(ColorModifier modifier, const Color& color);
+	~ColorManipulation(){}
 
 	void SetModifier(ColorModifier modifier, const Color& color);
 	inline Color GetModifierColor() const {return mColor;}
 
-	void ModifyColor(Color& inputColor);
+	Color ModifyColor(const Color& inputColor) const;
+
+	static ColorManipulation NoColorManipulation() {
+		static ColorManipulation manip;
+		return manip;
+	}
 
 private:
-	void ColorMultiply(Color& inputColor);
-	void ColorScreen(Color& inputColor);
-	void ColorDesaturate(Color& inputColor);
-
-	ColorModifier mModifier;
 	Color mColor;
+	ColorModifier mModifier;
+
+	Color ColorMultiply(const Color& inputColor) const;
+	Color ColorScreen(const Color& inputColor) const;
+	Color ColorDesaturate(const Color& inputColor) const;
 };
 
 

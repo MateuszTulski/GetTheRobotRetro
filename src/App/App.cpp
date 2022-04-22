@@ -58,7 +58,8 @@ void App::Run(){
 
 		if(topScene){
 			// UPDATE
-			while(accumulator >= deltaTime){
+			while(accumulator >= deltaTime)
+			{
 				topScene->Update(deltaTime);
 				accumulator -= deltaTime;
 			}
@@ -86,7 +87,7 @@ void App::PushScene(std::unique_ptr<Scene> scene){
 void App::PopScene(){
 	if(mSceneStack.size()>1){
 		mScreen.RemoveSceneCamera();
-		mActiveCameraPtr = nullptr;
+		mActiveCameraPtr.reset();
 		// Remove scene from stack
 		mSceneStack.pop_back();
 	}
@@ -114,7 +115,7 @@ void App::SetSceneCamera(const Vec2D& position, std::shared_ptr<Camera>& cameraP
 	Camera camera;
 	camera.Init(position);
 
-	mActiveCameraPtr = std::make_shared<Camera>(camera);
+	mActiveCameraPtr = std::make_shared<Camera>(std::move(camera));
 	mScreen.SetSceneCamera(mActiveCameraPtr);
 
 	cameraPtr = mActiveCameraPtr;

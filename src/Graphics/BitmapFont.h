@@ -38,5 +38,4 @@ private:
 };
 
 
-
 #endif /* SRC_GRAPHICS_BITMAPFONT_H_ */

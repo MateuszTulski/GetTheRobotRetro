@@ -51,16 +51,16 @@ public:
 	void Draw(const Line2D& line, const Color& color);
 	void Draw(const Shape& shape, const Color& color, bool fillShape = false, const Color& fillColor = Color::White());
 	void Draw(const Circle& circle, const Color& color, bool fillShape = false, const Color& fillColor = Color::White());
-	void Draw(const BMPImage& image, const Vec2D& position, ColorManipulation& manipulator);
-	void Draw(const SpriteSheet& sprite, const std::string& name, const Vec2D& position, ColorManipulation& manipulator);
-
+	void Draw(const BMPImage& image, const Vec2D& position, const ColorManipulation& manipulator = ColorManipulation::NoColorManipulation());
+	void Draw(const SpriteSheet& sprite, const std::string& name, const Vec2D& position, const ColorManipulation& manipulator = ColorManipulation::NoColorManipulation());
 	void Draw(const BitmapFont& font, const std::string& text, const Vec2D& position);
-	void Draw(const BitmapFont& font, const std::string& text, const Vec2D& position, ColorManipulation& manipulator);
+	void Draw(const BitmapFont& font, const std::string& text, const Vec2D& position, const ColorManipulation& manipulator = ColorManipulation::NoColorManipulation());
 
 	void FillPoly(const std::vector<Vec2D>& points, const Color& color);
 
 private:
-	void Draw(const BMPImage& image, const Sprite& sprite, const Vec2D& position, ColorManipulation& manipulator);
+
+	void Draw(const BMPImage& image, const Sprite& sprite, const Vec2D& position, const ColorManipulation& manipulator = ColorManipulation::NoColorManipulation());
 	Vec2D GetScreenPoint(const Vec2D globalPoint) const;
 
 	uint32_t mWidth, mHeight;

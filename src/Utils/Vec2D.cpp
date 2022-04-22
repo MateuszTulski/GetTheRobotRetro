@@ -60,6 +60,7 @@ Vec2D Vec2D::operator+=(const Vec2D &rhs){
 	this->mY += rhs.mY;
 	return *this;
 }
+
 Vec2D Vec2D::operator-(const Vec2D &rhs) const{
 	float newX = this->mX - rhs.mX;
 	float newY = this->mY - rhs.mY;

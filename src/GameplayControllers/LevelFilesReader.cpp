@@ -39,26 +39,30 @@ bool LevelFilesReader::LoadFile(const std::string& name, LevelObjectType type, c
 	{
 		Vec2D p0, p1;
 		int points{0};
-		char lastSymbol;
 
 		while(getline(file, line))
 		{
+			char prevSymbol;
 			row ++;
 			for(char c : line)
 			{
 				col ++;
 
 				if(c == symbol && points == 0){
+					// This is first point for this symbols line
 					p0 = Vec2D(col, row);
 					points ++;
 				}
 				if(c == symbol && points == 1){
-					lastSymbol = c;
+					prevSymbol = c;
 				}
-				if(c != symbol && points == 1){
+				if(c != prevSymbol && points == 1){
+					// This is the last point for this symbols line
 					p1 = Vec2D(col-1, row);
 					mLines.push_back(Line2D(p0, p1));
+
 					points = 0;
+					prevSymbol = {};
 				}
 
 			}
