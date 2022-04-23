@@ -53,6 +53,8 @@ private:
 	int mID;
 
 	float const COLLISION_OFFSET = 0.5f;
+
+	void ResetOffsetOnObstacle(Vec2D& offset, const BoundaryEdge& obstacleEdge);
 };
 
 

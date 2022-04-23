@@ -51,53 +51,46 @@ void Rigidbody::UpdateRigdbody(uint32_t deltaTime){
 	}
 	Vec2D finalOffset = mVelocity * MilisecondsToSeconds(deltaTime);
 
-	BoundaryEdge outEdge;		// Edge on the collided obstacle
+	BoundaryEdge outObstacleEdge;
 
-	// Look for collisions before and after moving object
+	// Checking ACTUAL and POTENTIAL collisions
 	for(Rigidbody* otherRigidbody : PhysicsWorld::Singleton().GetAllRigidbodyObjects()){
 		if(otherRigidbody->IsCollider() && mID != otherRigidbody->GetRigidbodyID())
 		{
-			// Check if rigidbody is already colliding
-			if(HasCollided(*otherRigidbody, outEdge))
+			// ACTUAL - Check if rigidbody is already colliding
+			if(HasCollided(*otherRigidbody, outObstacleEdge))
 			{
-				MakeFlushWithEdge(outEdge);
-
-				StopOnObstacle(outEdge.normal);
-
-				if(!IsEqual(outEdge.normal.GetX(), 0))
-				{
-					finalOffset.SetX(0);
-				}
-				if(!IsEqual(outEdge.normal.GetY(), 0))
-				{
-					finalOffset.SetY(0);
-				}
+				MakeFlushWithEdge(outObstacleEdge);
+				StopOnObstacle(outObstacleEdge.normal);
+				ResetOffsetOnObstacle(finalOffset, outObstacleEdge);
 			}
-			
-//			 Check possible collision after finalOffset
+
+			// POTENTIAL - Check possible collision after finalOffset
 			Excluder offsetGhost;
 			offsetGhost.Init(GetAARectangle());
 			offsetGhost.MoveBy(finalOffset);
 
-			if(offsetGhost.HasCollided(*otherRigidbody, outEdge))
+			if(offsetGhost.HasCollided(*otherRigidbody, outObstacleEdge))
 			{
-				// Movement will cause a collision, so don't do it
-				MakeFlushWithEdge(outEdge);
-				StopOnObstacle(outEdge.normal);
-
-				if(!IsEqual(outEdge.normal.GetX(), 0))
-				{
-					finalOffset.SetX(0);
-				}
-				if(!IsEqual(outEdge.normal.GetY(), 0))
-				{
-					finalOffset.SetY(0);
-				}
+				StopOnObstacle(outObstacleEdge.normal);
+				ResetOffsetOnObstacle(finalOffset, outObstacleEdge);
 			}
 		}
 	}
 
 	MoveBy(finalOffset);
+}
+
+void Rigidbody::ResetOffsetOnObstacle(Vec2D& offset, const BoundaryEdge& obstacleEdge){
+
+	if(!IsEqual(obstacleEdge.normal.GetX(), 0))
+	{
+		offset.SetX(0);
+	}
+	if(!IsEqual(obstacleEdge.normal.GetY(), 0))
+	{
+		offset.SetY(0);
+	}
 }
 
 void Rigidbody::MakeFlushWithEdge(const BoundaryEdge& edge){

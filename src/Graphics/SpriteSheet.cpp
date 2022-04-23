@@ -1,5 +1,6 @@
 #include <fstream>
 #include <sstream>
+#include <iostream>
 
 #include "SpriteSheet.h"
 #include "App.h"
@@ -13,6 +14,10 @@ bool SpriteSheet::LoadSprite(const std::string& name){
 
 	bool imageLoaded = mImage.LoadImage(App::Singleton().GetBasePath() + std::string("Assets/") + name + ".bmp");
 	bool spriteSectionsLoaded = LoadSpriteSections(App::Singleton().GetBasePath() + std::string("Assets/") + name + ".txt");
+
+	if(name == "Animations/player-run"){
+		auto sections = mSpriteSections;
+	}
 
 	return imageLoaded && spriteSectionsLoaded;
 }
@@ -40,7 +45,7 @@ Sprite SpriteSheet::GetSpriteCoordinates(const std::string& name) const{
 
 	for(const auto& el : mSpriteSections)
 	{
-		if(el.key == key)
+		if(StringToUpper(el.key) == key)
 		{
 			Sprite coordinates = el.sprite;
 			coordinates.xPos *= mScale.xScale;
@@ -70,7 +75,7 @@ bool SpriteSheet::LoadSpriteSections(const std::string& path){
 	fs.open(path);
 
 	if(!fs.is_open()){
-		std::cout << "Couldn't open font sections file!" << std::endl;
+		std::cout << "Couldn't open sprite sections file!" << std::endl;
 		return false;
 	}
 

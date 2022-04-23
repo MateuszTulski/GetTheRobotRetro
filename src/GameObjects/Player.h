@@ -3,6 +3,7 @@
 
 #include "AARectangle.h"
 #include "Rigidbody.h"
+#include "Animation.h"
 
 class Screen;
 class BoundaryEdge;
@@ -25,6 +26,7 @@ public:
 
 private:
 	bool mJumpPressed;
+	Animation mAnimation;
 
 	const float RUN_SPEED = 75.0f;
 	const float MASS = 20.0f;

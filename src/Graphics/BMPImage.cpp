@@ -1,6 +1,9 @@
 #include "BMPImage.h"
-#include <stdint.h>
+
 #include <SDL2/SDL.h>
+#include <stdint.h>
+#include <iostream>
+
 #include "Utils.h"
 
 BMPImage::BMPImage():mWidth(0), mHeight(0), originalWidth(0), originalHeight(0){
@@ -35,6 +38,7 @@ bool BMPImage::LoadImage(const std::string& path){
 
 	if(tempSurface == nullptr)
 	{
+		std::cout << "Couldn't open BMP file!" << std::endl;
 		return false;
 	}
 

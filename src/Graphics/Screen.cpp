@@ -292,7 +292,7 @@ void Screen::Draw(const Circle& circle, const Color& color, bool fillShape, cons
 
 }
 
-void Screen::Draw(const BMPImage& image, const Sprite& sprite, const Vec2D& position, const ColorManipulation& manipulator)
+void Screen::Draw(const BMPImage& image, const Sprite& sprite, const Vec2D& topLeftCorner, const ColorManipulation& manipulator)
 {
 	uint32_t rows = sprite.height;
 	uint32_t columns = sprite.width;
@@ -308,8 +308,8 @@ void Screen::Draw(const BMPImage& image, const Sprite& sprite, const Vec2D& posi
 	{
 		for(uint32_t c = 0; c < columns; ++c)
 		{
-			int pixelX = position.GetX() + c;
-			int pixelY = position.GetY() + r;
+			int pixelX = topLeftCorner.GetX() + c;
+			int pixelY = topLeftCorner.GetY() + r;
 
 			Color color = manipulator.ModifyColor(pixels.at(GetPixelIndex(c + sprite.xPos , r + sprite.yPos , image.GetImageWidth())));
 			if(color == Color::Black()){
