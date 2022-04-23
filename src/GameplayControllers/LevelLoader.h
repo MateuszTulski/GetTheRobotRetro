@@ -22,7 +22,6 @@ private:
 	std::shared_ptr<SpriteSheet> moptrPlatformSprite;
 
 	std::vector<Platform> mPlatforms;
-
 };
 
 

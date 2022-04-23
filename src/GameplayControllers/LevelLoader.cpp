@@ -7,12 +7,12 @@ bool LevelLoader::LoadGraphics()
 	SpriteSheet platforms;
 	if(platforms.LoadSprite("platform"))
 	{
-		// Save pointer
 		moptrPlatformSprite = std::make_shared<SpriteSheet>(platforms);
-	}else{
+	}
+	else
+	{
 		return false;
 	}
-
 
 	return true;
 }

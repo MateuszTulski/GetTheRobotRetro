@@ -28,8 +28,8 @@ private:
 
 	const float RUN_SPEED = 75.0f;
 	const float MASS = 20.0f;
-	const float WIDTH = 24;
-	const float HEIGHT = 56;
+	const float WIDTH = 12;
+	const float HEIGHT = 30;
 	const float JUMP_FORCE = 13000;
 
 	bool RIGHT_KEY_PRESSED = false;
