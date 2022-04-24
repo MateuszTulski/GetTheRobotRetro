@@ -1,3 +1,4 @@
+#include "App.h"
 #include "Rigidbody.h"
 #include "PhysicsWorld.h"
 #include "Utils.h"
@@ -49,7 +50,7 @@ void Rigidbody::UpdateRigdbody(uint32_t deltaTime){
 	if(!mUseGravity){
 		return;
 	}
-	Vec2D finalOffset = mVelocity * MilisecondsToSeconds(deltaTime);
+	Vec2D finalOffset = mVelocity * App::Singleton().GetTime().DeltaTime();
 
 	BoundaryEdge outObstacleEdge;
 

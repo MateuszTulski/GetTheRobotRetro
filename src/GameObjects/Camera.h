@@ -24,8 +24,10 @@ public:
 	inline void SetFollowOffset(const Vec2D& offset) { mFollowOffset = offset; }
 
 private:
-	const float DEFAULT_SPEED = 1.2f;
+	const float DEFAULT_SPEED = 1.6f;
 	const float DISTANCE_SPEED_FACTOR = 100.0f;
+
+	float mSpeed(float distance);
 
 	Vec2D mPosition;	// Camera top left corner position
 	Vec2D mFollowOffset;

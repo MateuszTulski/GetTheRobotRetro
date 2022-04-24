@@ -52,7 +52,7 @@ private:
 	float mGravityScale = 1;
 	int mID;
 
-	float const COLLISION_OFFSET = 0.5f;
+	float const COLLISION_OFFSET = 1.2f;
 
 	void ResetOffsetOnObstacle(Vec2D& offset, const BoundaryEdge& obstacleEdge);
 };

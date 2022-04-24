@@ -1,8 +1,11 @@
 #ifndef SRC_APP_GLOBALSETTINGS_H_
 #define SRC_APP_GLOBALSETTINGS_H_
 
-const float DEFAULT_ANIMATINOS_FPS = 30.0f;
+#include <stdint.h>
 
+const float DEFAULT_ANIMATINOS_FPS = 60.0f;
+const uint32_t DEFAULT_APP_FPS = 60;
 
+const float GRAVITY_SCALE = 1.4f;
 
 #endif /* SRC_APP_GLOBALSETTINGS_H_ */

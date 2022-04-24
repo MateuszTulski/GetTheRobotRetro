@@ -1,6 +1,6 @@
 #include "Camera.h"
 
-Camera::Camera() : mPosition(Vec2D::Zero), mFollowOffset(Vec2D::Zero), maxSpeed(DEFAULT_SPEED*2.3f), minSpeed(DEFAULT_SPEED*.1f){
+Camera::Camera() : mPosition(Vec2D::Zero), mFollowOffset(Vec2D::Zero), maxSpeed(DEFAULT_SPEED*3.8f), minSpeed(DEFAULT_SPEED*.1f){
 }
 
 Camera::Camera(const Camera& other) : mPosition(other.mPosition), maxSpeed(other.maxSpeed), minSpeed(other.minSpeed)
@@ -28,23 +28,29 @@ void Camera::Update(const Player& player)
 	if(desiredPosition != mPosition)
 	{
 		float distance = mPosition.Distance(desiredPosition);
-		if(distance < maxSpeed)
+		float speed = mSpeed(distance);
+
+		if(distance < speed)
 		{
 			mPosition = desiredPosition;
 		}
 		else
 		{
-			float speedDistanceFactor = distance / DISTANCE_SPEED_FACTOR;
-			if(speedDistanceFactor > 1)
-			{
-				mPosition += moveDirection * maxSpeed;
-			}
-			else
-			{
-				float speed = ((maxSpeed - minSpeed) * speedDistanceFactor) + minSpeed;
-				mPosition += moveDirection * speed;
-			}
+			mPosition += moveDirection * speed;
 		}
-//		std::cout << mPosition << std::endl;
+	}
+}
+
+float Camera::mSpeed(float distance){
+
+	float speedDistanceFactor = distance / DISTANCE_SPEED_FACTOR;
+
+	if(speedDistanceFactor > 1)
+	{
+		return maxSpeed;
+	}
+	else
+	{
+		return ((maxSpeed - minSpeed) * speedDistanceFactor) + minSpeed;
 	}
 }

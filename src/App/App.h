@@ -2,10 +2,12 @@
 #define APP_APP_H_
 
 #include "Screen.h"
+#include "Time.h"
 #include "Scene.h"
 #include "InputController.h"
 #include "BitmapFont.h"
 #include "Vec2D.h"
+
 #include <stdint.h>
 #include <memory>
 #include <vector>
@@ -29,11 +31,14 @@ public:
 	void PopScene();
 	Scene* TopScene();	// Current
 
+	inline Time GetTime() const { return time; }
+
 	static const std::string& GetBasePath();
 
 	void SetSceneCamera(const Vec2D& position, std::shared_ptr<Camera>& cameraPtr);
 
 private:
+	Time time;
 	BitmapFont mFont;
 	Screen mScreen;
 	SDL_Window * mnoptrWindow;

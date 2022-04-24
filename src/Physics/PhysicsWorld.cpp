@@ -1,5 +1,7 @@
 #include "PhysicsWorld.h"
 #include "Rigidbody.h"
+#include "GlobalSettings.h"
+
 #include <vector>
 #include <algorithm>
 #include <iostream>
@@ -15,7 +17,7 @@ PhysicsWorld& PhysicsWorld::Singleton(){
 void PhysicsWorld::Update(uint32_t deltaTime){
 	// Add gravity force to all Kinematic objects
 	for(auto kRB : mKinematicRB){
-		kRB->AddGravityForce(GLOBAL_GRAVITY);
+		kRB->AddGravityForce(GLOBAL_GRAVITY * GRAVITY_SCALE);
 		kRB->UpdateRigdbody(deltaTime);
 	}
 }
