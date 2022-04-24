@@ -19,6 +19,8 @@ public:
 	float DeltaTime();			// Return time of last frame time in seconds
 	float AppTime(); 			// Return time since App have been launched
 
+	inline unsigned int GetActualFrame() const { return frame; }
+
 private:
 	uint32_t frameRate;
 	unsigned int frame;

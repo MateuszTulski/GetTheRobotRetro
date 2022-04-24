@@ -30,17 +30,21 @@ class Animation{
 public:
 
 	Animation();
-	Animation(float fps);
-	Animation(const std::string& spriteFileName, float fps = DEFAULT_ANIMATINOS_FPS);
+	Animation(int speedInFrames);
+	Animation(const std::string& spriteFileName, int speedInFrames);
 
 	bool LoadSprite(const std::string& name);
 
 	inline void ScaleAnimationSprite(float xScale, float yScale) { mSpriteSheet.ScaleSpriteSheet(xScale, yScale); }
 
-	void Update(uint32_t deltaTime);
+	inline void SetVerticalAlign(AnimVerticalAlign align) { mAlign.vertical = align; }
+	inline void SetHorizontalAlign(AnimHorizontalAlign align) { mAlign.horizontal = align; }
+
+	void Update();
 	void Draw(Screen& screen, const Vec2D& pivotPoint);
 
 	inline void SetLoopTime(bool loop) { loopTime = loop; }
+	inline void SetFrameRate(int frames) { clipSpeedInFrames = frames; }
 
 	inline void Play() { isPlaying = true; }
 	inline void Stop() { isPlaying = false; }
@@ -54,13 +58,15 @@ private:
 	AnimationAlignment mAlign;
 	std::vector<std::string> mFramesNames;
 	unsigned int mActualFrame;
-	float mFrameRate;
+
+	int clipSpeedInFrames = 1;		// 1 means -> change animation frame every app frame
 
 	bool isPlaying;
 	bool loopTime;
 	bool playReverse;
 
 	Vec2D GetDrawPosition(const Vec2D& pivotPoint);
+	void ChangeAnimFrame();
 };
 
 

@@ -5,6 +5,7 @@
 
 Player::Player() : mJumpPressed(false), isRunning(false), mSpeed(RUN_SPEED_MIN){
 	Rigidbody::InitRigidbody(PLAYER_RECT, MASS, true, true);
+	mAnimation.SetFrameRate(5);
 }
 
 Player::Player(const Player& other) : mJumpPressed(other.mJumpPressed), isRunning(other.isRunning), mSpeed(other.mSpeed){
@@ -24,9 +25,12 @@ void Player::Init(const Vec2D& startPosition){
 	// Load player Animations
 	mAnimation.LoadSprite("player-run");
 	mAnimation.ScaleAnimationSprite(0.9, 0.9);
+	mAnimation.SetVerticalAlign(AnimVerticalAlign::Bottom);
 }
 
 void Player::Update(uint32_t deltaTime){
+
+	mAnimation.Update();
 
 	UpdateSpeed();
 	SetRigidbodyVelocity();
@@ -36,7 +40,7 @@ void Player::Update(uint32_t deltaTime){
 
 void Player::Draw(Screen& screen){
 //	screen.Draw(mAARect, Color::Blue(), false, Color::Blue());
-	mAnimation.Draw(screen, mAARect.GetCenterPoint());
+	mAnimation.Draw(screen, GetPosition());
 }
 
 void Player::MakeFlushWithEdge(const BoundaryEdge& edge, Vec2D& point, bool limitToEdge){

@@ -34,7 +34,7 @@ private:
 	float mSpeed;
 	Vec2D mLastPosition;
 
-	float resetSpeedTimer;
+	float resetSpeedTimer = 0.0f;
 	float resetSpeedDelay = 0.7f;
 
 	const float RUN_SPEED_MIN = 30.0f;

@@ -1,5 +1,7 @@
 #include "Animation.h"
 #include "Screen.h"
+#include "App.h"
+
 #include <cassert>
 
 
@@ -7,11 +9,11 @@ Animation::Animation() : Animation(DEFAULT_ANIMATINOS_FPS){
 
 }
 
-Animation::Animation(float fps) : mSpriteSheet(), mFramesNames(), mActualFrame(0), mFrameRate(fps), isPlaying(true), loopTime(true), playReverse(false){
+Animation::Animation(int speedInFrames) : mSpriteSheet(), mFramesNames(), mActualFrame(0), isPlaying(true), loopTime(true), playReverse(false){
 
 }
 
-Animation::Animation(const std::string& spriteFileName, float fps) : Animation(fps){
+Animation::Animation(const std::string& spriteFileName, int speedInFrames) : Animation(speedInFrames){
 
 	assert(LoadSprite(spriteFileName) && "Animation sprite couldn't be loaded");
 }
@@ -26,15 +28,19 @@ bool Animation::LoadSprite(const std::string& name){
 	return false;
 }
 
-void Animation::Update(uint32_t deltaTime){
+void Animation::Update(){
 
+	if(App::Singleton().GetTime().GetActualFrame() % clipSpeedInFrames == 0)
+	{
+		ChangeAnimFrame();
+	}
 }
 
 void Animation::Draw(Screen& screen, const Vec2D& pivotPoint){
 
 	if(mFramesNames.size() > 0)
 	{
-		screen.Draw(mSpriteSheet, mFramesNames.at(0), GetDrawPosition(pivotPoint));
+		screen.Draw(mSpriteSheet, mFramesNames.at(mActualFrame), GetDrawPosition(pivotPoint));
 	}
 }
 
@@ -81,4 +87,44 @@ Vec2D Animation::GetDrawPosition(const Vec2D& pivotPoint){
 
 	return drawPosition;
 }
+
+void Animation::ChangeAnimFrame(){
+
+	size_t frame {0};
+
+	if(!playReverse)
+	{
+		frame = mActualFrame + 1;
+
+		if(frame >= mFramesNames.size())
+		{
+			frame = 0;
+		}
+	}
+	else
+	{
+		frame = mActualFrame - 1;
+
+		if(frame < 0)
+		{
+			frame = mFramesNames.size() - 1;
+		}
+	}
+
+	mActualFrame = static_cast<unsigned int>(frame);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
