@@ -9,8 +9,14 @@ Animation::Animation() : Animation(DEFAULT_ANIMATINOS_FPS){
 
 }
 
-Animation::Animation(int speedInFrames) : mSpriteSheet(), mFramesNames(), mActualFrame(0), isPlaying(true), loopTime(true), playReverse(false){
-
+Animation::Animation(int speedInFrames) :
+		mSpriteSheet(),
+		mFramesNames(),
+		mActualFrame(0),
+		clipSpeedInFrames(speedInFrames),
+		isPlaying(true),
+		loopTime(true),
+		playReverse(false){
 }
 
 Animation::Animation(const std::string& spriteFileName, int speedInFrames) : Animation(speedInFrames){
@@ -38,9 +44,12 @@ void Animation::Update(){
 
 void Animation::Draw(Screen& screen, const Vec2D& pivotPoint){
 
-	if(mFramesNames.size() > 0)
-	{
-		screen.Draw(mSpriteSheet, mFramesNames.at(mActualFrame), GetDrawPosition(pivotPoint));
+	DrawFlipped(screen, pivotPoint, false, false);
+}
+void Animation::DrawFlipped(Screen& screen, const Vec2D& pivotPoint, bool flipHorizontal, bool flipVertical){
+
+	if(mFramesNames.size() > 0){
+		screen.DrawFlipped(mSpriteSheet, mFramesNames.at(mActualFrame), GetDrawPosition(pivotPoint), flipHorizontal, flipVertical);
 	}
 }
 

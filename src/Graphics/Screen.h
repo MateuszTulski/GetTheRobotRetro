@@ -39,20 +39,22 @@ public:
 	void SetSceneCamera(std::shared_ptr<Camera> camera);
 	void RemoveSceneCamera();
 
-	// Getters
 	inline uint32_t GetWidth()const{return mWidth;}
 	inline uint32_t GetHeight()const{return mHeight;}
 
 	AARectangle GetScreenRect() const;
 
-	// Draw Methods
-	void Draw(int x, int y, const Color& color);
+	void DrawPixel(int x, int y, const Color& color);
+	// Draw Shapes
 	void Draw(const Vec2D& vec, const Color& color);
 	void Draw(const Line2D& line, const Color& color);
 	void Draw(const Shape& shape, const Color& color, bool fillShape = false, const Color& fillColor = Color::White());
 	void Draw(const Circle& circle, const Color& color, bool fillShape = false, const Color& fillColor = Color::White());
+	// Draw images
 	void Draw(const BMPImage& image, const Vec2D& position, const ColorManipulation& manipulator = ColorManipulation::NoColorManipulation());
+	void DrawFlipped(const BMPImage& image, const Vec2D& position, bool flipHorizontal, bool flipVertical, const ColorManipulation& manipulator = ColorManipulation::NoColorManipulation());
 	void Draw(const SpriteSheet& sprite, const std::string& name, const Vec2D& position, const ColorManipulation& manipulator = ColorManipulation::NoColorManipulation());
+	void DrawFlipped(const SpriteSheet& sprite, const std::string& name, const Vec2D& position, bool flipHorizontal, bool flipVertical, const ColorManipulation& manipulator = ColorManipulation::NoColorManipulation());
 	void Draw(const BitmapFont& font, const std::string& text, const Vec2D& position);
 	void Draw(const BitmapFont& font, const std::string& text, const Vec2D& position, const ColorManipulation& manipulator = ColorManipulation::NoColorManipulation());
 
@@ -60,7 +62,10 @@ public:
 
 private:
 
-	void Draw(const BMPImage& image, const Sprite& sprite, const Vec2D& position, const ColorManipulation& manipulator = ColorManipulation::NoColorManipulation());
+	void DrawImagePixels(const BMPImage& image, const Sprite& sprite, const Vec2D& position, const ColorManipulation& manipulator = ColorManipulation::NoColorManipulation());
+
+	void DrawFlippedImagePixels(const BMPImage& image, const Sprite& sprite, const Vec2D& position, bool flipHorizontal, bool flipVertical, const ColorManipulation& manipulator = ColorManipulation::NoColorManipulation());
+
 	Vec2D GetScreenPoint(const Vec2D globalPoint) const;
 
 	uint32_t mWidth, mHeight;

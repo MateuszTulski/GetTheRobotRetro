@@ -29,10 +29,10 @@ void PursuitScene::Init(){
 	right.key = GameController::RightKey();
 	right.action = [this](uint32_t deltaTime, InputState state){
 
-		mPlayer.Run(1);
+		mPlayer.RunInput(1);
 
 		if(GameController::IsReleased(state)){ // @suppress("Ambiguous problem")
-			mPlayer.Run(1, true);
+			mPlayer.RunInput(1, true);
 		}
 	};
 	mGameController.AddInputActionForKey(right);
@@ -42,10 +42,10 @@ void PursuitScene::Init(){
 	left.key = GameController::LeftKey();
 	left.action = [this](uint32_t deltaTime, InputState state){
 
-		mPlayer.Run(-1);
+		mPlayer.RunInput(-1);
 
 		if(GameController::IsReleased(state)){ // @suppress("Ambiguous problem")
-			mPlayer.Run(-1, true);
+			mPlayer.RunInput(-1, true);
 		}
 	};
 	mGameController.AddInputActionForKey(left);

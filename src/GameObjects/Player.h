@@ -4,6 +4,7 @@
 #include "AARectangle.h"
 #include "Rigidbody.h"
 #include "Animation.h"
+#include "Animator.h"
 
 class Screen;
 class BoundaryEdge;
@@ -20,7 +21,7 @@ public:
 	void Draw(Screen& screen);
 	void MakeFlushWithEdge(const BoundaryEdge& edge, Vec2D& point, bool limitToEdge);
 
-	void Run(signed int direction, bool released = false);
+	void RunInput(signed int direction, bool released = false);
 	void Jump(bool jumpPressed);
 
 	void SetPosition(Vec2D bottomMiddlePoint);
@@ -31,8 +32,10 @@ private:
 	bool isRunning;
 
 	Animation mAnimation;
+	Animator mAnimator;
 	float mSpeed;
 	Vec2D mLastPosition;
+	int mDirection = 1;
 
 	float resetSpeedTimer = 0.0f;
 	float resetSpeedDelay = 0.7f;
@@ -55,6 +58,9 @@ private:
 	void SetRigidbodyVelocity();
 
 	void ResetSpeedWhenNotMoving();
+
+	void SetPlayerDirection();
+
 };
 
 

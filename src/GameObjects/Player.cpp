@@ -23,15 +23,30 @@ void Player::Init(const Vec2D& startPosition){
 	mLastPosition = startPosition;
 
 	// Load player Animations
-	mAnimation.LoadSprite("player-run");
-	mAnimation.ScaleAnimationSprite(0.9, 0.9);
-	mAnimation.SetVerticalAlign(AnimVerticalAlign::Bottom);
+//	mAnimation.LoadSprite("player-run");
+//	mAnimation.ScaleAnimationSprite(0.9, 0.9);
+//	mAnimation.SetVerticalAlign(AnimVerticalAlign::Bottom);
+
+	Animation run(3);
+	run.LoadSprite("player-run");
+	run.ScaleAnimationSprite(0.9, 0.9);
+	run.SetVerticalAlign(AnimVerticalAlign::Bottom);
+
+	Animation idle(10);
+	idle.LoadSprite("player-idle");
+	idle.ScaleAnimationSprite(0.9, 0.9);
+	idle.SetVerticalAlign(AnimVerticalAlign::Bottom);
+
+	mAnimator.AddAnimation("run", run);
+	mAnimator.AddAnimation("idle", idle);
+	mAnimator.SetActiveAnimation("idle");
 }
 
 void Player::Update(uint32_t deltaTime){
 
-	mAnimation.Update();
+	mAnimator.Update();
 
+	SetPlayerDirection();
 	UpdateSpeed();
 	SetRigidbodyVelocity();
 
@@ -39,17 +54,22 @@ void Player::Update(uint32_t deltaTime){
 }
 
 void Player::Draw(Screen& screen){
-//	screen.Draw(mAARect, Color::Blue(), false, Color::Blue());
-	mAnimation.Draw(screen, GetPosition());
+
+	if(mDirection > 0){
+//		mAnimation.Draw(screen, GetPosition());
+		mAnimator.DrawActiveAnimation(screen, GetPosition());
+	}else{
+//		mAnimation.DrawFlipped(screen, GetPosition(), true, false);
+		mAnimator.DrawFlippedActiveAnimation(screen, GetPosition(), true, false);
+	}
 }
 
 void Player::MakeFlushWithEdge(const BoundaryEdge& edge, Vec2D& point, bool limitToEdge){
 
 }
 
-void Player::Run(signed int direction, bool released){
+void Player::RunInput(signed int direction, bool released){
 
-	// Set right or left key (depending on direction)
 	if(direction > 0){
 		if(!RIGHT_KEY_PRESSED && !released){
 			RIGHT_KEY_PRESSED = true;
@@ -137,3 +157,12 @@ void Player::SetRigidbodyVelocity(){
 	}
 }
 
+void Player::SetPlayerDirection(){
+
+	if(RIGHT_KEY_PRESSED && !LEFT_KEY_PRESSED && mDirection < 0 && mLastPosition != GetPosition()){
+		mDirection = 1;
+	}
+	if(LEFT_KEY_PRESSED && !RIGHT_KEY_PRESSED && mDirection > 0 && mLastPosition != GetPosition()){
+		mDirection = -1;
+	}
+}
