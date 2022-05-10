@@ -3,16 +3,17 @@
 #include "Screen.h"
 #include "App.h"
 
-Player::Player() : mJumpPressed(false), isRunning(false), mSpeed(RUN_SPEED_MIN){
+#include <cassert>
+
+Player::Player() : mState(PlayerState::idle), mJumpPressed(false), mSpeed(RUN_SPEED_MIN){
 	Rigidbody::InitRigidbody(PLAYER_RECT, MASS, true, true);
-	mAnimation.SetFrameRate(5);
 }
 
-Player::Player(const Player& other) : mJumpPressed(other.mJumpPressed), isRunning(other.isRunning), mSpeed(other.mSpeed){
+Player::Player(const Player& other) : mState(PlayerState::idle), mJumpPressed(other.mJumpPressed), mSpeed(other.mSpeed){
 
 }
 
-Player::Player(Player&& other) : mJumpPressed(std::move(other.mJumpPressed)), isRunning(std::move(other.isRunning)), mSpeed(std::move(other.mSpeed)){
+Player::Player(Player&& other) : mState(std::move(other.mState)), mJumpPressed(std::move(other.mJumpPressed)), mSpeed(std::move(other.mSpeed)){
 
 }
 
@@ -22,46 +23,26 @@ void Player::Init(const Vec2D& startPosition){
 	SetGravityScale(1.5f);
 	mLastPosition = startPosition;
 
-	// Load player Animations
-//	mAnimation.LoadSprite("player-run");
-//	mAnimation.ScaleAnimationSprite(0.9, 0.9);
-//	mAnimation.SetVerticalAlign(AnimVerticalAlign::Bottom);
+	assert(mAnimations.InitAnimations() && "Couldn't init player animations!");
 
-	Animation run(3);
-	run.LoadSprite("player-run");
-	run.ScaleAnimationSprite(0.9, 0.9);
-	run.SetVerticalAlign(AnimVerticalAlign::Bottom);
-
-	Animation idle(10);
-	idle.LoadSprite("player-idle");
-	idle.ScaleAnimationSprite(0.9, 0.9);
-	idle.SetVerticalAlign(AnimVerticalAlign::Bottom);
-
-	mAnimator.AddAnimation("run", run);
-	mAnimator.AddAnimation("idle", idle);
-	mAnimator.SetActiveAnimation("idle");
 }
 
 void Player::Update(uint32_t deltaTime){
 
-	mAnimator.Update();
-
 	SetPlayerDirection();
 	UpdateSpeed();
 	SetRigidbodyVelocity();
+	UpdateState();
 
 	mLastPosition = GetPosition();
+
+	mAnimations.Update(mState);
 }
 
 void Player::Draw(Screen& screen){
 
-	if(mDirection > 0){
-//		mAnimation.Draw(screen, GetPosition());
-		mAnimator.DrawActiveAnimation(screen, GetPosition());
-	}else{
-//		mAnimation.DrawFlipped(screen, GetPosition(), true, false);
-		mAnimator.DrawFlippedActiveAnimation(screen, GetPosition(), true, false);
-	}
+	mAnimations.Draw(screen, mLastPosition, mDirection);
+
 }
 
 void Player::MakeFlushWithEdge(const BoundaryEdge& edge, Vec2D& point, bool limitToEdge){
@@ -125,6 +106,13 @@ void Player::UpdateSpeed(){
 
 		mSpeed = newSpeed;
 	}
+}
+
+void Player::UpdateState(){
+	/* TODO
+	 * falling detection
+	 * grounded detection
+	 */
 }
 
 void Player::ResetSpeedWhenNotMoving(){

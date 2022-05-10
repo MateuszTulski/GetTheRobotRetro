@@ -1,11 +1,12 @@
 :key idle_01
 :xPos 0
 :yPos 0
-:width 28
-:height 40
+:width 23
+:height 36
 
 :key idle_02
-:xPos 28
+:xPos 24
 :yPos 0
-:width 28
-:height 40
+:width 22
+:height 36
+:yPos 0

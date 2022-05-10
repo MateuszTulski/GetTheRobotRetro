@@ -16,7 +16,10 @@ Animation::Animation(int speedInFrames) :
 		clipSpeedInFrames(speedInFrames),
 		isPlaying(true),
 		loopTime(true),
-		playReverse(false){
+		playReverse(false),
+		stopOnLastFrame(false),
+		maxNumberOfLoops(1),
+		loopsCounter(0){
 }
 
 Animation::Animation(const std::string& spriteFileName, int speedInFrames) : Animation(speedInFrames){
@@ -36,9 +39,10 @@ bool Animation::LoadSprite(const std::string& name){
 
 void Animation::Update(){
 
-	if(App::Singleton().GetTime().GetActualFrame() % clipSpeedInFrames == 0)
-	{
-		ChangeAnimFrame();
+	if(isPlaying){
+		if(App::Singleton().GetTime().GetActualFrame() % clipSpeedInFrames == 0){
+			ChangeAnimFrame();
+		}
 	}
 }
 
@@ -50,6 +54,19 @@ void Animation::DrawFlipped(Screen& screen, const Vec2D& pivotPoint, bool flipHo
 
 	if(mFramesNames.size() > 0){
 		screen.DrawFlipped(mSpriteSheet, mFramesNames.at(mActualFrame), GetDrawPosition(pivotPoint), flipHorizontal, flipVertical);
+	}
+}
+
+inline void Animation::Play(){
+	isPlaying = true;
+}
+
+inline void Animation::Stop(bool forceStop){
+	if(forceStop){
+		isPlaying = false;
+	}else{
+		// Wait for last frame and than stop
+		stopOnLastFrame = true;
 	}
 }
 
@@ -101,29 +118,39 @@ void Animation::ChangeAnimFrame(){
 
 	size_t frame {0};
 
-	if(!playReverse)
-	{
+	if(!playReverse){
+
 		frame = mActualFrame + 1;
-
-		if(frame >= mFramesNames.size())
-		{
+		if(frame >= mFramesNames.size()){
 			frame = 0;
+			StartNewLoop();
 		}
-	}
-	else
-	{
+	}else{
 		frame = mActualFrame - 1;
-
-		if(frame < 0)
-		{
+		if(frame < 0){
 			frame = mFramesNames.size() - 1;
+			StartNewLoop();
 		}
 	}
 
 	mActualFrame = static_cast<unsigned int>(frame);
 }
 
+void Animation::StartNewLoop(){
 
+	if(stopOnLastFrame){
+		isPlaying = false;
+		stopOnLastFrame = false;
+	}
+
+	if(!loopTime){
+		loopsCounter++;
+		if(isPlaying && loopsCounter == maxNumberOfLoops){
+			stopOnLastFrame = true;
+			loopsCounter = 0;
+		}
+	}
+}
 
 
 

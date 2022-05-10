@@ -46,9 +46,10 @@ public:
 
 	inline void SetLoopTime(bool loop) { loopTime = loop; }
 	inline void SetFrameRate(int frames) { clipSpeedInFrames = frames; }
+	inline void SetNumberOfLoops(int num) { maxNumberOfLoops = num; }
 
-	inline void Play() { isPlaying = true; }
-	inline void Stop() { isPlaying = false; }
+	inline void Play();
+	inline void Stop(bool forceStop = false);
 
 	inline bool IsPlaying() const { return isPlaying; }
 
@@ -65,9 +66,14 @@ private:
 	bool isPlaying;
 	bool loopTime;
 	bool playReverse;
+	bool stopOnLastFrame;
+
+	int maxNumberOfLoops;
+	int loopsCounter;
 
 	Vec2D GetDrawPosition(const Vec2D& pivotPoint);
 	void ChangeAnimFrame();
+	void StartNewLoop();
 };
 
 

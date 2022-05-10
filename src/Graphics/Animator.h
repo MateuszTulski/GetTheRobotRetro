@@ -19,14 +19,21 @@ public:
 	void DrawFlippedActiveAnimation(Screen& screen, const Vec2D& pivotPoint, bool flipHorizontal, bool flipVertical);
 
 	void AddAnimation(std::string name, Animation anim);
-	void SetActiveAnimation(const std::string& name);
+	void ChangeAnimation(const std::string& name, bool immediately = true);
 
-//	std::string GetActiveAnimName() const { return
 
 private:
 	std::map<std::string, Animation> mAnimations;
+
+	std::string nextAnimation;
 	std::string mActiveAnimName;
+
 	std::unique_ptr<Animation> mActiveAnim;
+
+	bool waitForEndOfAnimation;
+	void CheckIfAnimationFinished();
+
+	void SetActiveAnimation(const std::string& name);
 };
 
 

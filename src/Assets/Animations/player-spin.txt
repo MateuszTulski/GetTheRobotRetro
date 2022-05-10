@@ -2,22 +2,22 @@
 :xPos 0
 :yPos 0
 :width 27
-:height 36
+:height 40
 
 :key run_02
-:xPos 27
+:xPos 31
 :yPos 0
 :width 25
-:height 36
+:height 40
 
 :key run_03
-:xPos 52
+:xPos 59
 :yPos 0
-:width 27
-:height 36
+:width 26
+:height 40
 
 :key run_04
-:xPos 79
+:xPos 89
 :yPos 0
-:width 23
-:height 36
+:width 24
+:height 40

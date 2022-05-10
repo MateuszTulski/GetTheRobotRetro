@@ -1,10 +1,10 @@
 #ifndef SRC_GAMEOBJECTS_PLAYER_H_
 #define SRC_GAMEOBJECTS_PLAYER_H_
 
+#include "Enums.h"
 #include "AARectangle.h"
 #include "Rigidbody.h"
-#include "Animation.h"
-#include "Animator.h"
+#include "PlayerAnimations.h"
 
 class Screen;
 class BoundaryEdge;
@@ -27,12 +27,14 @@ public:
 	void SetPosition(Vec2D bottomMiddlePoint);
 	Vec2D GetPosition() const;
 
-private:
-	bool mJumpPressed;
-	bool isRunning;
+	PlayerState GetState() const {return mState;}
 
-	Animation mAnimation;
-	Animator mAnimator;
+private:
+	PlayerState mState;
+	PlayerAnimations mAnimations;
+
+	bool mJumpPressed;
+
 	float mSpeed;
 	Vec2D mLastPosition;
 	int mDirection = 1;
@@ -55,6 +57,8 @@ private:
 	const AARectangle PLAYER_RECT = {Vec2D::Zero, WIDTH, HEIGHT};
 
 	void UpdateSpeed();
+	void UpdateState();
+
 	void SetRigidbodyVelocity();
 
 	void ResetSpeedWhenNotMoving();
