@@ -5,6 +5,7 @@
 #include "AARectangle.h"
 #include "Rigidbody.h"
 #include "PlayerAnimations.h"
+#include "Circle.h"
 
 class Screen;
 class BoundaryEdge;
@@ -27,7 +28,9 @@ public:
 	void SetPosition(Vec2D bottomMiddlePoint);
 	Vec2D GetPosition() const;
 
-	PlayerState GetState() const {return mState;}
+	inline PlayerState GetState() const {return mState;}
+	void HitThePlayer(int damage);
+	void FreezeThePlayer(bool freeze);
 
 private:
 	PlayerState mState;
@@ -57,14 +60,12 @@ private:
 	const AARectangle PLAYER_RECT = {Vec2D::Zero, WIDTH, HEIGHT};
 
 	void UpdateSpeed();
-	void UpdateState();
-
+	void UpdatePlayerState();
 	void SetRigidbodyVelocity();
-
 	void ResetSpeedWhenNotMoving();
-
 	void SetPlayerDirection();
 
+	bool IsGrounded();
 };
 
 

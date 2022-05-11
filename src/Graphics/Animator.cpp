@@ -57,7 +57,7 @@ void Animator::SetActiveAnimation(const std::string& name){
 	if(mAnimations.size() > 0){
 		auto it = find_if(mAnimations.begin(), mAnimations.end(), [&name](std::pair<std::string, Animation> element ){ return element.first == name;});
 		if(it != mAnimations.end()){
-			mActiveAnim = std::make_unique<Animation>(std::move(it->second));
+			mActiveAnim = std::make_unique<Animation>(it->second);
 		}
 
 	}

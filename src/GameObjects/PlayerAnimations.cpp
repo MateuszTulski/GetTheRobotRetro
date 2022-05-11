@@ -33,8 +33,6 @@ bool PlayerAnimations::InitAnimations(){
 	idle.LoadSprite("player-idle");
 	idle.ScaleAnimationSprite(0.9, 0.9);
 	idle.SetVerticalAlign(AnimVerticalAlign::Bottom);
-	idle.SetLoopTime(false);
-	idle.SetNumberOfLoops(5);
 	mAnimator.AddAnimation("idle", idle);
 
 	mAnimator.ChangeAnimation("idle");

@@ -153,4 +153,105 @@ void Rigidbody::StopOnObstacle(const Vec2D obstacleNormal){
 	}
 }
 
+bool Rigidbody::CastOrtoRay(const Vec2D& origin, const Vec2D& direction, int lengthLimit){
+	int empty;
+	return CastOrtoRay(origin, direction, lengthLimit, empty);
+}
+
+bool Rigidbody::CastOrtoRay(const Vec2D& origin, const Vec2D& direction, int lengthLimit, int& outID){
+
+	if(direction == Vec2D::Zero){
+		return false;
+	}
+
+	Vec2D endPoint(Vec2D(origin.GetX()+direction.GetX(), origin.GetY()+direction.GetY()));
+
+	auto UpRayHit = [&](Rigidbody* other){
+		if(origin.GetY() > other->mAARect.GetTopLeft().GetY()
+			&& endPoint.GetY() < other->mAARect.GetBottomRight().GetY()){
+			outID = other->mID;
+			return true;
+		}
+		return false;
+	};
+	auto DownRayHit = [&](Rigidbody* other){
+		if(origin.GetY() < other->mAARect.GetBottomRight().GetY()
+			&& endPoint.GetY() > other->mAARect.GetTopLeft().GetY()){
+			outID = other->mID;
+			return true;
+		}
+		return false;
+	};
+	auto RightRayHit = [&](Rigidbody* other){
+		if(origin.GetX() < other->mAARect.GetBottomRight().GetX()
+			&& endPoint.GetX() > other->mAARect.GetTopLeft().GetX()){
+			outID = other->mID;
+			return true;
+		}
+		return false;
+	};
+	auto LeftRayHit = [&](Rigidbody* other){
+		if(origin.GetX() > other->mAARect.GetTopLeft().GetX()
+			&& endPoint.GetX() < other->mAARect.GetBottomRight().GetX()){
+			outID = other->mID;
+			return true;
+		}
+		return false;
+	};
+
+	// Loop through rigidbody world
+	for(Rigidbody* otherRigidbody : PhysicsWorld::Singleton().GetAllRigidbodyObjects()){
+		if(otherRigidbody->IsCollider() && otherRigidbody->mID != mID){
+
+			// VERTICAL RAY
+			if(direction.GetX() == 0
+				&& origin.GetX() < otherRigidbody->mAARect.GetBottomRight().GetX()
+				&& origin.GetX() > otherRigidbody->mAARect.GetTopLeft().GetX()){
+
+				if(direction.GetY() < 0){
+					if(UpRayHit(otherRigidbody))
+						return true;
+				}else{
+					if(DownRayHit(otherRigidbody))
+						return true;
+				}
+			}
+
+			// HORIZONTAL RAY
+			if(direction.GetY() == 0
+				&& origin.GetY() > otherRigidbody->mAARect.GetTopLeft().GetY()
+				&& origin.GetY() < otherRigidbody->mAARect.GetBottomRight().GetY()){
+
+				if(direction.GetX() > 0){
+					if(RightRayHit(otherRigidbody))
+						return true;
+				}else{
+					if(LeftRayHit(otherRigidbody))
+						return true;
+				}
+			}
+		}
+	}
+	// If there were no collisions in for loop -> return false
+	return false;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

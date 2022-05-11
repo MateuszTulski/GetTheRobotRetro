@@ -25,6 +25,7 @@ void Player::Init(const Vec2D& startPosition){
 
 	assert(mAnimations.InitAnimations() && "Couldn't init player animations!");
 
+
 }
 
 void Player::Update(uint32_t deltaTime){
@@ -32,7 +33,7 @@ void Player::Update(uint32_t deltaTime){
 	SetPlayerDirection();
 	UpdateSpeed();
 	SetRigidbodyVelocity();
-	UpdateState();
+	UpdatePlayerState();
 
 	mLastPosition = GetPosition();
 
@@ -42,7 +43,6 @@ void Player::Update(uint32_t deltaTime){
 void Player::Draw(Screen& screen){
 
 	mAnimations.Draw(screen, mLastPosition, mDirection);
-
 }
 
 void Player::MakeFlushWithEdge(const BoundaryEdge& edge, Vec2D& point, bool limitToEdge){
@@ -92,6 +92,20 @@ Vec2D Player::GetPosition() const{
 	return Vec2D(mAARect.GetBottomRight().GetX() - WIDTH/2, mAARect.GetBottomRight().GetY());
 }
 
+void Player::HitThePlayer(int damage){
+	// TODO
+	mState = PlayerState::hitted;
+}
+
+void Player::FreezeThePlayer(bool freeze){
+	// TODO
+	if(freeze){
+		mState = PlayerState::freezed;
+	}else{
+		mState = PlayerState::idle;
+	}
+}
+
 void Player::UpdateSpeed(){
 
 	ResetSpeedWhenNotMoving();
@@ -108,11 +122,60 @@ void Player::UpdateSpeed(){
 	}
 }
 
-void Player::UpdateState(){
-	/* TODO
-	 * falling detection
-	 * grounded detection
-	 */
+void Player::UpdatePlayerState(){
+
+	auto setIdle = [this](){
+		if(IsGrounded()){
+			if(IsEqual(mLastPosition.GetX(), GetPosition().GetX())){
+				mState = PlayerState::idle;
+			}
+			if(!RIGHT_KEY_PRESSED && !LEFT_KEY_PRESSED){
+				mState = PlayerState::idle;
+			}
+		}
+	};
+
+	auto setRun = [this](){
+		if(IsGrounded() && (RIGHT_KEY_PRESSED || LEFT_KEY_PRESSED)){
+			if(!IsEqual(mLastPosition.GetX(), GetPosition().GetX())){
+				mState = PlayerState::run;
+			}
+		}
+	};
+
+	auto setFalling = [this](){
+		if(!IsGrounded()){
+			if(mLastPosition.GetY() < GetPosition().GetY()){
+				mState = PlayerState::falling;
+			}
+		}
+	};
+
+	switch(mState){
+		case PlayerState::idle:
+			setRun();
+			setFalling();
+			break;
+		case PlayerState::run:
+			setFalling();
+			setIdle();
+			break;
+		case PlayerState::firstJump:
+		case PlayerState::secondJump:
+			setFalling();
+			setIdle();
+			break;
+		case PlayerState::falling:
+			setIdle();
+			setRun();
+			break;
+		case PlayerState::hitted:
+		case PlayerState::freezed:
+			setIdle();
+			setRun();
+			setFalling();
+			break;
+	}
 }
 
 void Player::ResetSpeedWhenNotMoving(){
@@ -154,3 +217,12 @@ void Player::SetPlayerDirection(){
 		mDirection = -1;
 	}
 }
+
+bool Player::IsGrounded(){
+	return CastOrtoRay(GetPosition(), Vec2D(0, 1), 20);
+}
+
+
+
+
+

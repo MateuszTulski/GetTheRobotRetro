@@ -1,4 +1,4 @@
-#ifndef SRC_PHYSICS_RIGIDBODY_H_
+	#ifndef SRC_PHYSICS_RIGIDBODY_H_
 #define SRC_PHYSICS_RIGIDBODY_H_
 
 #include <stdint.h>
@@ -41,6 +41,9 @@ public:
 	inline void SetGravityScale(const float& gravityScale) { mGravityScale = gravityScale;}
 
 	inline int GetRigidbodyID() const {return mID;}
+
+	bool CastOrtoRay(const Vec2D& origin, const Vec2D& direction, int lengthLimit);
+	bool CastOrtoRay(const Vec2D& origin, const Vec2D& direction, int lengthLimit, int& outID);
 
 	static int InitializedRigidbody;
 
