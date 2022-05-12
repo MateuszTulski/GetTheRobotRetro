@@ -23,7 +23,7 @@ public:
 	void MakeFlushWithEdge(const BoundaryEdge& edge, Vec2D& point, bool limitToEdge);
 
 	void RunInput(signed int direction, bool released = false);
-	void Jump(bool jumpPressed);
+	void JumpTrigger(bool jumpPressed);
 
 	void SetPosition(Vec2D bottomMiddlePoint);
 	Vec2D GetPosition() const;
@@ -37,6 +37,9 @@ private:
 	PlayerAnimations mAnimations;
 
 	bool mJumpPressed;
+
+	bool firstJumpUsed = false;
+	bool secondJumpUsed = false;
 
 	float mSpeed;
 	Vec2D mLastPosition;
@@ -64,8 +67,12 @@ private:
 	void SetRigidbodyVelocity();
 	void ResetSpeedWhenNotMoving();
 	void SetPlayerDirection();
+	void JumpSequence();
 
 	bool IsGrounded();
+	bool CanJumpFirst();
+	bool CanJumpSecond();
+	void ResetUsedJumps();
 };
 
 

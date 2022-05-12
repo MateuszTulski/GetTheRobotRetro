@@ -23,7 +23,7 @@ void PlayerAnimations::Draw(Screen& screen, Vec2D pivotPoint, int direction){
 
 bool PlayerAnimations::InitAnimations(){
 
-	Animation run(5);
+	Animation run(4);
 	run.LoadSprite("player-run");
 	run.ScaleAnimationSprite(0.9, 0.9);
 	run.SetVerticalAlign(AnimVerticalAlign::Bottom);
@@ -31,9 +31,25 @@ bool PlayerAnimations::InitAnimations(){
 
 	Animation idle(20);
 	idle.LoadSprite("player-idle");
-	idle.ScaleAnimationSprite(0.9, 0.9);
 	idle.SetVerticalAlign(AnimVerticalAlign::Bottom);
 	mAnimator.AddAnimation("idle", idle);
+
+	Animation falling(4);
+	falling.LoadSprite("player-falling");
+	falling.SetVerticalAlign(AnimVerticalAlign::Bottom);
+	falling.SetLoopTime(false);
+	mAnimator.AddAnimation("falling", falling);
+
+	Animation jump(4);
+	jump.LoadSprite("player-jump");
+	jump.SetVerticalAlign(AnimVerticalAlign::Bottom);
+	jump.SetLoopTime(false);
+	mAnimator.AddAnimation("jump", jump);
+
+	Animation spin(2);
+	spin.LoadSprite("player-spin");
+	spin.SetVerticalAlign(AnimVerticalAlign::Bottom);
+	mAnimator.AddAnimation("spin", spin);
 
 	mAnimator.ChangeAnimation("idle");
 
@@ -58,10 +74,13 @@ void PlayerAnimations::SetNewAnimation(){
 		mAnimator.ChangeAnimation("run");
 		break;
 	case PlayerState::firstJump:
+		mAnimator.ChangeAnimation("jump");
 		break;
 	case PlayerState::secondJump:
+		mAnimator.ChangeAnimation("spin");
 		break;
 	case PlayerState::falling:
+		mAnimator.ChangeAnimation("falling");
 		break;
 	case PlayerState::freezed:
 		break;

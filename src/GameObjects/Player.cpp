@@ -68,17 +68,15 @@ void Player::RunInput(signed int direction, bool released){
 	}
 }
 
-void Player::Jump(bool jumpPressed)
+void Player::JumpTrigger(bool jumpPressed)
 {
-	if(jumpPressed && !mJumpPressed)
-	{
+	if(jumpPressed && !mJumpPressed){
 		mJumpPressed = true;
-		AddForce(Vec2D(0, -JUMP_FORCE));
+		JumpSequence();
 	}
 	else if(!jumpPressed)
 	{
-		// False means jump button have been released
-		mJumpPressed = false;
+		mJumpPressed = false;	// Jump button released
 	}
 }
 
@@ -124,8 +122,13 @@ void Player::UpdateSpeed(){
 
 void Player::UpdatePlayerState(){
 
-	auto setIdle = [this](){
-		if(IsGrounded()){
+	bool grounded = IsGrounded();
+	if(grounded){
+		ResetUsedJumps();
+	}
+
+	auto setIdle = [this, &grounded](){
+		if(grounded){
 			if(IsEqual(mLastPosition.GetX(), GetPosition().GetX())){
 				mState = PlayerState::idle;
 			}
@@ -135,16 +138,16 @@ void Player::UpdatePlayerState(){
 		}
 	};
 
-	auto setRun = [this](){
-		if(IsGrounded() && (RIGHT_KEY_PRESSED || LEFT_KEY_PRESSED)){
+	auto setRun = [this, &grounded](){
+		if(grounded && (RIGHT_KEY_PRESSED || LEFT_KEY_PRESSED)){
 			if(!IsEqual(mLastPosition.GetX(), GetPosition().GetX())){
 				mState = PlayerState::run;
 			}
 		}
 	};
 
-	auto setFalling = [this](){
-		if(!IsGrounded()){
+	auto setFalling = [this, &grounded](){
+		if(!grounded){
 			if(mLastPosition.GetY() < GetPosition().GetY()){
 				mState = PlayerState::falling;
 			}
@@ -218,11 +221,50 @@ void Player::SetPlayerDirection(){
 	}
 }
 
+void Player::JumpSequence(){
+
+	if(CanJumpFirst()){
+		mState = PlayerState::firstJump;
+		firstJumpUsed = true;
+		AddForce(Vec2D(0, -JUMP_FORCE));
+	}else if(CanJumpSecond()){
+		mState = PlayerState::secondJump;
+		secondJumpUsed = true;
+		AddForce(Vec2D(0, -JUMP_FORCE*0.7f));
+	}
+}
+
 bool Player::IsGrounded(){
 	return CastOrtoRay(GetPosition(), Vec2D(0, 1), 20);
 }
 
+bool Player::CanJumpFirst(){
+	if(IsGrounded() && !firstJumpUsed){
+		if(mState != PlayerState::firstJump
+			|| mState != PlayerState::secondJump){
+			return true;
+		}
+	}
+	return false;
+}
 
+bool Player::CanJumpSecond(){
+	if(!secondJumpUsed){
+		if(mState == PlayerState::firstJump
+			|| mState == PlayerState::secondJump){
+			return true;
+		}
+	}
+	return false;
+}
 
+void Player::ResetUsedJumps(){
+	if(firstJumpUsed){
+		firstJumpUsed = false;
+	}
+	if(secondJumpUsed){
+		secondJumpUsed = false;
+	}
+}
 
 

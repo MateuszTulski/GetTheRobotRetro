@@ -16,10 +16,10 @@ void PursuitScene::Init(){
 	jump.key = GameController::JumpKey();
 	jump.action = [this](uint32_t deltaTime, InputState state){
 
-		mPlayer.Jump(true);
+		mPlayer.JumpTrigger(true);
 
 		if(GameController::IsReleased(state)){ // @suppress("Ambiguous problem")
-			mPlayer.Jump(false);
+			mPlayer.JumpTrigger(false);
 		}
 	};
 	mGameController.AddInputActionForKey(jump);

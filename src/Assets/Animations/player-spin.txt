@@ -1,23 +1,23 @@
-:key run_01
+:key spin_01
 :xPos 0
 :yPos 0
-:width 27
-:height 40
+:width 28
+:height 28
 
-:key run_02
-:xPos 31
+:key spin_02
+:xPos 29
 :yPos 0
-:width 25
-:height 40
+:width 30
+:height 28
 
-:key run_03
+:key spin_03
 :xPos 59
 :yPos 0
-:width 26
-:height 40
+:width 30
+:height 28
 
-:key run_04
+:key spin_04
 :xPos 89
 :yPos 0
-:width 24
-:height 40
+:width 30
+:height 28

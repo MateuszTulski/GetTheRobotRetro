@@ -145,8 +145,8 @@ void Animation::StartNewLoop(){
 
 	if(!loopTime){
 		loopsCounter++;
-		if(isPlaying && loopsCounter == maxNumberOfLoops){
-			stopOnLastFrame = true;
+		if(isPlaying && loopsCounter >= maxNumberOfLoops){
+			isPlaying = false;
 			loopsCounter = 0;
 		}
 	}
