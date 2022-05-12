@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "Scene.h"
+#include "PursuitController.h"
 #include "PhysicsWorld.h"
 #include "Player.h"
 #include "BMPImage.h"
@@ -25,6 +26,7 @@ public:
 private:
 	Player mPlayer;
 	std::shared_ptr<Camera> mCamera;
+	PursuitController mPursuitController;
 
 	LevelLoader mLevelLoader;
 

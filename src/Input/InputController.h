@@ -1,9 +1,9 @@
 #ifndef INPUT_INPUTCONTROLLER_H_
 #define INPUT_INPUTCONTROLLER_H_
 
+#include <GameControlsActions.h>
 #include <SDL2/SDL.h>
 #include "InputAction.h"
-#include "GameController.h"
 
 class InputController{
 
@@ -11,11 +11,11 @@ public:
 	InputController();
 	void InitInputController(InputAction quitAction);
 	void Update(uint32_t deltaTime);
-	void SetGameController(GameController* controller);
+	void SetGameController(GameControlsActions* controller);
 
 private:
 	InputAction mQuit;
-	GameController* mnoptrGameController;
+	GameControlsActions* mnoptrGameController;
 };
 
 

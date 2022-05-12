@@ -134,6 +134,10 @@ void Rigidbody::SetHorizontalVelocity(float velocity){
 	mVelocity.SetX(velocity);
 }
 
+void Rigidbody::SetVerticalVelocity(float velocity){
+	mVelocity.SetY(velocity);
+}
+
 void Rigidbody::StopOnObstacle(const Vec2D obstacleNormal){
 	if(obstacleNormal==DIR_UP && mVelocity.GetY() > 0)
 	{

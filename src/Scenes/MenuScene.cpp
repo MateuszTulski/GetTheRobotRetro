@@ -46,27 +46,27 @@ void MenuScene::Init()
 
 	// SCENE NAVIGATION
 	ButtonAction upArrow;
-	upArrow.key = GameController::UpKey();
+	upArrow.key = GameControlsActions::UpKey();
 	upArrow.action = [this](uint32_t deltaTime, InputState state){
-		if(GameController::IsPressed(state)){
+		if(GameControlsActions::IsPressed(state)){
 			PrevButton();
 		}
 	};
 	mGameController.AddInputActionForKey(upArrow);
 
 	ButtonAction downArrow;
-	downArrow.key = GameController::DownKey();
+	downArrow.key = GameControlsActions::DownKey();
 	downArrow.action = [this](uint32_t deltaTime, InputState state){
-		if(GameController::IsPressed(state)){
+		if(GameControlsActions::IsPressed(state)){
 			NextButton();
 		}
 	};
 	mGameController.AddInputActionForKey(downArrow);
 
 	ButtonAction executeButton;
-	executeButton.key = GameController::JumpKey();
+	executeButton.key = GameControlsActions::JumpKey();
 	executeButton.action = [this](uint32_t detlatime, InputState state){
-		if(GameController::IsPressed(state)){
+		if(GameControlsActions::IsPressed(state)){
 			for(auto& btn : mButtons){
 				if(btn.IsActive())
 					btn.ExecuteAction();

@@ -52,7 +52,7 @@ void InputController::Update(uint32_t deltaTime){
 	}
 }
 
-void InputController::SetGameController(GameController* controller){
+void InputController::SetGameController(GameControlsActions* controller){
 	mnoptrGameController = controller;
 }
 

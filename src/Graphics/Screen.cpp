@@ -161,8 +161,12 @@ AARectangle Screen::GetScreenRect() const
 
 }
 // Draw Shapes
-void Screen::DrawPixel(int x, int y, const Color& color){
-	Vec2D screenPoint = GetScreenPoint(Vec2D(x, y));
+void Screen::DrawPixel(int x, int y, const Color& color, bool globalPosition){
+
+	Vec2D screenPoint(static_cast<float>(x), static_cast<float>(y));
+	if(globalPosition){
+		screenPoint = GetScreenPoint(Vec2D(x, y));
+	}
 
 	float spx = screenPoint.GetX();
 	float spy = screenPoint.GetY();
@@ -175,13 +179,13 @@ void Screen::DrawPixel(int x, int y, const Color& color){
 		mBackBuffer.SetPixel(color, screenPoint.GetX(), screenPoint.GetY());
 	}
 }
-void Screen::Draw(const Vec2D& vec, const Color& color){
+void Screen::Draw(const Vec2D& vec, const Color& color, bool globalPosition){
 	assert(moptrWindow);
 	if(moptrWindow){
 		mBackBuffer.SetPixel(color, vec.GetX(), vec.GetY());
 	}
 }
-void Screen::Draw(const Line2D& line, const Color& color){
+void Screen::Draw(const Line2D& line, const Color& color, bool globalPosition){
 	assert(moptrWindow);
 	if(moptrWindow){
 		int dx, dy;
@@ -200,7 +204,7 @@ void Screen::Draw(const Line2D& line, const Color& color){
 		dx = abs(dx) * 2;
 		dy = abs(dy) * 2;
 
-		DrawPixel(x0, y0, color);
+		DrawPixel(x0, y0, color, globalPosition);
 
 		if(dx >= dy){
 			//go along in the x
@@ -216,7 +220,7 @@ void Screen::Draw(const Line2D& line, const Color& color){
 				d += dy;
 				x0 += ix;
 
-				DrawPixel(x0, y0, color);
+				DrawPixel(x0, y0, color, globalPosition);
 			}
 		}else{
 			//go along in y
@@ -231,12 +235,12 @@ void Screen::Draw(const Line2D& line, const Color& color){
 				d += dx;
 				y0 += iy;
 
-				DrawPixel(x0, y0, color);
+				DrawPixel(x0, y0, color, globalPosition);
 			}
 		}
 	}
 }
-void Screen::Draw(const Shape& shape, const Color& color, bool fillShape, const Color& fillColor){
+void Screen::Draw(const Shape& shape, const Color& color, bool fillShape, const Color& fillColor, bool globalPosition){
 
 	if(fillShape){
 		FillPoly(shape.GetPoints(), fillColor);
@@ -251,10 +255,10 @@ void Screen::Draw(const Shape& shape, const Color& color, bool fillShape, const 
 		}
 		// Create and draw line
 		Line2D line(shape.GetPoints()[pointA], shape.GetPoints()[pointB]);
-		Draw(line, color);
+		Draw(line, color, globalPosition);
 	}
 }
-void Screen::Draw(const Circle& circle, const Color& color, bool fillShape, const Color& fillColor){
+void Screen::Draw(const Circle& circle, const Color& color, bool fillShape, const Color& fillColor, bool globalPosition){
 
 	unsigned const int numberOfSegments = 30;
 	float angle = TWO_PI / static_cast<float>(numberOfSegments);
@@ -289,24 +293,24 @@ void Screen::Draw(const Circle& circle, const Color& color, bool fillShape, cons
 }
 
 // Draw Images
-void Screen::Draw(const BMPImage& image, const Vec2D& position, const ColorManipulation& manipulator)
+void Screen::Draw(const BMPImage& image, const Vec2D& position, const ColorManipulation& manipulator, bool globalPosition)
 {
 	Sprite sprite;
-	DrawImagePixels(image, sprite, position, manipulator);
+	DrawImagePixels(image, sprite, position, manipulator, globalPosition);
 }
-void Screen::DrawFlipped(const BMPImage& image, const Vec2D& position, bool flipHorizontal, bool flipVertical, const ColorManipulation& manipulator){
+void Screen::DrawFlipped(const BMPImage& image, const Vec2D& position, bool flipHorizontal, bool flipVertical, const ColorManipulation& manipulator, bool globalPosition){
 	Sprite sprite;
-	DrawFlippedImagePixels(image, sprite, position, flipHorizontal, flipVertical, manipulator);
+	DrawFlippedImagePixels(image, sprite, position, flipHorizontal, flipVertical, manipulator, globalPosition);
 }
 
-void Screen::Draw(const SpriteSheet& sprite, const std::string& name, const Vec2D& position, const ColorManipulation& manipulator)
+void Screen::Draw(const SpriteSheet& sprite, const std::string& name, const Vec2D& position, const ColorManipulation& manipulator, bool globalPosition)
 {
-	DrawImagePixels(sprite.GetImage(), sprite.GetSpriteCoordinates(name), position, manipulator);
+	DrawImagePixels(sprite.GetImage(), sprite.GetSpriteCoordinates(name), position, manipulator, globalPosition);
 }
-void Screen::DrawFlipped(const SpriteSheet& sprite, const std::string& name, const Vec2D& position, bool flipHorizontal, bool flipVertical, const ColorManipulation& manipulator){
-	DrawFlippedImagePixels(sprite.GetImage(), sprite.GetSpriteCoordinates(name), position, flipHorizontal, flipVertical, manipulator);
+void Screen::DrawFlipped(const SpriteSheet& sprite, const std::string& name, const Vec2D& position, bool flipHorizontal, bool flipVertical, const ColorManipulation& manipulator, bool globalPosition){
+	DrawFlippedImagePixels(sprite.GetImage(), sprite.GetSpriteCoordinates(name), position, flipHorizontal, flipVertical, manipulator, globalPosition);
 }
-void Screen::Draw(const BitmapFont& font, const std::string& text, const Vec2D& position, const ColorManipulation& manipulator)
+void Screen::Draw(const BitmapFont& font, const std::string& text, const Vec2D& position, const ColorManipulation& manipulator, bool globalPosition)
 {
 	unsigned int xPos = position.GetX();
 
@@ -319,17 +323,17 @@ void Screen::Draw(const BitmapFont& font, const std::string& text, const Vec2D& 
 
 		SpriteSheet spriteSheet = font.GetSpriteSheet();
 
-		Draw(spriteSheet, std::string("")+c, Vec2D(xPos, position.GetY()), manipulator);
+		Draw(spriteSheet, std::string("")+c, Vec2D(xPos, position.GetY()), manipulator, globalPosition);
 
 		xPos += spriteSheet.GetSpriteCoordinates(std::string("")+c).width;
 		xPos += font.GetFontLetterSpace();
 	}
 }
-void Screen::Draw(const BitmapFont& font, const std::string& text, const Vec2D& position)
+void Screen::Draw(const BitmapFont& font, const std::string& text, const Vec2D& position, bool globalPosition)
 {
 	// Draw text without color manipulation
 	ColorManipulation manip;
-	Draw(font, text, position, manip);
+	Draw(font, text, position, manip, globalPosition);
 }
 
 void Screen::FillPoly(const std::vector<Vec2D>& points, const Color& color){
@@ -404,7 +408,7 @@ void Screen::FillPoly(const std::vector<Vec2D>& points, const Color& color){
 
 				// DRAW each pixel
 				for(int pixelX = nodeXVec[k]; pixelX < nodeXVec[k+1]; pixelX++){
-					DrawPixel(pixelX, pixelY, color);
+					DrawPixel(pixelX, pixelY, color, true);
 				}
 			}
 		}
@@ -412,12 +416,12 @@ void Screen::FillPoly(const std::vector<Vec2D>& points, const Color& color){
 
 }
 
-void Screen::DrawImagePixels(const BMPImage& image, const Sprite& sprite, const Vec2D& topLeftCorner, const ColorManipulation& manipulator){
+void Screen::DrawImagePixels(const BMPImage& image, const Sprite& sprite, const Vec2D& topLeftCorner, const ColorManipulation& manipulator, bool globalPosition){
 	// Draw in next method, setting flipHorizontal and flipVertical as false
-	DrawFlippedImagePixels(image, sprite, topLeftCorner, false, false, manipulator);
+	DrawFlippedImagePixels(image, sprite, topLeftCorner, false, false, manipulator, globalPosition);
 }
 
-void Screen::DrawFlippedImagePixels(const BMPImage& image, const Sprite& sprite, const Vec2D& topLeftCorner, bool flipHorizontal, bool flipVertical, const ColorManipulation& manipulator)
+void Screen::DrawFlippedImagePixels(const BMPImage& image, const Sprite& sprite, const Vec2D& topLeftCorner, bool flipHorizontal, bool flipVertical, const ColorManipulation& manipulator, bool globalPosition)
 {
 	uint32_t rows = sprite.height;
 	uint32_t columns = sprite.width;
@@ -452,11 +456,10 @@ void Screen::DrawFlippedImagePixels(const BMPImage& image, const Sprite& sprite,
 				color.SetAlpha(0);
 			}
 
-			DrawPixel(pixelDrawPosX, pixelDrawPosY, color);
+			DrawPixel(pixelDrawPosX, pixelDrawPosY, color, globalPosition);
 		}
 	}
 }
-
 
 void Screen::ClearScreen()
 {

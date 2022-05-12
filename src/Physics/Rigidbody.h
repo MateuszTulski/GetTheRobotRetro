@@ -28,7 +28,10 @@ public:
 
 	void AddForce(const Vec2D& force);
 	void AddGravityForce(const float gravity);
+
 	void SetHorizontalVelocity(float velocity);
+	void SetVerticalVelocity(float velocity);
+
 	inline Vec2D GetVelocity() const {return mVelocity;}
 	void StopOnObstacle(const Vec2D normal);
 

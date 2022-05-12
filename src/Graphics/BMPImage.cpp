@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "Utils.h"
+#include "SpriteSheet.h"
 
 BMPImage::BMPImage():mWidth(0), mHeight(0), originalWidth(0), originalHeight(0){
 
@@ -75,6 +76,37 @@ bool BMPImage::LoadImage(const std::string& path){
 	SDL_FreeSurface(bmpSurface);
 
 	return true;
+}
+
+bool BMPImage::LoadImageFromSpriteSheet(const SpriteSheet& sprite, const std::string name){
+
+	uint32_t startX = sprite.GetSpriteCoordinates(name).xPos;
+	uint32_t startY = sprite.GetSpriteCoordinates(name).yPos;
+
+	mWidth = sprite.GetSpriteCoordinates(name).width;
+	mHeight = sprite.GetSpriteCoordinates(name).height;
+
+	mOriginalPixels.reserve(mWidth*mHeight);
+	mPixels.reserve(mWidth*mHeight);
+
+	for(unsigned int r = 0; r < mHeight; r++){
+		for(unsigned int c = 0; c < mWidth; c++){
+
+			Color col;
+			int pixelIndex = GetPixelIndex(startX+c, startY+r, sprite.GetImage().GetImageWidth());
+			col = sprite.GetImage().GetPixels()[pixelIndex];
+
+			mOriginalPixels.push_back(col);
+			mPixels.push_back(col);
+		}
+	}
+
+	return true;
+}
+
+bool BMPImage::operator<(const BMPImage& other) const{
+
+	return (this->mHeight*this->mWidth) < (other.mHeight*other.mWidth);
 }
 
 const std::vector<Color>& BMPImage::GetPixels() const {

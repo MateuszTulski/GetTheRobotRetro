@@ -1,9 +1,9 @@
 #ifndef SCENES_SCENE_H_
 #define SCENES_SCENE_H_
 
+#include <GameControlsActions.h>
 #include <stdint.h>
 #include <string>
-#include "GameController.h"
 #include "Game.h"
 #include <memory>
 
@@ -18,10 +18,10 @@ public:
 	virtual void Draw(Screen& theScreen) = 0;
 	virtual const std::string& GetSceneName() const = 0;
 
-	GameController* GetGameController() {return &mGameController;}
+	GameControlsActions* GetGameController() {return &mGameController;}
 
 protected:
-	GameController mGameController;
+	GameControlsActions mGameController;
 };
 
 

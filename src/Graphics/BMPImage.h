@@ -8,6 +8,7 @@
 #include "AARectangle.h"
 #include "Vec2D.h"
 
+class SpriteSheet;
 
 struct ImageCanvas{
 	AARectangle AARect = AARectangle(Vec2D(0, 0), Vec2D(1.0, 1.0));
@@ -20,6 +21,9 @@ public:
 
 	BMPImage();
 	bool LoadImage(const std::string& path);
+	bool LoadImageFromSpriteSheet(const SpriteSheet& sprite, const std::string name);
+
+	bool operator<(const BMPImage& other) const;
 
 	const std::vector<Color>& GetPixels() const;
 

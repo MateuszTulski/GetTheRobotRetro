@@ -230,7 +230,8 @@ void Player::JumpSequence(){
 	}else if(CanJumpSecond()){
 		mState = PlayerState::secondJump;
 		secondJumpUsed = true;
-		AddForce(Vec2D(0, -JUMP_FORCE*0.7f));
+		SetVerticalVelocity(0);
+		AddForce(Vec2D(0, -JUMP_FORCE*0.85f));
 	}
 }
 
@@ -251,7 +252,7 @@ bool Player::CanJumpFirst(){
 bool Player::CanJumpSecond(){
 	if(!secondJumpUsed){
 		if(mState == PlayerState::firstJump
-			|| mState == PlayerState::secondJump){
+			|| mState == PlayerState::falling){
 			return true;
 		}
 	}

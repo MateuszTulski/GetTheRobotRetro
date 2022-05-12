@@ -1,12 +1,12 @@
-#include "GameController.h"
+#include <GameControlsActions.h>
 #include <SDL2/SDL.h>
 #include <iostream>
 
-GameController::GameController(): mMouseMovedAction(nullptr){
+GameControlsActions::GameControlsActions(): mMouseMovedAction(nullptr){
 
 }
 
-InputAction GameController::GetActionForKey(InputKey key){
+InputAction GameControlsActions::GetActionForKey(InputKey key){
 	for(const auto& buttonAction : mButtonActions){
 		if(key == buttonAction.key)
 		{
@@ -16,58 +16,58 @@ InputAction GameController::GetActionForKey(InputKey key){
 	return [](uint32_t, InputState){};
 }
 
-void GameController::AddInputActionForKey(const ButtonAction& buttonAction){
+void GameControlsActions::AddInputActionForKey(const ButtonAction& buttonAction){
 	mButtonActions.push_back(buttonAction);
 }
 
-void GameController::ClearAll(){
+void GameControlsActions::ClearAll(){
 	mButtonActions.clear();
 }
 
-bool GameController::IsPressed(InputState state){
+bool GameControlsActions::IsPressed(InputState state){
 	return state == SDL_PRESSED;
 }
 
-bool GameController::IsReleased(InputState state){
+bool GameControlsActions::IsReleased(InputState state){
 	return state == SDL_RELEASED;
 }
 
-InputKey GameController::ActionKey(){
+InputKey GameControlsActions::ActionKey(){
 	return static_cast<InputKey>(SDLK_a);
 }
-InputKey GameController::CancelKey(){
+InputKey GameControlsActions::CancelKey(){
 	return static_cast<InputKey>(SDLK_s);
 }
 
-InputKey GameController::RightKey(){
+InputKey GameControlsActions::RightKey(){
 	return static_cast<InputKey>(SDLK_RIGHT);
 }
 
-InputKey GameController::LeftKey(){
+InputKey GameControlsActions::LeftKey(){
 	return static_cast<InputKey>(SDLK_LEFT);
 }
 
-InputKey GameController::UpKey(){
+InputKey GameControlsActions::UpKey(){
 	return static_cast<InputKey>(SDLK_UP);
 }
 
-InputKey GameController::DownKey(){
+InputKey GameControlsActions::DownKey(){
 	return static_cast<InputKey>(SDLK_DOWN);
 }
 
-InputKey GameController::JumpKey(){
+InputKey GameControlsActions::JumpKey(){
 	return static_cast<InputKey>(SDLK_SPACE);
 }
 
-MouseButton GameController::LeftMouseButton(){
+MouseButton GameControlsActions::LeftMouseButton(){
 	return static_cast<MouseButton>(SDL_BUTTON_LEFT);
 }
 
-MouseButton GameController::RigthMouseButton(){
+MouseButton GameControlsActions::RigthMouseButton(){
 	return static_cast<MouseButton>(SDL_BUTTON_RIGHT);
 }
 
-MouseInputAction GameController::GetMouseInputAction(MouseButton mouseButton){
+MouseInputAction GameControlsActions::GetMouseInputAction(MouseButton mouseButton){
 	for(const auto& buttonAction : mMouseButtonActions){
 		if(buttonAction.mouseButton == mouseButton){
 
@@ -77,7 +77,7 @@ MouseInputAction GameController::GetMouseInputAction(MouseButton mouseButton){
 
 	return [](InputState state, const MousePosition& mousePosition){};
 }
-void GameController::AddMouseInputActionForKey(const MouseButtonAction& mouseButtonAction){
+void GameControlsActions::AddMouseInputActionForKey(const MouseButtonAction& mouseButtonAction){
 	mMouseButtonActions.push_back(mouseButtonAction);
 }
 

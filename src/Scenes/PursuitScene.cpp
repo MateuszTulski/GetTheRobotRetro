@@ -13,12 +13,12 @@ PursuitScene::PursuitScene(){
 void PursuitScene::Init(){
 	// Set GameController
 	ButtonAction jump;
-	jump.key = GameController::JumpKey();
+	jump.key = GameControlsActions::JumpKey();
 	jump.action = [this](uint32_t deltaTime, InputState state){
 
 		mPlayer.JumpTrigger(true);
 
-		if(GameController::IsReleased(state)){ // @suppress("Ambiguous problem")
+		if(GameControlsActions::IsReleased(state)){ // @suppress("Ambiguous problem")
 			mPlayer.JumpTrigger(false);
 		}
 	};
@@ -26,12 +26,12 @@ void PursuitScene::Init(){
 
 	// RIGTH ACTION BUTTON
 	ButtonAction right;
-	right.key = GameController::RightKey();
+	right.key = GameControlsActions::RightKey();
 	right.action = [this](uint32_t deltaTime, InputState state){
 
 		mPlayer.RunInput(1);
 
-		if(GameController::IsReleased(state)){ // @suppress("Ambiguous problem")
+		if(GameControlsActions::IsReleased(state)){ // @suppress("Ambiguous problem")
 			mPlayer.RunInput(1, true);
 		}
 	};
@@ -39,12 +39,12 @@ void PursuitScene::Init(){
 
 	// LEFT ACTION BUTTON
 	ButtonAction left;
-	left.key = GameController::LeftKey();
+	left.key = GameControlsActions::LeftKey();
 	left.action = [this](uint32_t deltaTime, InputState state){
 
 		mPlayer.RunInput(-1);
 
-		if(GameController::IsReleased(state)){ // @suppress("Ambiguous problem")
+		if(GameControlsActions::IsReleased(state)){ // @suppress("Ambiguous problem")
 			mPlayer.RunInput(-1, true);
 		}
 	};
@@ -63,8 +63,9 @@ void PursuitScene::Init(){
 	App::Singleton().SetSceneCamera(Vec2D::Zero, mCamera);
 	mCamera->SetFollowOffset(Vec2D(-80, -90));
 
+	mPursuitController.InitUI();
+
 	tempImage.LoadImage(App::Singleton().GetBasePath() + "Assets/rocket.bmp");
-//	tempImage.ScaleToCenter(1.2f);
 	tempImage.ScaleImage(0.5, 0.5, false);
 }
 
@@ -80,8 +81,8 @@ void PursuitScene::Draw(Screen& screen)
 	screen.Draw(tempImage, Vec2D(10, 10));
 
 	mPlayer.Draw(screen);
-	// Draw Level
 	mLevelLoader.DrawObjects(screen);
+	mPursuitController.DrawUI(screen);
 }
 
 const std::string& PursuitScene::GetSceneName() const

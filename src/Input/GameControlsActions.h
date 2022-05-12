@@ -5,9 +5,9 @@
 #include "InputAction.h"
 #include <vector>
 
-class GameController{
+class GameControlsActions{
 public:
-	GameController();
+	GameControlsActions();
 	InputAction GetActionForKey(InputKey key);
 	void AddInputActionForKey(const ButtonAction& buttonAction);
 	void ClearAll();
