@@ -1,41 +1,49 @@
-:key status_frame
+:key frame_left
 :xPos 0
-:yPos 27
+:yPos 15
 :width 158
 :height 26
+:screenX 1
+:screenY 1
 
-:key life_stripe
-:xPos 85
-:yPos 0
-:width 95
-:height 13
-
-:key distance_stripe
-:xPos 85
-:yPos 13
-:width 95
-:height 13
+:key frame_right
+:xPos 0
+:yPos 15
+:width 159
+:height 26
+:screenX 160
+:screenY 1
+:flip X
 
 :key badass_john
-:xPos 0
-:yPos 0
+:xPos 83
+:yPos 1
 :width 79
 :height 12
+:screenX 4
+:screenY 2
 
 :key distance
 :xPos 0
-:yPos 12
+:yPos 1
 :width 59
 :height 12
+:screenX 258
+:screenY 2
 
 :key T
 :xPos 60
-:yPos 13
+:yPos 1
 :width 10
 :height 11
+:screenX 216
+:screenY 10
 
 :key S
 :xPos 72
-:yPos 13
+:yPos 1
 :width 9
 :height 11
+:screenX 96
+:screenY 10
+

@@ -127,9 +127,32 @@ bool SpriteSheet::LoadSpriteSections(const std::string& path){
 					mSpriteSections.back().sprite.height = std::stoi(command);
 				};
 			}
-			else if(readValueInNextIteration)
+			else if(command == ":screenX")
 			{
-				// Read the property
+				readValueInNextIteration = true;
+				mReadField = [&](std::string command){
+					mSpriteSections.back().sprite.screenX = std::stoi(command);
+				};
+			}
+			else if(command == ":screenY")
+			{
+				readValueInNextIteration = true;
+				mReadField = [&](std::string command){
+					mSpriteSections.back().sprite.screenY = std::stoi(command);
+				};
+			}
+			else if(command == ":flip")
+			{
+				readValueInNextIteration = true;
+				mReadField = [&](std::string command){
+					if(command == "x" || command == "X"){
+						mSpriteSections.back().sprite.flipX = true;
+					}else if(command == "y" || command == "Y"){
+						mSpriteSections.back().sprite.flipY = true;
+					}
+				};
+			}
+			else if(readValueInNextIteration){
 				mReadField(command);
 			}
 		}

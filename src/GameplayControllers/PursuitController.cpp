@@ -14,10 +14,17 @@ void PursuitController::InitUI(){
 		std::vector<std::string> spriteNames = sprites.GetSpritestNames();
 
 		for(auto name : spriteNames){
+
 			BMPImage image;
+			Sprite sprite = sprites.GetSpriteCoordinates(name);
+
 			image.LoadImageFromSpriteSheet(sprites, name);
 
-			mainUI.AddStaticImage(image, Vec2D(0, 0));
+			if(sprite.flipX){
+				image.FlipImageHorizontal();
+			}
+
+			mainUI.AddStaticImage(image, Vec2D(sprite.screenX, sprite.screenY));
 		}
 	}
 }

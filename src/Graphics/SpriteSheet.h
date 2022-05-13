@@ -15,6 +15,10 @@ struct Sprite{
 	uint32_t yPos = 0;
 	uint32_t width = 0;
 	uint32_t height = 0;
+	uint32_t screenX = 0;
+	uint32_t screenY = 0;
+	bool flipX = false;
+	bool flipY = false;
 };
 
 class SpriteSheet {

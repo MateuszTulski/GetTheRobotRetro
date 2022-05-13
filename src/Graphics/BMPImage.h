@@ -37,6 +37,8 @@ public:
 
 	void RotateAroundLocalPoint(const Vec2D& point, float angle);
 	void RotateAroundCenter(float angle);
+	void FlipImageHorizontal();
+
 
 	void SetHeight(const float& height, bool autoWidth = false);
 	void SetWidth(const float& width, bool autoHeight = false);

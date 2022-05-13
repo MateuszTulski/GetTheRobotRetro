@@ -1,0 +1,16 @@
+:key life_stripe
+:xPos 85
+:yPos 0
+:width 95
+:height 13
+:screenX 1
+:screenY 14
+
+:key distance_stripe
+:xPos 85
+:yPos 13
+:width 94
+:height 13
+:screenX 225
+:screenY 14
+:flip X

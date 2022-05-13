@@ -61,7 +61,7 @@ void PursuitScene::Init(){
 	}
 
 	App::Singleton().SetSceneCamera(Vec2D::Zero, mCamera);
-	mCamera->SetFollowOffset(Vec2D(-80, -90));
+	mCamera->SetFollowOffset(Vec2D(-80, -105));
 
 	mPursuitController.InitUI();
 

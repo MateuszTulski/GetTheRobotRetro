@@ -6,7 +6,7 @@ UIPanel::UIPanel() : isActive(true), noManip(ColorManipulation::NoColorManipulat
 }
 
 void UIPanel::AddStaticImage(const BMPImage& image, const Vec2D& position){
-	mImages.emplace(image, Vec2D(1, 1));
+	mImages.emplace(image, position);
 }
 
 void UIPanel::AddText(const BitmapFont& font, const Vec2D& position, const GetText& text){

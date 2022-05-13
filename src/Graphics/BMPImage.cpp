@@ -162,6 +162,15 @@ void BMPImage::RotateAroundCenter(float angle){
 	RotateAroundLocalPoint(Vec2D(0.5, 0.5), angle);
 }
 
+void BMPImage::FlipImageHorizontal(){
+
+	for(uint32_t r = 0; r < mHeight; r++){
+		for(uint32_t c = 0; c < mWidth; c++){
+			mPixels.at(GetPixelIndex(c, r, mWidth)) = mOriginalPixels.at(GetPixelIndex((mWidth - 1 - c), r, mWidth));
+		}
+	}
+}
+
 void BMPImage::SetHeight(const float& height, bool autoWidth){
 
 
