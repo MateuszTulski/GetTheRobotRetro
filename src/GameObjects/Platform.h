@@ -25,7 +25,6 @@ private:
 	Line2D mLine;
 	unsigned int mSegments;
 	std::shared_ptr<SpriteSheet> mnoptrSprite;
-	ColorManipulation mColorManipulator;
 };
 
 

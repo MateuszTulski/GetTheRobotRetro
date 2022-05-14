@@ -3,10 +3,13 @@
 
 #include <stdint.h>
 #include <vector>
+#include <functional>
 
 #include "Color.h"
 #include "AARectangle.h"
 #include "Vec2D.h"
+#include "ColorManipulation.h"
+#include "Screen.h"
 
 class SpriteSheet;
 
@@ -15,6 +18,8 @@ struct ImageCanvas{
 	float Rotation = 0;
 	Vec2D RotationPoint = Vec2D::Zero;
 };
+
+using colorOverlay = std::function<Color(const Color& inputColor)>;
 
 class BMPImage {
 public:
@@ -25,6 +30,11 @@ public:
 
 	bool operator<(const BMPImage& other) const;
 
+	void DrawImage(Screen& screen, const Vec2D& position, bool globalPosition = true);
+	void DrawImage(Screen& screen, const Vec2D& position, colorOverlay overlay, bool globalPosition = true);
+	void DrawImageSprite(Screen& screen, const Vec2D& position, const Sprite& sprite, bool globalPosition);
+	void DrawImageSprite(Screen& screen, const Vec2D& position, const Sprite& sprite, colorOverlay overlay, bool globalPosition = true);
+
 	const std::vector<Color>& GetPixels() const;
 
 	inline uint32_t GetImageWidth() const { return mWidth; }
@@ -32,6 +42,8 @@ public:
 
 	inline uint32_t GetOriginalImageWidth() const { return originalWidth; }
 	inline uint32_t GetOriginalImageHeight() const { return originalHeight; }
+
+	void PinInamgeToScreen(const Vec2D& position);
 
 	void ScaleImage(float xScale, float yScale, bool relative=true);
 
@@ -49,6 +61,11 @@ private:
 
 	std::vector<Color> mOriginalPixels;
 	std::vector<Color> mPixels;
+
+	bool flipHorizontal, flipVertical;
+
+	bool globalPosition;
+	Vec2D screenPosition;
 
 	ImageCanvas mCanvas;
 };

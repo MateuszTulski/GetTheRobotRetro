@@ -10,7 +10,7 @@
 :width 20
 :height 20
 
-:key RIGTH
+:key RIGHT
 :xPos 40
 :yPos 0
 :width 20

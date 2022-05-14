@@ -10,7 +10,14 @@ Button::Button() : Button(App::Singleton().GetAppFont()){
 }
 
 Button::Button(const BitmapFont& font):
-	mButtonFont(font), mAARect(Vec2D::Zero, Vec2D::Zero), mButtonText(""), mIsActive(false), mAction(nullptr), mBaseColor(), mHighlightColor(){
+	mButtonFont(font),
+	mAARect(Vec2D::Zero, Vec2D::Zero),
+	mButtonText(""), mIsActive(false),
+	mAction(nullptr),
+	buttonBase(),
+	buttonHighlighted(),
+	baseText(),
+	highlightedText(){
 }
 
 void Button::InitButton(const Size& buttonSize, const std::string& text, Vec2D position)
@@ -22,17 +29,15 @@ void Button::InitButton(const Size& buttonSize, const std::string& text, Vec2D p
 	mButtonText = text;
 
 	mTextPosition = mButtonFont.GetDrawPosition(mButtonText, mAARect, FHA_Center, FVA_Middle);
-	mBaseColor.SetModifier(COL_MULTIPLY, Color().White());
 };
 
-void Button::Draw(Screen& screen)
-{
-	screen.Draw(mAARect, mBaseColor.GetModifierColor(), mIsActive, mHighlightColor.GetModifierColor());
-
+void Button::Draw(Screen& screen){
 	if(mIsActive){
-		screen.Draw(mButtonFont, mButtonText, mTextPosition, mHighlightedTextColor);
+		screen.Draw(mAARect, buttonHighlighted, true, buttonHighlighted);
+		mButtonFont.DrawText(screen, mButtonText, mTextPosition, highlightedText);
 	}else{
-		screen.Draw(mButtonFont, mButtonText, mTextPosition, mBaseColor);
+		screen.Draw(mAARect, buttonBase, true, buttonBase);
+		mButtonFont.DrawText(screen, mButtonText, mTextPosition, baseText);
 	}
 
 }
@@ -45,10 +50,11 @@ void Button::ExecuteAction()
 	}
 }
 
-void Button::SetHighlitColor(const Color& color){
-
-	mHighlightColor.SetModifier(COL_MULTIPLY, color);
-	mHighlightedTextColor.SetModifier(COL_MULTIPLY, Color(10, 10, 10, 255));
+void Button::SetButtonColors(const Color& base, const Color& highlighted, const Color& baseText, const Color& highlightedText){
+	this->buttonBase = base;
+	this->buttonHighlighted = highlighted;
+	this->baseText = baseText;
+	this->highlightedText = highlightedText;
 }
 
 void Button::SetButtonActive(const bool& active)

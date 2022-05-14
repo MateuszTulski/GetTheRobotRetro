@@ -20,11 +20,8 @@ void MenuScene::Init()
 	for(auto name : btnNames){
 		Button btn;
 		btn.InitButton(mButtonSize, name, buttonsPos);
-		btn.SetBaseColor(Color().Cyan());
-		btn.SetHighlitColor(Color(130, 130, 130, 255));
-
+		btn.SetButtonColors(Color(40, 40, 40, 255), Color(37, 240, 217, 120), Color(180, 180, 180, 255), Color::White());
 		buttonsPos.SetY(buttonsPos.GetY() + mButtonSize.height + mButtonsSpace);
-
 		mButtons.push_back(btn);
 	}
 

@@ -1,5 +1,6 @@
 #include "BitmapFont.h"
 #include "AARectangle.h"
+#include "ColorManipulation.h"
 #include "App.h"
 #include <fstream>
 #include <sstream>
@@ -66,6 +67,26 @@ Vec2D BitmapFont::GetDrawPosition(const std::string&text, const AARectangle& rec
 
 
 	return Vec2D(x, y);
+}
+
+void BitmapFont::DrawText(Screen& screen, const std::string& text, const Vec2D& position, const Color& color, bool globalPosition){
+
+	unsigned int xPos = position.GetX();
+
+	for(char c : text)
+	{
+		if(c == ' '){
+			xPos += GetFontWordSpace();
+			continue;
+		}
+
+		mFontSheet.DrawSprite(screen, Vec2D(xPos, position.GetY()), std::string("")+c, [&color](const Color& in){
+			return ModifyColorMultiply(in, color);}, globalPosition);
+
+		xPos += mFontSheet.GetSpriteCoordinates(std::string("")+c).width;
+		xPos += GetFontLetterSpace();
+	}
+
 }
 
 void BitmapFont::SetFontHeight(const unsigned int& heightInPixels){

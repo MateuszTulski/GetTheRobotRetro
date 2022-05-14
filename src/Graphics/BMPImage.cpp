@@ -7,8 +7,14 @@
 #include "Utils.h"
 #include "SpriteSheet.h"
 
-BMPImage::BMPImage():mWidth(0), mHeight(0), originalWidth(0), originalHeight(0){
-
+BMPImage::BMPImage(): mWidth(0),
+					mHeight(0),
+					originalWidth(0),
+					originalHeight(0),
+					flipHorizontal(false),
+					flipVertical(false),
+					globalPosition(false),
+					screenPosition(Vec2D::Zero){
 }
 
 bool BMPImage::LoadImage(const std::string& path){
@@ -17,9 +23,6 @@ bool BMPImage::LoadImage(const std::string& path){
 	SDL_Surface *bmpSurface;
 	Uint32 rmask, gmask, bmask, amask;
 
-	/* SDL interprets each pixel as a 32-bit number, so our masks must depend
-	 * on the endianness (byte order) of the machine */
-
 	if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
 	{
 		rmask = 0xff000000;
@@ -27,9 +30,8 @@ bool BMPImage::LoadImage(const std::string& path){
 		bmask = 0x0000ff00;
 		amask = 0x000000ff;
 
-	}
-	else
-	{
+	}else{
+
 		rmask = 0xff000000;
 		gmask = 0x00ff0000;
 		bmask = 0x0000ff00;
@@ -109,8 +111,62 @@ bool BMPImage::operator<(const BMPImage& other) const{
 	return (this->mHeight*this->mWidth) < (other.mHeight*other.mWidth);
 }
 
+void BMPImage::DrawImage(Screen& screen, const Vec2D& position, bool globalPosition){
+	DrawImage(screen, position, [](Color in){return in;}, globalPosition);
+}
+
+void BMPImage::DrawImage(Screen& screen, const Vec2D& position, colorOverlay overlay, bool globalPosition){
+	Sprite sprite;
+	sprite.width = mWidth;
+	sprite.height = mHeight;
+	DrawImageSprite(screen, position, sprite, overlay, globalPosition);
+}
+
+void BMPImage::DrawImageSprite(Screen& screen, const Vec2D& position, const Sprite& sprite, bool globalPosition){
+	DrawImageSprite(screen, position, sprite, [](Color in){return in;}, globalPosition);
+}
+
+void BMPImage::DrawImageSprite(Screen& screen, const Vec2D& position, const Sprite& sprite, colorOverlay overlay, bool globalPosition){
+
+		uint32_t rows = sprite.height;
+		uint32_t columns = sprite.width;
+
+	for(uint32_t r = 0; r < rows; ++r){
+		for(uint32_t c = 0; c < columns; ++c){
+
+			int pixelDrawPosX, pixelDrawPosY;
+
+			if(flipHorizontal){
+				pixelDrawPosX = (position.GetX() + columns) - c;
+			}else{
+				pixelDrawPosX = position.GetX() + c;
+			}
+
+			if(flipVertical){
+				pixelDrawPosX = (position.GetY() + rows) - r;
+			}else{
+				pixelDrawPosY = position.GetY() + r;
+			}
+
+			Color color = overlay(mPixels.at(GetPixelIndex(c + sprite.xPos , r + sprite.yPos , mWidth)));
+
+			if(color == Color::Black()){
+				color.SetAlpha(0);
+			}
+
+			screen.DrawPixel(pixelDrawPosX, pixelDrawPosY, color, globalPosition);
+		}
+	}
+}
+
 const std::vector<Color>& BMPImage::GetPixels() const {
 	return mPixels;
+}
+
+void BMPImage::PinInamgeToScreen(const Vec2D& position){
+
+	screenPosition = position;
+	globalPosition = true;
 }
 
 void BMPImage::ScaleImage(float xScale, float yScale, bool relative){

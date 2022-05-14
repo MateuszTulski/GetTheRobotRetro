@@ -24,7 +24,8 @@ public:
 
 	void ExecuteAction();
 
-	inline void SetBaseColor(const Color& color) {mBaseColor.SetModifier(COL_MULTIPLY, color);}
+	void SetButtonColors(const Color& base, const Color& highlighted, const Color& baseText, const Color& highlightedText);
+
 	void SetHighlitColor(const Color& color);
 
 	inline std::string GetButtonName() const { return mButtonText;}
@@ -33,15 +34,13 @@ public:
 	inline bool IsActive() const {return mIsActive;}
 
 private:
-	const BitmapFont mButtonFont;
+	BitmapFont mButtonFont;
 	AARectangle mAARect;
 	std::string mButtonText;
 	bool mIsActive;
 	ButtonAction mAction;
 
-	ColorManipulation mBaseColor;
-	ColorManipulation mHighlightColor;
-	ColorManipulation mHighlightedTextColor;
+	Color buttonBase, buttonHighlighted, baseText, highlightedText;
 
 	Vec2D mTextPosition;
 };

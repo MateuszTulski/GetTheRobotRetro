@@ -69,24 +69,21 @@ void PursuitScene::Init(){
 	tempImage.ScaleImage(0.5, 0.5, false);
 }
 
-void PursuitScene::Update(uint32_t deltaTime)
-{
+void PursuitScene::Update(uint32_t deltaTime){
 	PhysicsWorld::Singleton().Update(deltaTime);
 	mPlayer.Update(deltaTime);
 	mCamera->Update(mPlayer);
 }
 
-void PursuitScene::Draw(Screen& screen)
-{
-	screen.Draw(tempImage, Vec2D(10, 10));
+void PursuitScene::Draw(Screen& screen){
+	tempImage.DrawImage(screen, Vec2D(10,10), true);
 
 	mPlayer.Draw(screen);
 	mLevelLoader.DrawObjects(screen);
 	mPursuitController.DrawUI(screen);
 }
 
-const std::string& PursuitScene::GetSceneName() const
-{
+const std::string& PursuitScene::GetSceneName() const{
 	const static std::string gameName = {"GetTheRobot Retro!"};
 	return gameName;
 }

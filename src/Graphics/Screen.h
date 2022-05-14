@@ -45,27 +45,18 @@ public:
 	AARectangle GetScreenRect() const;
 
 	void DrawPixel(int x, int y, const Color& color, bool globalPosition);
+
 	// Draw Shapes
 	void Draw(const Vec2D& vec, const Color& color, bool globalPosition = true);
 	void Draw(const Line2D& line, const Color& color, bool globalPosition = true);
 	void Draw(const Shape& shape, const Color& color, bool fillShape = false, const Color& fillColor = Color::White(), bool globalPosition = true);
 	void Draw(const Circle& circle, const Color& color, bool fillShape = false, const Color& fillColor = Color::White(), bool globalPosition = true);
-	// Draw images
-	void Draw(const BMPImage& image, const Vec2D& position, const ColorManipulation& manipulator = ColorManipulation::NoColorManipulation(), bool globalPosition = true);
-	void DrawFlipped(const BMPImage& image, const Vec2D& position, bool flipHorizontal, bool flipVertical, const ColorManipulation& manipulator = ColorManipulation::NoColorManipulation(), bool globalPosition = true);
-	void Draw(const SpriteSheet& sprite, const std::string& name, const Vec2D& position, const ColorManipulation& manipulator = ColorManipulation::NoColorManipulation(), bool globalPosition = true);
-	void DrawFlipped(const SpriteSheet& sprite, const std::string& name, const Vec2D& position, bool flipHorizontal, bool flipVertical, const ColorManipulation& manipulator = ColorManipulation::NoColorManipulation(), bool globalPosition = true);
-	void Draw(const BitmapFont& font, const std::string& text, const Vec2D& position, bool globalPosition = true);
-	void Draw(const BitmapFont& font, const std::string& text, const Vec2D& position, const ColorManipulation& manipulator = ColorManipulation::NoColorManipulation(), bool globalPosition = true);
 
 	void FillPoly(const std::vector<Vec2D>& points, const Color& color);
 
-private:
-
-	void DrawImagePixels(const BMPImage& image, const Sprite& sprite, const Vec2D& position, const ColorManipulation& manipulator = ColorManipulation::NoColorManipulation(), bool globalPosition = true);
-	void DrawFlippedImagePixels(const BMPImage& image, const Sprite& sprite, const Vec2D& position, bool flipHorizontal, bool flipVertical, const ColorManipulation& manipulator = ColorManipulation::NoColorManipulation(), bool globalPosition = true);
-
 	Vec2D GetScreenPoint(const Vec2D globalPoint) const;
+
+private:
 
 	uint32_t mWidth, mHeight;
 

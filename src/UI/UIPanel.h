@@ -31,8 +31,6 @@ private:
 	std::map<BMPImage, Vec2D> mImages;
 	std::map<BitmapFont, Vec2D> mTexts;
 
-	ColorManipulation noManip;
-
 	void DrawStaticImages();
 
 };
