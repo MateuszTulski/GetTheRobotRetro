@@ -42,7 +42,7 @@ public:
 
 	void Update();
 	void Draw(Screen& screen, const Vec2D& pivotPoint);
-	void DrawFlipped(Screen& screen, const Vec2D& pivotPoint, bool flipHorizontal, bool flipVertical);
+	void DrawFlipped(Screen& screen, const Vec2D& pivotPoint, bool flipHorizontal=true);
 
 	inline void SetLoopTime(bool loop) { loopTime = loop; }
 	inline void SetFrameRate(int frames) { clipSpeedInFrames = frames; }

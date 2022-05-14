@@ -7,7 +7,10 @@
 
 BitmapFont::BitmapFont() : BitmapFont(1, 7){}
 
-BitmapFont::BitmapFont(unsigned int letterSpace, unsigned int wordSpace) : mLetterSpace(letterSpace), mWordSpace(wordSpace), fontHeight(0){
+BitmapFont::BitmapFont(unsigned int letterSpace, unsigned int wordSpace) :
+		mLetterSpace(letterSpace),
+		mWordSpace(wordSpace),
+		fontHeight(0){
 }
 
 bool BitmapFont::LoadFont(const std::string& fontName){
@@ -69,7 +72,7 @@ Vec2D BitmapFont::GetDrawPosition(const std::string&text, const AARectangle& rec
 	return Vec2D(x, y);
 }
 
-void BitmapFont::DrawText(Screen& screen, const std::string& text, const Vec2D& position, const Color& color, bool globalPosition){
+void BitmapFont::DrawText(Screen& screen, const std::string& text, const Vec2D& position, const Color& color, bool flipHorizontal, bool globalPosition){
 
 	unsigned int xPos = position.GetX();
 
@@ -81,7 +84,7 @@ void BitmapFont::DrawText(Screen& screen, const std::string& text, const Vec2D& 
 		}
 
 		mFontSheet.DrawSprite(screen, Vec2D(xPos, position.GetY()), std::string("")+c, [&color](const Color& in){
-			return ModifyColorMultiply(in, color);}, globalPosition);
+			return ModifyColorMultiply(in, color);}, flipHorizontal, globalPosition);
 
 		xPos += mFontSheet.GetSpriteCoordinates(std::string("")+c).width;
 		xPos += GetFontLetterSpace();

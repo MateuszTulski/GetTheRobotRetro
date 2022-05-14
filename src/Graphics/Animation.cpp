@@ -48,13 +48,12 @@ void Animation::Update(){
 
 void Animation::Draw(Screen& screen, const Vec2D& pivotPoint){
 
-	DrawFlipped(screen, pivotPoint, false, false);
+	DrawFlipped(screen, pivotPoint, false);
 }
-void Animation::DrawFlipped(Screen& screen, const Vec2D& pivotPoint, bool flipHorizontal, bool flipVertical){
+void Animation::DrawFlipped(Screen& screen, const Vec2D& pivotPoint, bool flipHorizontal){
 
 	if(mFramesNames.size() > 0){
-//		screen.DrawFlipped(mSpriteSheet, mFramesNames.at(mActualFrame), GetDrawPosition(pivotPoint), flipHorizontal, flipVertical);
-		mSpriteSheet.DrawSprite(screen, GetDrawPosition(pivotPoint), mFramesNames.at(mActualFrame));
+		mSpriteSheet.DrawSprite(screen, GetDrawPosition(pivotPoint), mFramesNames.at(mActualFrame), flipHorizontal);
 	}
 }
 

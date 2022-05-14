@@ -6,18 +6,20 @@ UIPanel::UIPanel() : isActive(true){
 }
 
 void UIPanel::AddStaticImage(const BMPImage& image, const Vec2D& position){
-	mImages.emplace(image, position);
+	mStaticImages.emplace(image, position);
 }
 
-void UIPanel::AddText(const BitmapFont& font, const Vec2D& position, const GetText& text){
-
+void UIPanel::AddHPStripe(const UIStatusStripe& stripe){
+	std::cout << "stripe: " << stripe.GetImageWidth() << std::endl;
+	mPlayerHP = stripe;
+	std::cout << "player: " << mPlayerHP.GetImageWidth() << std::endl;
 }
 
 void UIPanel::DrawPanel(Screen& screen){
-	for(const auto& image : mImages){
-//		screen.Draw(image.first, image.second, noManip, false);
-//		image.first.DrawImage(screen, image.second, false);
+	for(const auto& image : mStaticImages){
+		image.first.DrawImage(screen, image.second, false, false);
 	}
+	mPlayerHP.DrawStripe(screen);
 }
 
 void UIPanel::DrawStaticImages(){

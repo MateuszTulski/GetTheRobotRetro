@@ -111,52 +111,23 @@ bool BMPImage::operator<(const BMPImage& other) const{
 	return (this->mHeight*this->mWidth) < (other.mHeight*other.mWidth);
 }
 
-void BMPImage::DrawImage(Screen& screen, const Vec2D& position, bool globalPosition){
-	DrawImage(screen, position, [](Color in){return in;}, globalPosition);
+void BMPImage::DrawImage(Screen& screen, const Vec2D& position, bool flipHorizontal, bool globalPosition) const{
+	DrawImage(screen, position, [](Color in){return in;}, flipHorizontal, globalPosition);
 }
 
-void BMPImage::DrawImage(Screen& screen, const Vec2D& position, colorOverlay overlay, bool globalPosition){
+void BMPImage::DrawImage(Screen& screen, const Vec2D& position, colorOverlay overlay,  bool flipHorizontal, bool globalPosition) const{
 	Sprite sprite;
 	sprite.width = mWidth;
 	sprite.height = mHeight;
-	DrawImageSprite(screen, position, sprite, overlay, globalPosition);
+	DrawImagePixels(screen, position, sprite, overlay, flipHorizontal, globalPosition);
 }
 
-void BMPImage::DrawImageSprite(Screen& screen, const Vec2D& position, const Sprite& sprite, bool globalPosition){
-	DrawImageSprite(screen, position, sprite, [](Color in){return in;}, globalPosition);
+void BMPImage::DrawImageSprite(Screen& screen, const Vec2D& position, const Sprite& sprite,  bool flipHorizontal, bool globalPosition) const{
+	DrawImagePixels(screen, position, sprite, [](Color in){return in;}, flipHorizontal, globalPosition);
 }
 
-void BMPImage::DrawImageSprite(Screen& screen, const Vec2D& position, const Sprite& sprite, colorOverlay overlay, bool globalPosition){
-
-		uint32_t rows = sprite.height;
-		uint32_t columns = sprite.width;
-
-	for(uint32_t r = 0; r < rows; ++r){
-		for(uint32_t c = 0; c < columns; ++c){
-
-			int pixelDrawPosX, pixelDrawPosY;
-
-			if(flipHorizontal){
-				pixelDrawPosX = (position.GetX() + columns) - c;
-			}else{
-				pixelDrawPosX = position.GetX() + c;
-			}
-
-			if(flipVertical){
-				pixelDrawPosX = (position.GetY() + rows) - r;
-			}else{
-				pixelDrawPosY = position.GetY() + r;
-			}
-
-			Color color = overlay(mPixels.at(GetPixelIndex(c + sprite.xPos , r + sprite.yPos , mWidth)));
-
-			if(color == Color::Black()){
-				color.SetAlpha(0);
-			}
-
-			screen.DrawPixel(pixelDrawPosX, pixelDrawPosY, color, globalPosition);
-		}
-	}
+void BMPImage::DrawImageSprite(Screen& screen, const Vec2D& position, const Sprite& sprite, colorOverlay overlay, bool flipHorizontal, bool globalPosition) const{
+	DrawImagePixels(screen, position, sprite, overlay, flipHorizontal, globalPosition);
 }
 
 const std::vector<Color>& BMPImage::GetPixels() const {
@@ -172,13 +143,10 @@ void BMPImage::PinInamgeToScreen(const Vec2D& position){
 void BMPImage::ScaleImage(float xScale, float yScale, bool relative){
 
 	uint32_t newWidth, newHeight;
-	if(relative)
-	{
+	if(relative){
 		newWidth = static_cast<uint32_t>(xScale * mWidth);
 		newHeight = static_cast<uint32_t>(yScale * mHeight);
-	}
-	else
-	{
+	}else{
 		newWidth = static_cast<uint32_t>(xScale * originalWidth);
 		newHeight = static_cast<uint32_t>(yScale * originalHeight);
 	}
@@ -233,12 +201,36 @@ void BMPImage::SetHeight(const float& height, bool autoWidth){
 
 }
 void BMPImage::SetWidth(const float& width, bool autoHeight){
-
-
-
+	// TODO
 }
 
+void BMPImage::DrawImagePixels(Screen& screen, const Vec2D& position, const Sprite& sprite, colorOverlay overlay, bool flipHorizontal, bool globalPosition, int cropLeft, int cropRight) const{
+	uint32_t rows = sprite.height;
+	uint32_t columns = sprite.width;
 
+for(uint32_t r = 0; r < rows; ++r){
+	for(uint32_t c = 0; c < columns; ++c){
+
+		int pixelDrawPosX, pixelDrawPosY;
+
+		if(flipHorizontal){
+			pixelDrawPosX = (position.GetX() + columns) - c;
+		}else{
+			pixelDrawPosX = position.GetX() + c;
+		}
+
+		pixelDrawPosY = position.GetY() + r;
+
+		Color color = overlay(mPixels.at(GetPixelIndex(c + sprite.xPos , r + sprite.yPos , mWidth)));
+
+		if(color == Color::Black()){
+			color.SetAlpha(0);
+		}
+
+		screen.DrawPixel(pixelDrawPosX, pixelDrawPosY, color, globalPosition);
+	}
+}
+}
 
 
 

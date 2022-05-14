@@ -16,7 +16,7 @@ public:
 	void Update();
 
 	void DrawActiveAnimation(Screen& screen, const Vec2D& pivotPoint);
-	void DrawFlippedActiveAnimation(Screen& screen, const Vec2D& pivotPoint, bool flipHorizontal, bool flipVertical);
+	void DrawFlippedActiveAnimation(Screen& screen, const Vec2D& pivotPoint, bool flipHorizontal=true);
 
 	void AddAnimation(std::string name, Animation anim);
 	void ChangeAnimation(const std::string& name, bool immediately = true);

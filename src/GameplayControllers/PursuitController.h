@@ -15,7 +15,7 @@ public:
 
 	float GetPlayerRobotDistance();
 	int GetActualScore();
-	int GetActualLife();
+	inline int GetActualLife() {return playerHealth;}
 	int GetNumberOfSeconds();
 
 	void CollectCoin();
@@ -23,6 +23,8 @@ public:
 
 private:
 	const float FALL_DOWN_LEVEL = 400;
+
+	const int PLAYER_MAX_HEALTH = 10;
 
 	int playerCoins;
 	int playerHealth;

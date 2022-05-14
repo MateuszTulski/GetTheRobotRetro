@@ -17,7 +17,7 @@ void PlayerAnimations::Draw(Screen& screen, Vec2D pivotPoint, int direction){
 	if(direction > 0){
 		mAnimator.DrawActiveAnimation(screen, pivotPoint);
 	}else{
-		mAnimator.DrawFlippedActiveAnimation(screen, pivotPoint, true, false);
+		mAnimator.DrawFlippedActiveAnimation(screen, pivotPoint);
 	}
 }
 

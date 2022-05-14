@@ -58,9 +58,6 @@ void AARectangle::ScaleToPoint(const Vec2D& point, float scale)
 	Vec2D p1Direction (point.GetX()-mPoints[0].GetX(), point.GetY()-mPoints[0].GetY());
 	Vec2D p2Direction (point.GetX()-mPoints[1].GetX(), point.GetY()-mPoints[1].GetY());
 
-	std::cout << p1Direction << std::endl;
-	std::cout << p2Direction << std::endl;
-
 	mPoints[0] = point + (p1Direction.Normalize() * topLeftNewDistance);
 	mPoints[1] = point + (p2Direction.Normalize() * bottomRightNewDistance);
 }

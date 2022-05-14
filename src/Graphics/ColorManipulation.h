@@ -3,7 +3,7 @@
 
 #include "Color.h"
 
-Color ModifyColorMultiply(const Color& outColor, const Color& modifier);
+Color ModifyColorMultiply(const Color& inColor, const Color& modifier);
 
 
 

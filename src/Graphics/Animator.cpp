@@ -26,8 +26,8 @@ void Animator::DrawActiveAnimation(Screen& screen, const Vec2D& pivotPoint){
 	mActiveAnim->Draw(screen, pivotPoint);
 }
 
-void Animator::DrawFlippedActiveAnimation(Screen& screen, const Vec2D& pivotPoint, bool flipHorizontal, bool flipVertical){
-	mActiveAnim->DrawFlipped(screen, pivotPoint, flipHorizontal, flipVertical);
+void Animator::DrawFlippedActiveAnimation(Screen& screen, const Vec2D& pivotPoint, bool flipHorizontal){
+	mActiveAnim->DrawFlipped(screen, pivotPoint, flipHorizontal);
 }
 
 void Animator::AddAnimation(std::string name, Animation anim){

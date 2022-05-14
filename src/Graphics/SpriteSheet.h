@@ -26,8 +26,8 @@ public:
 	SpriteSheet();
 	bool LoadSprite(const std::string& name);
 
-	void DrawSprite(Screen& screen, const Vec2D& position, const std::string& name, bool globalPosition = true);
-	void DrawSprite(Screen& screen, const Vec2D& position, const std::string& name, colorOverlay overlay, bool globalPosition = true);
+	void DrawSprite(Screen& screen, const Vec2D& position, const std::string& name,  bool flipHorizontal = false, bool globalPosition = true);
+	void DrawSprite(Screen& screen, const Vec2D& position, const std::string& name, colorOverlay overlay, bool flipHorizontal = false, bool globalPosition = true);
 
 	void ScaleSpriteSheet(float xScale, float yScale, bool relative = true);
 

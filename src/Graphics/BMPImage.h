@@ -30,10 +30,11 @@ public:
 
 	bool operator<(const BMPImage& other) const;
 
-	void DrawImage(Screen& screen, const Vec2D& position, bool globalPosition = true);
-	void DrawImage(Screen& screen, const Vec2D& position, colorOverlay overlay, bool globalPosition = true);
-	void DrawImageSprite(Screen& screen, const Vec2D& position, const Sprite& sprite, bool globalPosition);
-	void DrawImageSprite(Screen& screen, const Vec2D& position, const Sprite& sprite, colorOverlay overlay, bool globalPosition = true);
+
+	void DrawImage(Screen& screen, const Vec2D& position, bool flipHorizontal = false, bool globalPosition = true) const;
+	void DrawImage(Screen& screen, const Vec2D& position, colorOverlay overlay, bool flipHorizontal = false, bool globalPosition = true) const;
+	void DrawImageSprite(Screen& screen, const Vec2D& position, const Sprite& sprite, bool flipHorizontal = false, bool globalPosition = true) const;
+	void DrawImageSprite(Screen& screen, const Vec2D& position, const Sprite& sprite, colorOverlay overlay, bool flipHorizontal = false, bool globalPosition = true) const;
 
 	const std::vector<Color>& GetPixels() const;
 
@@ -51,12 +52,15 @@ public:
 	void RotateAroundCenter(float angle);
 	void FlipImageHorizontal();
 
-
 	void SetHeight(const float& height, bool autoWidth = false);
 	void SetWidth(const float& width, bool autoHeight = false);
 
-private:
+protected:
+	void DrawImagePixels(Screen& screen, const Vec2D& position, const Sprite& sprite, colorOverlay overlay, bool flipHorizontal=false, bool globalPosition=true, int cropLeft=0, int cropRight=0) const;
 	uint32_t mWidth, mHeight;
+
+private:
+
 	uint32_t originalWidth, originalHeight;
 
 	std::vector<Color> mOriginalPixels;
