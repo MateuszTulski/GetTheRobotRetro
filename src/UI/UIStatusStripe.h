@@ -31,7 +31,7 @@ private:
 	GetValue getValueFunc;
 
 	const bool FLIP_HORIZONTAL = false;
-	const bool GLOBAL_POSITION = true;
+	const bool GLOBAL_POSITION = false;
 };
 
 

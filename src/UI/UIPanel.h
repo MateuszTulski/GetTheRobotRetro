@@ -20,7 +20,7 @@ public:
 
 	void AddStaticImage(const BMPImage& image, const Vec2D& position);
 	void AddHPStripe(const UIStatusStripe& stripe);
-	void AddDistanceStripe(UIStatusStripe stripe);
+	void AddDistanceStripe(const UIStatusStripe& stripe);
 
 	inline void SetActive(bool active) { isActive = active; }
 

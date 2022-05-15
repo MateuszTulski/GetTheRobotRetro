@@ -209,12 +209,12 @@ void BMPImage::DrawImagePixels(Screen& screen, const Vec2D& position, const Spri
 	uint32_t columns = sprite.width;
 
 for(uint32_t r = 0; r < rows; ++r){
-	for(uint32_t c = 0; c < columns; ++c){
+	for(uint32_t c = cropLeft; c < columns - cropRight; ++c){
 
 		int pixelDrawPosX, pixelDrawPosY;
 
 		if(flipHorizontal){
-			pixelDrawPosX = (position.GetX() + columns) - c;
+			pixelDrawPosX = (position.GetX() + columns) - c - cropRight;
 		}else{
 			pixelDrawPosX = position.GetX() + c;
 		}

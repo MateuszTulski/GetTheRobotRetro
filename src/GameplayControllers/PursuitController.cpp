@@ -3,8 +3,7 @@
 
 PursuitController::PursuitController():
 	playerCoins(0),
-	playerHealth(10){
-
+	playerHealth(PLAYER_MAX_HEALTH){
 }
 
 void PursuitController::InitUI(){
@@ -30,13 +29,18 @@ void PursuitController::InitUI(){
 	// Player HP and Distance stripes
 	SpriteSheet statusStripes;
 	if(statusStripes.LoadSprite("ui-stripes")){
-		Sprite sprite = statusStripes.GetSpriteCoordinates("life_stripe");
+		Sprite hpSprite = statusStripes.GetSpriteCoordinates("life_stripe");
+		UIStatusStripe hpBar([this](){return PlayerLifeNormalizedDecimal();});
+		hpBar.LoadImageFromSpriteSheet(statusStripes, "life_stripe");
+		hpBar.SetCoordinates(hpSprite.screenX, hpSprite.screenY, false);
+		mainUI.AddHPStripe(hpBar);
 
-		UIStatusStripe hpStripe([this](){return GetActualLife() / static_cast<float>(PLAYER_MAX_HEALTH);});
-		hpStripe.LoadImageFromSpriteSheet(statusStripes, "life_stripe");
-		hpStripe.SetCoordinates(sprite.screenX, sprite.screenY, false);
-
-		mainUI.AddHPStripe(hpStripe);
+		Sprite distanceSprite = statusStripes.GetSpriteCoordinates("distance_stripe");
+		UIStatusStripe distanceBar([this](){return PlayerDistanceNormalizedDecimal();});
+		distanceBar.LoadImageFromSpriteSheet(statusStripes, "distance_stripe");
+		distanceBar.FlipImageHorizontal();
+		distanceBar.SetCoordinates(distanceSprite.screenX, distanceSprite.screenY, true);
+		mainUI.AddDistanceStripe(distanceBar);
 	}
 }
 
@@ -49,18 +53,32 @@ float PursuitController::GetPlayerRobotDistance(){
 	return 0;
 }
 
-void CollectCoin(){
+void PursuitController::CollectCoin(){
 
 }
 
-void PlayerDamage(){
+void PursuitController::PlayerDamage(){
 
 }
 
-void RestartGame(){
+void PursuitController::RestartGame(){
 
 }
 
-void PauseGame(bool pause){
+void PursuitController::PauseGame(bool pause){
 
 }
+
+float PursuitController::PlayerLifeNormalizedDecimal(){
+	return GetActualLife() / static_cast<float>(PLAYER_MAX_HEALTH);
+}
+
+float PursuitController::PlayerDistanceNormalizedDecimal(){
+	return GetPlayerRobotDistance() / ROBOT_ESCAPE_DISTANCE;
+}
+
+
+
+
+
+
