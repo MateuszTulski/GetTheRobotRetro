@@ -8,6 +8,7 @@
 #include "BitmapFont.h"
 #include "ColorManipulation.h"
 #include "UIStatusStripe.h"
+#include "UIDynamicText.h"
 
 class Screen;
 class BitmapFont;
@@ -21,6 +22,8 @@ public:
 	void AddStaticImage(const BMPImage& image, const Vec2D& position);
 	void AddHPStripe(const UIStatusStripe& stripe);
 	void AddDistanceStripe(const UIStatusStripe& stripe);
+	void AddTimeText(const UIDynamicText& text);
+	void AddScoreText(const UIDynamicText& text);
 
 	inline void SetActive(bool active) { isActive = active; }
 
@@ -31,6 +34,7 @@ private:
 
 	std::map<BMPImage, Vec2D> mStaticImages;
 	UIStatusStripe mPlayerHP, mDistance;
+	UIDynamicText timeText, scoreText;
 
 	void DrawStaticImages();
 

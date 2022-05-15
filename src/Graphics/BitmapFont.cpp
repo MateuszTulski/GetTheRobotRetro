@@ -7,16 +7,14 @@
 
 BitmapFont::BitmapFont() : BitmapFont(1, 7){}
 
-BitmapFont::BitmapFont(unsigned int letterSpace, unsigned int wordSpace) :
+BitmapFont::BitmapFont(unsigned int letterSpace, unsigned int wordsSpace) :
 		mLetterSpace(letterSpace),
-		mWordSpace(wordSpace),
+		mWordSpace(wordsSpace),
 		fontHeight(0){
 }
 
 bool BitmapFont::LoadFont(const std::string& fontName){
-
 	bool fontLoaded = mFontSheet.LoadSprite(fontName);
-
 	return fontLoaded && GetFontHeight(fontName);
 }
 
@@ -50,21 +48,17 @@ Vec2D BitmapFont::GetDrawPosition(const std::string&text, const AARectangle& rec
 	unsigned int x = 0;
 	unsigned int y = 0;
 
-	if(hAlign == FHA_Center)
-	{
+	if(hAlign == FHA_Center){
 		x = rect.GetCenterPoint().GetX() - textSize.width/2;
 	}
-	else if (hAlign == FHA_Right)
-	{
+	else if (hAlign == FHA_Right){
 		x = rect.GetBottomRight().GetX() - textSize.width;
 	}
 
-	if(vAlign == FVA_Middle)
-	{
+	if(vAlign == FVA_Middle){
 		y = rect.GetCenterPoint().GetY() - textSize.height/2;
 	}
-	else if (vAlign == FVA_Bottom)
-	{
+	else if (vAlign == FVA_Bottom){
 		y = rect.GetBottomRight().GetY() - textSize.height;
 	}
 

@@ -64,21 +64,18 @@ void PursuitScene::Init(){
 	mCamera->SetFollowOffset(Vec2D(-80, -105));
 
 	mPursuitController.InitUI();
-
-	tempImage.LoadImage(App::Singleton().GetBasePath() + "Assets/rocket.bmp");
-	tempImage.ScaleImage(0.5, 0.5, false);
 }
 
 void PursuitScene::Update(uint32_t deltaTime){
 	PhysicsWorld::Singleton().Update(deltaTime);
 	mPlayer.Update(deltaTime);
 	mCamera->Update(mPlayer);
+	mPursuitController.Update(mPlayer, mRobot);
 }
 
 void PursuitScene::Draw(Screen& screen){
-	tempImage.DrawImage(screen, Vec2D(10,10), true);
-
 	mPlayer.Draw(screen);
+	mRobot.Draw(screen);
 	mLevelLoader.DrawObjects(screen);
 	mPursuitController.DrawUI(screen);
 }

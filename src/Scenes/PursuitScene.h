@@ -7,6 +7,7 @@
 #include "PursuitController.h"
 #include "PhysicsWorld.h"
 #include "Player.h"
+#include "Robot.h"
 #include "BMPImage.h"
 #include "SpriteSheet.h"
 #include "Button.h"
@@ -25,6 +26,7 @@ public:
 	const std::string& GetSceneName() const override;
 private:
 	Player mPlayer;
+	Robot mRobot;
 	std::shared_ptr<Camera> mCamera;
 	PursuitController mPursuitController;
 

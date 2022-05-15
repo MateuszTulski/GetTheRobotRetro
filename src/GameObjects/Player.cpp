@@ -50,16 +50,13 @@ void Player::MakeFlushWithEdge(const BoundaryEdge& edge, Vec2D& point, bool limi
 }
 
 void Player::RunInput(signed int direction, bool released){
-
 	if(direction > 0){
 		if(!RIGHT_KEY_PRESSED && !released){
 			RIGHT_KEY_PRESSED = true;
 		}else if(released){
 			RIGHT_KEY_PRESSED = false;
 		}
-	}
-	else
-	{
+	}else{
 		if(!LEFT_KEY_PRESSED && !released){
 			LEFT_KEY_PRESSED = true;
 		}else if(released){
@@ -68,8 +65,7 @@ void Player::RunInput(signed int direction, bool released){
 	}
 }
 
-void Player::JumpTrigger(bool jumpPressed)
-{
+void Player::JumpTrigger(bool jumpPressed){
 	if(jumpPressed && !mJumpPressed){
 		mJumpPressed = true;
 		JumpSequence();
@@ -86,7 +82,6 @@ void Player::SetPosition(Vec2D bottomMiddlePoint){
 }
 
 Vec2D Player::GetPosition() const{
-
 	return Vec2D(mAARect.GetBottomRight().GetX() - WIDTH/2, mAARect.GetBottomRight().GetY());
 }
 
@@ -105,7 +100,6 @@ void Player::FreezeThePlayer(bool freeze){
 }
 
 void Player::UpdateSpeed(){
-
 	ResetSpeedWhenNotMoving();
 
 	if(mLastPosition != GetPosition() && mSpeed < RUN_SPEED_MAX)
@@ -121,7 +115,6 @@ void Player::UpdateSpeed(){
 }
 
 void Player::UpdatePlayerState(){
-
 	bool grounded = IsGrounded();
 	if(grounded){
 		ResetUsedJumps();

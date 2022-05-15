@@ -25,12 +25,12 @@ void Time::UpdateTime(UpdateAction executeFrame){
 
 
 float Time::DeltaTime(){
-
+	// Return number of seconds
 	return  static_cast<float>(prevFrameDuration) / 1000.0f;
 }
 
 float Time::AppTime(){
-
+	// Return number of seconds
 	return  static_cast<float>(SDL_GetTicks()) / 1000.0f;
 }
 

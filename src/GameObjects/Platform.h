@@ -2,7 +2,6 @@
 #define SRC_GAMEOBJECTS_PLATFORM_H_
 
 #include "Rigidbody.h"
-#include "IGameObject.h"
 #include "Line2D.h"
 #include "SpriteSheet.h"
 #include <memory>

@@ -22,7 +22,7 @@ enum FontHorizontalAlign{
 class BitmapFont {
 public:
 	BitmapFont();
-	BitmapFont(unsigned int letterSpace, unsigned int wordSpace);
+	BitmapFont(unsigned int letterSpace, unsigned int wordsSpace);
 
 	bool LoadFont(const std::string& fontName);
 	Size GetTextSize(const std::string& text) const;

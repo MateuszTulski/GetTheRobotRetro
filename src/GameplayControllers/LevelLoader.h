@@ -4,7 +4,6 @@
 #include <memory>
 #include "SpriteSheet.h"
 #include "Line2D.h"
-#include "IGameObject.h"
 #include "Platform.h"
 
 class LevelLoader {
@@ -22,6 +21,10 @@ private:
 	std::shared_ptr<SpriteSheet> moptrPlatformSprite;
 
 	std::vector<Platform> mPlatforms;
+
+	void DrawPlatforms(Screen& screen, float rightScreenSide, float leftScreenSide);
+	void DrawCoins(Screen& screen, float rightScreenSide, float leftScreenSide);
+	void DrawObstacles(Screen& screen, float rightScreenSide, float leftScreenSide);
 };
 
 

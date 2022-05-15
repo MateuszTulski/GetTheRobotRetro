@@ -1,9 +1,14 @@
 #include "PursuitController.h"
 #include "UIStatusStripe.h"
+#include "UIDynamicText.h"
+#include "App.h"
 
 PursuitController::PursuitController():
+	playerRobotDistance(0),
 	playerCoins(0),
 	playerHealth(PLAYER_MAX_HEALTH){
+
+	gameStartTime = App::Singleton().GetTime().AppTime();
 }
 
 void PursuitController::InitUI(){
@@ -42,23 +47,49 @@ void PursuitController::InitUI(){
 		distanceBar.SetCoordinates(distanceSprite.screenX, distanceSprite.screenY, true);
 		mainUI.AddDistanceStripe(distanceBar);
 	}
+
+	// Dynamic Texts
+	UIDynamicText scoreText([this](){ return ScoreDisplayString();});
+	scoreText.LoadFont("HemiFont");
+	scoreText.SetScreenPosition(140, 10);
+	scoreText.SetFontHeight(13);
+	scoreText.SetOverlayColor(mUIColor);
+	mainUI.AddScoreText(scoreText);
+
+	UIDynamicText timeText([this](){ return TimeDisplayString();});
+	timeText.LoadFont("HemiFont");
+	timeText.SetScreenPosition(180, 10);
+	timeText.SetFontHeight(13);
+	timeText.SetOverlayColor(mUIColor);
+	mainUI.AddTimeText(timeText);
+}
+
+void PursuitController::Update(const Player& player, const Robot& robot){
+	playerRobotDistance = player.GetPosition().Distance(robot.GetPosition());
+
+	if(PlayerFeld(player.GetPosition().GetY()) || RobotEscaped()){
+		GameOver(false);
+	}
 }
 
 void PursuitController::DrawUI(Screen& screen){
 	mainUI.DrawPanel(screen);
 }
 
-float PursuitController::GetPlayerRobotDistance(){
+int PursuitController::GetNumberOfSeconds(){
 
-	return 0;
+	return static_cast<int>(App::Singleton().GetTime().AppTime() - gameStartTime);
 }
 
-void PursuitController::CollectCoin(){
-
+void PursuitController::CollectCoin(const int& points){
+	playerCoins += points;
 }
 
-void PursuitController::PlayerDamage(){
-
+void PursuitController::PlayerDamage(const int& damage){
+	playerHealth -= damage;
+	if(playerHealth < 0){
+		GameOver(false);
+	}
 }
 
 void PursuitController::RestartGame(){
@@ -69,6 +100,15 @@ void PursuitController::PauseGame(bool pause){
 
 }
 
+void PursuitController::GameOver(bool success){
+//	std::cout << "GAME OVER" << std::endl;
+//	if(success){
+//		std::cout << "---success---\n";
+//	}else{
+//		std::cout << "---failed---\n";
+//	}
+}
+
 float PursuitController::PlayerLifeNormalizedDecimal(){
 	return GetActualLife() / static_cast<float>(PLAYER_MAX_HEALTH);
 }
@@ -77,6 +117,40 @@ float PursuitController::PlayerDistanceNormalizedDecimal(){
 	return GetPlayerRobotDistance() / ROBOT_ESCAPE_DISTANCE;
 }
 
+std::string PursuitController::TimeDisplayString(){
+	int seconds = GetNumberOfSeconds();
+	if(seconds < 10){
+		return std::string("0") + std::to_string(seconds);
+	}else{
+		return std::to_string(seconds);
+	}
+}
+
+std::string PursuitController::ScoreDisplayString(){
+	int scores = GetActualScore();
+	if(scores == 0){
+		return std::string("00");
+	}else if(scores < 10){
+		return std::string("0") + std::to_string(scores);
+	}else{
+		return std::to_string(scores);
+	}
+	return std::to_string(scores);
+}
+
+bool PursuitController::PlayerFeld(const float& yPosition){
+	if(yPosition>FALL_DOWN_LEVEL){
+		return true;
+	}
+	return false;
+}
+
+bool PursuitController::RobotEscaped(){
+	if(playerRobotDistance > ROBOT_ESCAPE_DISTANCE){
+		return true;
+	}
+	return false;
+}
 
 
 
