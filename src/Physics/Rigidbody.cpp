@@ -240,22 +240,3 @@ bool Rigidbody::CastOrtoRay(const Vec2D& origin, const Vec2D& direction, int len
 	return false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -16,9 +16,6 @@ public:
 
 	~Rigidbody();
 
-	//// TEMP
-	inline void Draw(Screen& screen){ screen.Draw(mAARect, Color::Red(), true, Color::Red());}
-
 	bool operator==(const Rigidbody& other);
 
 	void InitRigidbody(AARectangle rect, float mass, bool useGravity = true, bool isCollider = true);
@@ -44,9 +41,12 @@ public:
 	inline void SetGravityScale(const float& gravityScale) { mGravityScale = gravityScale;}
 
 	inline int GetRigidbodyID() const {return mID;}
+	inline AARectangle GetAARectangle() const {return mAARect;}
 
 	bool CastOrtoRay(const Vec2D& origin, const Vec2D& direction, int lengthLimit);
 	bool CastOrtoRay(const Vec2D& origin, const Vec2D& direction, int lengthLimit, int& outID);
+
+	virtual void OnCollision(){}
 
 	static int InitializedRigidbody;
 
