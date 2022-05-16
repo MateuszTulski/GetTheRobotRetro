@@ -19,8 +19,8 @@ public:
 
 	bool LoadFile(const std::string& name, LevelObjectType type, const char& symbol);
 
-	std::unique_ptr<std::vector<Line2D>> GetLines() const;
-	std::unique_ptr<std::vector<Vec2D>> GetPoints() const;
+	inline std::vector<Line2D> GetLines() const {return mLines;}
+	inline std::vector<Vec2D> GetPoints() const {return mPoints;}
 
 private:
 	std::vector<Vec2D> mPoints;

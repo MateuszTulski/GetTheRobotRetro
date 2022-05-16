@@ -18,7 +18,7 @@ void PursuitScene::Init(){
 
 		mPlayer.JumpTrigger(true);
 
-		if(GameControlsActions::IsReleased(state)){ // @suppress("Ambiguous problem")
+		if(GameControlsActions::IsReleased(state)){
 			mPlayer.JumpTrigger(false);
 		}
 	};
@@ -31,7 +31,7 @@ void PursuitScene::Init(){
 
 		mPlayer.RunInput(1);
 
-		if(GameControlsActions::IsReleased(state)){ // @suppress("Ambiguous problem")
+		if(GameControlsActions::IsReleased(state)){
 			mPlayer.RunInput(1, true);
 		}
 	};
@@ -44,7 +44,7 @@ void PursuitScene::Init(){
 
 		mPlayer.RunInput(-1);
 
-		if(GameControlsActions::IsReleased(state)){ // @suppress("Ambiguous problem")
+		if(GameControlsActions::IsReleased(state)){
 			mPlayer.RunInput(-1, true);
 		}
 	};
@@ -55,7 +55,7 @@ void PursuitScene::Init(){
 
 	// LOAD LEVEL
 	if(mLevelLoader.LoadGraphics()){
-		if(!mLevelLoader.LoadPlatforms()){
+		if(!mLevelLoader.LoadLevelObjects()){
 			std::cout << "Error while loading level!" << std::endl;
 		}
 	}

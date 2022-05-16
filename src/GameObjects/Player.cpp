@@ -2,19 +2,19 @@
 #include "Color.h"
 #include "Screen.h"
 #include "App.h"
+#include "Coin.h"
 
 #include <cassert>
+
 
 Player::Player() : mState(PlayerState::idle), mJumpPressed(false), mSpeed(RUN_SPEED_MIN){
 	Rigidbody::InitRigidbody(PLAYER_RECT, MASS, true, true);
 }
 
 Player::Player(const Player& other) : mState(PlayerState::idle), mJumpPressed(other.mJumpPressed), mSpeed(other.mSpeed){
-
 }
 
 Player::Player(Player&& other) : mState(std::move(other.mState)), mJumpPressed(std::move(other.mJumpPressed)), mSpeed(std::move(other.mSpeed)){
-
 }
 
 void Player::Init(const Vec2D& startPosition){
@@ -24,24 +24,19 @@ void Player::Init(const Vec2D& startPosition){
 	mLastPosition = startPosition;
 
 	assert(mAnimations.InitAnimations() && "Couldn't init player animations!");
-
-
 }
 
 void Player::Update(uint32_t deltaTime){
-
 	SetPlayerDirection();
 	UpdateSpeed();
 	SetRigidbodyVelocity();
 	UpdatePlayerState();
 
 	mLastPosition = GetPosition();
-
 	mAnimations.Update(mState);
 }
 
 void Player::Draw(Screen& screen){
-
 	mAnimations.Draw(screen, mLastPosition, mDirection);
 }
 
@@ -70,8 +65,7 @@ void Player::JumpTrigger(bool jumpPressed){
 		mJumpPressed = true;
 		JumpSequence();
 	}
-	else if(!jumpPressed)
-	{
+	else if(!jumpPressed){
 		mJumpPressed = false;	// Jump button released
 	}
 }
@@ -99,17 +93,23 @@ void Player::FreezeThePlayer(bool freeze){
 	}
 }
 
+void Player::OnCollision(Rigidbody& outCollider){
+	if(outCollider.IsOnLayer("coins")){
+		Coin* coin = dynamic_cast<Coin*>(&outCollider);
+		if(coin != nullptr){
+			coin->SetActive(false);
+			mScores += coin->CollectCoin();
+		}
+	}
+}
+
 void Player::UpdateSpeed(){
 	ResetSpeedWhenNotMoving();
-
-	if(mLastPosition != GetPosition() && mSpeed < RUN_SPEED_MAX)
-	{
+	if(mLastPosition != GetPosition() && mSpeed < RUN_SPEED_MAX){
 		float newSpeed = mSpeed + ACCELERATION;
-		if(newSpeed > RUN_SPEED_MAX)
-		{
+		if(newSpeed > RUN_SPEED_MAX){
 			newSpeed = RUN_SPEED_MAX;
 		}
-
 		mSpeed = newSpeed;
 	}
 }
@@ -175,9 +175,7 @@ void Player::UpdatePlayerState(){
 }
 
 void Player::ResetSpeedWhenNotMoving(){
-
-	if(GetPosition() == mLastPosition)
-	{
+	if(GetPosition() == mLastPosition){
 		resetSpeedTimer += App::Singleton().GetTime().DeltaTime();
 
 		if(resetSpeedTimer > resetSpeedDelay && mSpeed != RUN_SPEED_MIN)
@@ -189,23 +187,18 @@ void Player::ResetSpeedWhenNotMoving(){
 }
 
 void Player::SetRigidbodyVelocity(){
-
-	if(RIGHT_KEY_PRESSED && !LEFT_KEY_PRESSED)
-	{
+	if(RIGHT_KEY_PRESSED && !LEFT_KEY_PRESSED){
 		SetHorizontalVelocity(mSpeed);
 	}
-	else if(LEFT_KEY_PRESSED && !RIGHT_KEY_PRESSED)
-	{
+	else if(LEFT_KEY_PRESSED && !RIGHT_KEY_PRESSED){
 		SetHorizontalVelocity(-mSpeed);
 	}
-	else
-	{
+	else{
 		SetHorizontalVelocity(0);
 	}
 }
 
 void Player::SetPlayerDirection(){
-
 	if(RIGHT_KEY_PRESSED && !LEFT_KEY_PRESSED && mDirection < 0 && mLastPosition != GetPosition()){
 		mDirection = 1;
 	}
@@ -215,7 +208,6 @@ void Player::SetPlayerDirection(){
 }
 
 void Player::JumpSequence(){
-
 	if(CanJumpFirst()){
 		mState = PlayerState::firstJump;
 		firstJumpUsed = true;

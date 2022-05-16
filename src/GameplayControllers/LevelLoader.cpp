@@ -1,33 +1,37 @@
+#include "App.h"
 #include "LevelLoader.h"
 #include "LevelFilesReader.h"
 #include "Platform.h"
 
-bool LevelLoader::LoadGraphics()
-{
-	SpriteSheet platforms;
-	if(platforms.LoadSprite("platform"))
-	{
-		moptrPlatformSprite = std::make_shared<SpriteSheet>(platforms);
-	}
-	else
-	{
+bool LevelLoader::LoadGraphics(){
+	auto loadPlatforms = [this](){
+		SpriteSheet platforms;
+		if(platforms.LoadSprite("platform")){
+			moptrPlatformSprite = std::make_shared<SpriteSheet>(platforms);
+			return true;
+		}
 		return false;
-	}
+	};
 
-	return true;
+	auto loadCoins = [this](){
+		return coinsImage.LoadImage(App::Singleton().GetBasePath() + "Assets/coin.bmp");
+	};
+
+	return loadPlatforms() && loadCoins();
 }
 
-bool LevelLoader::LoadPlatforms()
-{
+bool LevelLoader::LoadLevelObjects(){
+	return LoadPlatforms() && LoadCoins();
+}
+
+bool LevelLoader::LoadPlatforms(){
 	LevelFilesReader lines;
 	std::string fileName("platforms");
-	if(lines.LoadFile(fileName, LOT_Lines, 'x'))
-	{
-		mPlatformsLines = lines.GetLines();
-		mPlatforms.reserve(mPlatformsLines->size());
+	if(lines.LoadFile(fileName, LOT_Lines, 'x')){
+		std::vector<Line2D> mPlatformsLines = lines.GetLines();
+		mPlatforms.reserve(mPlatformsLines.size());
 
-		for(auto p : *mPlatformsLines)
-		{
+		for(auto p : mPlatformsLines){
 			mPlatforms.emplace_back(Platform(p, moptrPlatformSprite));
 
 			Vec2D leftTop((p.GetP0().GetX()-1) * LevelLoader::LEVEL_GRID_SIZE, (p.GetP0().GetY()-1) * LevelLoader::LEVEL_GRID_SIZE);
@@ -35,12 +39,30 @@ bool LevelLoader::LoadPlatforms()
 
 			mPlatforms.back().InitRigidbody(AARectangle(leftTop, rightBottom), 10, false, true);
 		}
-
+		return true;
 	}else{
 		return false;
 	}
+}
 
-	return true;
+bool LevelLoader::LoadCoins(){
+	LevelFilesReader coinsPoints;
+	std::string fileName("platforms");
+	if(coinsPoints.LoadFile(fileName, LOT_Points, 'c')){
+		std::vector<Vec2D> points = coinsPoints.GetPoints();
+		mCoins.reserve(points.size());
+		if(points.size() > 0){
+			for(auto p : points){
+				Vec2D position(Vec2D(p.GetX()*LEVEL_GRID_SIZE, (p.GetY()-1)*LEVEL_GRID_SIZE));
+				mCoins.emplace_back(position);
+				mCoins.back().SetPhysicsLayer("coins");
+				mCoins.back().SetAsTrigger(true);
+			}
+		}
+		return true;
+	}else{
+		return false;
+	}
 }
 
 void LevelLoader::DrawObjects(Screen& screen){
@@ -62,7 +84,9 @@ void LevelLoader::DrawPlatforms(Screen& screen, float rightScreenSide, float lef
 }
 
 void LevelLoader::DrawCoins(Screen& screen, float rightScreenSide, float leftScreenSide){
-
+	for(const auto& c : mCoins){
+		c.Draw(screen, coinsImage);
+	}
 }
 
 void LevelLoader::DrawObstacles(Screen& screen, float rightScreenSide, float leftScreenSide){

@@ -5,7 +5,7 @@
 
 PursuitController::PursuitController():
 	playerRobotDistance(0),
-	playerCoins(0),
+	playerScores(0),
 	playerHealth(PLAYER_MAX_HEALTH){
 
 	gameStartTime = App::Singleton().GetTime().AppTime();
@@ -66,8 +66,10 @@ void PursuitController::InitUI(){
 
 void PursuitController::Update(const Player& player, const Robot& robot){
 	playerRobotDistance = player.GetPosition().Distance(robot.GetPosition());
+	playerHealth = player.GetPlayerHP();
+	playerScores = player.GetPlayerScores();
 
-	if(PlayerFeld(player.GetPosition().GetY()) || RobotEscaped()){
+	if(PlayerFeld(player.GetPosition().GetY()) || RobotEscaped() || playerHealth<=0){
 		GameOver(false);
 	}
 }
@@ -79,17 +81,6 @@ void PursuitController::DrawUI(Screen& screen){
 int PursuitController::GetNumberOfSeconds(){
 
 	return static_cast<int>(App::Singleton().GetTime().AppTime() - gameStartTime);
-}
-
-void PursuitController::CollectCoin(const int& points){
-	playerCoins += points;
-}
-
-void PursuitController::PlayerDamage(const int& damage){
-	playerHealth -= damage;
-	if(playerHealth < 0){
-		GameOver(false);
-	}
 }
 
 void PursuitController::RestartGame(){

@@ -9,30 +9,31 @@ int Rigidbody::InitializedRigidbody = 0;
 Rigidbody::Rigidbody() : Rigidbody(AARectangle(Vec2D::Zero, Vec2D::Zero), 0, true, true){
 }
 
-Rigidbody::Rigidbody(AARectangle rect, float mass, bool useGravity, bool isCollider) : mVelocity(Vec2D::Zero), mUseGravity(useGravity), mIsCollider(isCollider), mMass(mass)
-{
-	InitializedRigidbody++;
-	mID = InitializedRigidbody;
-	Excluder::Init(rect);
+Rigidbody::Rigidbody(AARectangle rect, float mass, bool useGravity, bool isCollider) :
+		Rigidbody(rect, mass, "default", useGravity, isCollider){
 }
 
-Rigidbody::Rigidbody(const Rigidbody& other) : mVelocity(Vec2D::Zero), mUseGravity(std::move(other.mUseGravity)), mIsCollider(std::move(other.mIsCollider)), mMass(std::move(other.mMass))
-{
-	mID = other.GetRigidbodyID();
+Rigidbody::Rigidbody(AARectangle rect, float mass, const std::string layer, bool useGravity, bool isCollider) :
+			mVelocity(Vec2D::Zero),
+			mUseGravity(useGravity),
+			mIsCollider(isCollider),
+			mIsTrigger(false),
+			mMass(mass),
+			mLayerId(0){
+
+		InitializedRigidbody++;
+		mID = InitializedRigidbody;
+		Excluder::Init(rect);
+	}
+
+Rigidbody::~Rigidbody(){
 }
 
-Rigidbody::~Rigidbody()
-{
-
-}
-
-bool Rigidbody::operator==(const Rigidbody& other)
-{
+bool Rigidbody::operator==(const Rigidbody& other){
 	return this->mID == other.GetRigidbodyID();
 }
 
 void Rigidbody::InitRigidbody(AARectangle rect, float mass, bool useGravity, bool isCollider){
-
 	mUseGravity = useGravity;
 	mIsCollider = isCollider;
 	mMass = mass;
@@ -46,24 +47,24 @@ void Rigidbody::InitRigidbody(AARectangle rect, float mass, bool useGravity, boo
 
 }
 
-void Rigidbody::UpdateRigdbody(uint32_t deltaTime){
+void Rigidbody::UpdateCollisions(uint32_t deltaTime){
 	if(!mUseGravity){
 		return;
 	}
 	Vec2D finalOffset = mVelocity * App::Singleton().GetTime().DeltaTime();
-
 	BoundaryEdge outObstacleEdge;
 
 	// Checking ACTUAL and POTENTIAL collisions
 	for(Rigidbody* otherRigidbody : PhysicsWorld::Singleton().GetAllRigidbodyObjects()){
-		if(otherRigidbody->IsCollider() && mID != otherRigidbody->GetRigidbodyID())
-		{
+		if(otherRigidbody->IsCollider() && mID != otherRigidbody->GetRigidbodyID()){
 			// ACTUAL - Check if rigidbody is already colliding
-			if(HasCollided(*otherRigidbody, outObstacleEdge))
-			{
-				MakeFlushWithEdge(outObstacleEdge);
-				StopOnObstacle(outObstacleEdge.normal);
-				ResetOffsetOnObstacle(finalOffset, outObstacleEdge);
+			if(HasCollided(*otherRigidbody, outObstacleEdge)){
+				if(!otherRigidbody->IsTrigger()){
+					MakeFlushWithEdge(outObstacleEdge);
+					StopOnObstacle(outObstacleEdge.normal);
+					ResetOffsetOnObstacle(finalOffset, outObstacleEdge);
+				}
+				OnCollision(*otherRigidbody);
 			}
 
 			// POTENTIAL - Check possible collision after finalOffset
@@ -71,10 +72,12 @@ void Rigidbody::UpdateRigdbody(uint32_t deltaTime){
 			offsetGhost.Init(GetAARectangle());
 			offsetGhost.MoveBy(finalOffset);
 
-			if(offsetGhost.HasCollided(*otherRigidbody, outObstacleEdge))
-			{
-				StopOnObstacle(outObstacleEdge.normal);
-				ResetOffsetOnObstacle(finalOffset, outObstacleEdge);
+			if(offsetGhost.HasCollided(*otherRigidbody, outObstacleEdge)){
+				if(!otherRigidbody->IsTrigger()){
+					StopOnObstacle(outObstacleEdge.normal);
+					ResetOffsetOnObstacle(finalOffset, outObstacleEdge);
+				}
+				OnCollision(*otherRigidbody);
 			}
 		}
 	}
@@ -112,7 +115,6 @@ void Rigidbody::MakeFlushWithEdge(const BoundaryEdge& edge){
 	{
 		MoveTo(Vec2D(edge.edge.GetP0().GetX() + COLLISION_OFFSET, mAARect.GetTopLeft().GetY()));
 	}
-
 }
 
 void Rigidbody::AddForce(const Vec2D& force){
@@ -155,6 +157,30 @@ void Rigidbody::StopOnObstacle(const Vec2D obstacleNormal){
 	{
 		mVelocity.SetX(0);
 	}
+}
+
+void Rigidbody::SetPhysicsLayer(const std::string& name){
+	int outId;
+	// Check if layer with that name already exists
+	if(!PhysicsWorld::Singleton().GetPhysicsLayer(name, outId)){
+		// Add new physicsLayer
+		PhysicsWorld::Singleton().AddPhysicsLayer(name, outId);
+	}
+	mLayerId = outId;
+}
+
+std::string Rigidbody::GetPhysicsLayerName() const{
+	return PhysicsWorld::Singleton().GetPhysicsLayerName(mLayerId);
+}
+
+bool Rigidbody::IsOnLayer(const std::string& name){
+	int outId;
+	if(PhysicsWorld::Singleton().GetPhysicsLayer(name, outId)){
+		if(mLayerId == outId){
+			return true;
+		}
+	}
+	return false;
 }
 
 bool Rigidbody::CastOrtoRay(const Vec2D& origin, const Vec2D& direction, int lengthLimit){

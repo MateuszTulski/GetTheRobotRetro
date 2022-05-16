@@ -9,12 +9,19 @@ public:
 	Coin();
 	Coin(const Vec2D& position);
 
-	void Draw(Screen& screen, BMPImage& image);
+	Coin(const Coin& other);
 
+	void Draw(Screen& screen, BMPImage& image) const;
 	void SetPosition(const Vec2D& position);
-	void OnCollision() override;
+
+	void SetActive(bool active);
+
+	inline int CollectCoin() {return COIN_VALUE;}
+	inline bool IsActive() const {return isActive;}
+
 private:
 	bool isActive;
+	const int COIN_VALUE = 5;
 	const Vec2D SIZE = Vec2D(15, 15);
 };
 

@@ -9,10 +9,15 @@ Coin::Coin(const Vec2D& position) :	Rigidbody(), isActive(true){
 	MoveTo(position);
 }
 
-void Coin::Draw(Screen& screen, BMPImage& image){
-	if(isActive){
+Coin::Coin(const Coin& other) :
+		Rigidbody(other),
+		isActive(other.isActive){
+	MoveTo(other.GetAARectangle().GetTopLeft());
+}
 
-		image.DrawImage(screen, GetAARectangle().GetTopLeft(), false, false);
+void Coin::Draw(Screen& screen, BMPImage& image) const{
+	if(isActive){
+		image.DrawImage(screen, GetAARectangle().GetTopLeft());
 	}
 }
 
@@ -20,6 +25,7 @@ void Coin::SetPosition(const Vec2D& position){
 
 }
 
-void Coin::OnCollision(){
-
+void Coin::SetActive(bool active){
+	isActive = active;
+	SetCollider(active);
 }

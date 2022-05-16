@@ -29,8 +29,14 @@ public:
 	Vec2D GetPosition() const;
 
 	inline PlayerState GetState() const {return mState;}
+
+	inline int GetPlayerHP() const {return mHP;}
+	inline int GetPlayerScores() const {return mScores;}
+
 	void HitThePlayer(int damage);
 	void FreezeThePlayer(bool freeze);
+
+	void OnCollision(Rigidbody& outCollider) override;
 
 private:
 	PlayerState mState;
@@ -44,6 +50,9 @@ private:
 	float mSpeed;
 	Vec2D mLastPosition;
 	int mDirection = 1;
+
+	int mHP = 10;
+	int mScores = 0;
 
 	float resetSpeedTimer = 0.0f;
 	float resetSpeedDelay = 0.7f;

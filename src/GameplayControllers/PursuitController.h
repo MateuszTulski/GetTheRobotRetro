@@ -26,13 +26,10 @@ public:
 	inline float GetPlayerRobotDistance() const {return playerRobotDistance;}
 	inline float GetRobotMaxDistance() const {return ROBOT_ESCAPE_DISTANCE;}
 
-	inline int GetActualScore() const {return playerCoins;}
+	inline int GetActualScore() const {return playerScores;}
 	inline int GetActualLife() const {return playerHealth;}
 
 	int GetNumberOfSeconds();
-
-	void CollectCoin(const int& points);
-	void PlayerDamage(const int& damage);
 
 private:
 	const float FALL_DOWN_LEVEL = 400;
@@ -41,8 +38,8 @@ private:
 	const float ROBOT_ESCAPE_DISTANCE = 500.00f;
 
 	float playerRobotDistance;
-	int playerCoins;
-	int playerHealth = 5;
+	int playerScores;
+	int playerHealth;
 
 	float gameStartTime;
 

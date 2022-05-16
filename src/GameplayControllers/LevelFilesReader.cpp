@@ -4,13 +4,11 @@
 #include <stdint.h>
 #include <fstream>
 
-bool LevelFilesReader::LoadFile(const std::string& name, LevelObjectType type, const char& symbol)
-{
+bool LevelFilesReader::LoadFile(const std::string& name, LevelObjectType type, const char& symbol){
 	std::string path = App::Singleton().GetBasePath() + "Assets/Level001/" + name;
 
 	std::ifstream file(path);
-	if(!file.is_open())
-	{
+	if(!file.is_open()){
 		std::cout << "Error while opening the file: " << path << std::endl;
 		return false;
 	}
@@ -19,13 +17,10 @@ bool LevelFilesReader::LoadFile(const std::string& name, LevelObjectType type, c
 	unsigned int row{0};
 	unsigned int col{0};
 
-	if(type == LOT_Points)
-	{
-		while(getline(file, line))
-		{
+	if(type == LOT_Points){
+		while(getline(file, line)){
 			row ++;
-			for(char c : line)
-			{
+			for(char c : line){
 				col ++;
 				if(c == symbol){
 
@@ -35,17 +30,14 @@ bool LevelFilesReader::LoadFile(const std::string& name, LevelObjectType type, c
 			col = 0;	// Reset column number
 		}
 	}
-	else if (type == LOT_Lines)
-	{
+	else if (type == LOT_Lines){
 		Vec2D p0, p1;
 		int points{0};
 
-		while(getline(file, line))
-		{
+		while(getline(file, line)){
 			char prevSymbol;
 			row ++;
-			for(char c : line)
-			{
+			for(char c : line){
 				col ++;
 
 				if(c == symbol && points == 0){
@@ -69,19 +61,5 @@ bool LevelFilesReader::LoadFile(const std::string& name, LevelObjectType type, c
 			col = 0;	// Reset column number
 		}
 	}
-
 	return true;
-}
-
-std::unique_ptr<std::vector<Line2D>> LevelFilesReader::GetLines() const
-{
-
-	std::unique_ptr<std::vector<Line2D>> lines = std::make_unique<std::vector<Line2D>>(mLines);
-	return lines;
-}
-
-std::unique_ptr<std::vector<Vec2D>> LevelFilesReader::GetPoints() const
-{
-	std::unique_ptr<std::vector<Vec2D>> points = std::make_unique<std::vector<Vec2D>>(mPoints);
-	return points;
 }
