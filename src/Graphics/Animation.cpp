@@ -57,7 +57,7 @@ void Animation::DrawFlipped(Screen& screen, const Vec2D& pivotPoint, bool flipHo
 	}
 }
 
-inline void Animation::Play(){
+void Animation::Play(){
 	isPlaying = true;
 }
 

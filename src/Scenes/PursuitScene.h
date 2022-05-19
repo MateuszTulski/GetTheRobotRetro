@@ -35,7 +35,13 @@ private:
 	SpriteSheet platformSpriteTemp;
 	Platform mPlatform;
 
-	BMPImage tempImage;
+	void SetGameControls();
+	void LoadLevel();
+	void LoadPlayer();
+	void LoadRobot();
+	void SetCamera();
+	void InitUI();
+
 
 	void ResetGame();
 };

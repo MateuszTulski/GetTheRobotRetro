@@ -48,7 +48,7 @@ public:
 	inline void SetFrameRate(int frames) { clipSpeedInFrames = frames; }
 	inline void SetNumberOfLoops(int num) { maxNumberOfLoops = num; }
 
-	inline void Play();
+	void Play();
 	inline void Stop(bool forceStop = false);
 
 	inline bool IsPlaying() const { return isPlaying; }

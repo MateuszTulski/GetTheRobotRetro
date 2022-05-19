@@ -49,6 +49,8 @@ public:
 	float AngleBetweenDeg(const Vec2D& vec2) const;
 	Vec2D Reflect(const Vec2D& normal) const;
 
+	void MoveTowards(const Vec2D& point, const float& dist);
+
 	void Rotate(float angle, const Vec2D& aroundPoint);
 	void RotateDegrees(float angle, const Vec2D& aroundPoint);
 	Vec2D RotationResult(float angle, const Vec2D& aroundPoint) const;

@@ -14,38 +14,27 @@ Platform::Platform(const Line2D& line, std::shared_ptr<SpriteSheet> sprite) : mL
 	mSegments = static_cast<int>(line.GetP1().GetX()) - static_cast<int>(line.GetP0().GetX()) + 2;
 }
 
-//Platform::Platform(const Platform& other) : mLine(other.mLine), mSegments(other.mSegments), mnoptrSprite(other.mnoptrSprite)
-Platform::Platform(const Platform& other) : mLine(std::move(other.mLine)), mSegments(std::move(other.mSegments)), mnoptrSprite(std::move(other.mnoptrSprite))
-{
+
+Platform::Platform(const Platform& other) : mLine(std::move(other.mLine)), mSegments(std::move(other.mSegments)), mnoptrSprite(std::move(other.mnoptrSprite)){
 
 }
 
-Platform::~Platform()
-{
+Platform::~Platform(){
 
 }
 
-void Platform::Draw(Screen& screen)
-{
-	if(mSegments >= 3)
-	{
+void Platform::Draw(Screen& screen){
+	if(mSegments >= 3){
 		// Draw left side
-//		screen.Draw(*mnoptrSprite, "left", mAARect.GetTopLeft(), mColorManipulator);
 		mnoptrSprite->DrawSprite(screen, mAARect.GetTopLeft(), "left");
-
 		// Draw middle segments
 		for(unsigned int i = 2; i < mSegments-1; i++){
-//			screen.Draw(*mnoptrSprite, "middle", mAARect.GetTopLeft()+Vec2D(((i-1)*LevelLoader::LEVEL_GRID_SIZE), 0), mColorManipulator);
 			mnoptrSprite->DrawSprite(screen, mAARect.GetTopLeft()+Vec2D(((i-1)*LevelLoader::LEVEL_GRID_SIZE), 0), "middle");
 		}
-
 		// Draw right side
-//		screen.Draw(*mnoptrSprite, "rigth", mAARect.GetTopLeft()+Vec2D(((mSegments-2)*LevelLoader::LEVEL_GRID_SIZE), 0), mColorManipulator);
 		mnoptrSprite->DrawSprite(screen, mAARect.GetTopLeft()+Vec2D(((mSegments-2)*LevelLoader::LEVEL_GRID_SIZE), 0), "right");
 
-	}
-	else if(mSegments == 2)
-	{
+	}else if(mSegments == 2){
 
 	}
 }

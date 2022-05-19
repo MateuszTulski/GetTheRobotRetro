@@ -14,7 +14,9 @@ BMPImage::BMPImage(): mWidth(0),
 					flipHorizontal(false),
 					flipVertical(false),
 					globalPosition(false),
-					screenPosition(Vec2D::Zero){
+					screenPosition(Vec2D::Zero),
+					pivotNormalized(Vec2D::Zero),
+					rotation(0){
 }
 
 bool BMPImage::LoadImage(const std::string& path){
@@ -179,7 +181,8 @@ void BMPImage::ScaleImage(float xScale, float yScale, bool relative){
 }
 
 void BMPImage::RotateAroundLocalPoint(const Vec2D& point, float angle){
-
+	pivotNormalized = point;
+	rotation = angle;
 }
 
 void BMPImage::RotateAroundCenter(float angle){
@@ -187,7 +190,6 @@ void BMPImage::RotateAroundCenter(float angle){
 }
 
 void BMPImage::FlipImageHorizontal(){
-
 	for(uint32_t r = 0; r < mHeight; r++){
 		for(uint32_t c = 0; c < mWidth; c++){
 			mPixels.at(GetPixelIndex(c, r, mWidth)) = mOriginalPixels.at(GetPixelIndex((mWidth - 1 - c), r, mWidth));
@@ -208,29 +210,51 @@ void BMPImage::DrawImagePixels(Screen& screen, const Vec2D& position, const Spri
 	uint32_t rows = sprite.height;
 	uint32_t columns = sprite.width;
 
-for(uint32_t r = 0; r < rows; ++r){
-	for(uint32_t c = cropLeft; c < columns - cropRight; ++c){
+	for(uint32_t r = 0; r < rows; ++r){
+		for(uint32_t c = cropLeft; c < columns - cropRight; ++c){
 
-		int pixelDrawPosX, pixelDrawPosY;
+			int pixelDrawPosX, pixelDrawPosY;
 
-		if(flipHorizontal){
-			pixelDrawPosX = (position.GetX() + columns) - c - cropRight;
-		}else{
-			pixelDrawPosX = position.GetX() + c;
+			if(flipHorizontal){
+				pixelDrawPosX = (position.GetX() + columns) - c - cropRight;
+			}else{
+				pixelDrawPosX = position.GetX() + c;
+			}
+
+			pixelDrawPosY = position.GetY() + r;
+
+			Color color = overlay(mPixels.at(GetPixelIndex(c + sprite.xPos , r + sprite.yPos , mWidth)));
+
+			if(color == Color::Black()){
+				color.SetAlpha(0);
+			}
+
+			if(rotation==0){
+				screen.DrawPixel(pixelDrawPosX, pixelDrawPosY, color, globalPosition);
+
+			}else{
+				Vec2D drawPosition(pixelDrawPosX, pixelDrawPosY);
+				Vec2D rotatedPosition = GetRotatedPointPosition(position, drawPosition);
+				screen.DrawPixel(rotatedPosition.GetX(), rotatedPosition.GetY(), color, globalPosition);
+			}
 		}
-
-		pixelDrawPosY = position.GetY() + r;
-
-		Color color = overlay(mPixels.at(GetPixelIndex(c + sprite.xPos , r + sprite.yPos , mWidth)));
-
-		if(color == Color::Black()){
-			color.SetAlpha(0);
-		}
-
-		screen.DrawPixel(pixelDrawPosX, pixelDrawPosY, color, globalPosition);
 	}
 }
+
+Vec2D BMPImage::GetRotatedPointPosition(const Vec2D& imageTopLeftPosition, const Vec2D& pixelPosition) const{
+
+	float topLeft = imageTopLeftPosition.GetX()*pivotNormalized.GetX();
+	float bottomRight = imageTopLeftPosition.GetY()*pivotNormalized.GetY();
+	Vec2D pivot(topLeft, bottomRight);
+
+	Vec2D newPosition(pixelPosition);
+	newPosition.RotateDegrees(rotation, pivot);
+
+	return newPosition;
 }
+
+
+
 
 
 

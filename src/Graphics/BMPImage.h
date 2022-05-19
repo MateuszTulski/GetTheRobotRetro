@@ -13,12 +13,6 @@
 
 class SpriteSheet;
 
-struct ImageCanvas{
-	AARectangle AARect = AARectangle(Vec2D(0, 0), Vec2D(1.0, 1.0));
-	float Rotation = 0;
-	Vec2D RotationPoint = Vec2D::Zero;
-};
-
 using colorOverlay = std::function<Color(const Color& inputColor)>;
 
 class BMPImage {
@@ -29,7 +23,6 @@ public:
 	bool LoadImageFromSpriteSheet(const SpriteSheet& sprite, const std::string name);
 
 	bool operator<(const BMPImage& other) const;
-
 
 	void DrawImage(Screen& screen, const Vec2D& position, bool flipHorizontal = false, bool globalPosition = true) const;
 	void DrawImage(Screen& screen, const Vec2D& position, colorOverlay overlay, bool flipHorizontal = false, bool globalPosition = true) const;
@@ -60,7 +53,6 @@ protected:
 	uint32_t mWidth, mHeight;
 
 private:
-
 	uint32_t originalWidth, originalHeight;
 
 	std::vector<Color> mOriginalPixels;
@@ -71,7 +63,10 @@ private:
 	bool globalPosition;
 	Vec2D screenPosition;
 
-	ImageCanvas mCanvas;
+	Vec2D pivotNormalized;	// 0,0 is TopLeftCorner --- 1,1 is BottomRightCorner
+	float rotation;
+
+	Vec2D GetRotatedPointPosition(const Vec2D& imageTopLeftPosition, const Vec2D& pixelPosition) const;
 };
 
 

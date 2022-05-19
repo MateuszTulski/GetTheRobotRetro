@@ -26,7 +26,7 @@ bool LevelLoader::LoadLevelObjects(){
 
 bool LevelLoader::LoadPlatforms(){
 	LevelFilesReader lines;
-	std::string fileName("platforms");
+	std::string fileName("level");
 	if(lines.LoadFile(fileName, LOT_Lines, 'x')){
 		std::vector<Line2D> mPlatformsLines = lines.GetLines();
 		mPlatforms.reserve(mPlatformsLines.size());
@@ -47,7 +47,7 @@ bool LevelLoader::LoadPlatforms(){
 
 bool LevelLoader::LoadCoins(){
 	LevelFilesReader coinsPoints;
-	std::string fileName("platforms");
+	std::string fileName("level");
 	if(coinsPoints.LoadFile(fileName, LOT_Points, 'c')){
 		std::vector<Vec2D> points = coinsPoints.GetPoints();
 		mCoins.reserve(points.size());
