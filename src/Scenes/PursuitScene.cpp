@@ -31,17 +31,13 @@ void PursuitScene::Update(uint32_t deltaTime){
 		mCamera->Update(mPlayer);
 		mPursuitController.Update(mPlayer, mRobot);
 	}
-	else if(mGameState == GameState::gameOverPanel){
-
-	}
 }
 
 void PursuitScene::Draw(Screen& screen){
-	mPlayer.Draw(screen);
-	mRobot.Draw(screen);
 	mLevelLoader.DrawObjects(screen);
 	mPursuitController.DrawUI(screen);
-
+	mRobot.Draw(screen);
+	mPlayer.Draw(screen);
 
 	if(mGameState == GameState::gameOverPanel){
 		gameOverPanel.DrawPanel(screen);
@@ -180,6 +176,10 @@ void PursuitScene::InitGameOverPanel(){
 void PursuitScene::RestartGame(){
 	mPlayer.Restart();
 	mRobot.Restart();
+	mCamera->RestartCamera();
+	mPursuitController.Restart();
+	mLevelLoader.Restart();
+
 	mGameState = GameState::pursuit;
 }
 

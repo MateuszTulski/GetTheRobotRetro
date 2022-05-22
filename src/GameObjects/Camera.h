@@ -16,6 +16,8 @@ public:
 	void Init(Vec2D startPos = Vec2D::Zero);
 	void Update(const Player& player);
 
+	void RestartCamera();
+
 	inline Vec2D GetCameraPosition() const { return mPosition; }
 
 	inline void SetCameraPosition(const Vec2D& pos) { mPosition = pos; }
@@ -29,6 +31,7 @@ private:
 
 	float mSpeed(float distance);
 
+	Vec2D mStartPosition;
 	Vec2D mPosition;	// Camera top left corner position
 	Vec2D mFollowOffset;
 	float maxSpeed;

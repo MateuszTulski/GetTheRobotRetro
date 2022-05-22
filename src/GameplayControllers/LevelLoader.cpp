@@ -74,6 +74,12 @@ void LevelLoader::DrawObjects(Screen& screen){
 	DrawObstacles(screen, rightScreenSide, leftScreenSide);
 }
 
+void LevelLoader::Restart(){
+	for(auto& c : mCoins){
+		c.SetActive(true);
+	}
+}
+
 void LevelLoader::DrawPlatforms(Screen& screen, float rightScreenSide, float leftScreenSide){
 	for(auto& p : mPlatforms){
 		if(p.GetAARectangle().GetTopLeft().GetX() > rightScreenSide || p.GetAARectangle().GetBottomRight().GetX() < leftScreenSide ){

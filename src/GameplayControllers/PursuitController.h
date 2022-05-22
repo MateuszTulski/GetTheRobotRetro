@@ -26,6 +26,8 @@ public:
 	void Update(const Player& player, const Robot& robot);
 	void DrawUI(Screen& screen);
 
+	void Restart();
+
 	inline float GetPlayerRobotDistance() const {return playerRobotDistance;}
 	inline float GetRobotMaxDistance() const {return ROBOT_ESCAPE_DISTANCE;}
 
@@ -53,6 +55,10 @@ private:
 	void RestartGame();
 	void PauseGame(bool pause);
 	void GameOver(bool success);
+
+	void LoadStaticGraphics();
+	void LoadDynamicTexts();
+	void LoadStatusStripes();
 
 	inline int GetNumberOfSeconds() {return static_cast<int>(gameTime);}
 

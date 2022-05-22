@@ -16,6 +16,8 @@ public:
 
 	void DrawObjects(Screen& screen);
 
+	void Restart();
+
 	static const unsigned int LEVEL_GRID_SIZE = 20;
 
 private:

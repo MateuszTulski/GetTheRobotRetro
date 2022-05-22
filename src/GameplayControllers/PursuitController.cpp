@@ -12,58 +12,10 @@ PursuitController::PursuitController():
 }
 
 void PursuitController::InitUI(ChangeState changeStateFunc){
-
 	this->changeStateFunc = changeStateFunc;
-
-	SpriteSheet sprites;
-	if(sprites.LoadSprite("ui-static")){
-		std::vector<std::string> spriteNames = sprites.GetSpritestNames();
-		for(auto name : spriteNames){
-
-			BMPImage image;
-			Sprite sprite = sprites.GetSpriteCoordinates(name);
-
-			image.LoadImageFromSpriteSheet(sprites, name);
-
-			if(sprite.flipX){
-				image.FlipImageHorizontal();
-			}
-
-			mainUI.AddStaticImage(image, Vec2D(sprite.screenX, sprite.screenY));
-		}
-	}
-
-	// Player HP and Distance stripes
-	SpriteSheet statusStripes;
-	if(statusStripes.LoadSprite("ui-stripes")){
-		Sprite hpSprite = statusStripes.GetSpriteCoordinates("life_stripe");
-		UIStatusStripe hpBar([this](){return PlayerLifeNormalizedDecimal();});
-		hpBar.LoadImageFromSpriteSheet(statusStripes, "life_stripe");
-		hpBar.SetCoordinates(hpSprite.screenX, hpSprite.screenY, false);
-		mainUI.AddHPStripe(hpBar);
-
-		Sprite distanceSprite = statusStripes.GetSpriteCoordinates("distance_stripe");
-		UIStatusStripe distanceBar([this](){return PlayerDistanceNormalizedDecimal();});
-		distanceBar.LoadImageFromSpriteSheet(statusStripes, "distance_stripe");
-		distanceBar.FlipImageHorizontal();
-		distanceBar.SetCoordinates(distanceSprite.screenX, distanceSprite.screenY, true);
-		mainUI.AddDistanceStripe(distanceBar);
-	}
-
-	// Dynamic Texts
-	UIDynamicText scoreText([this](){ return ScoreDisplayString();});
-	scoreText.LoadFont("HemiFont");
-	scoreText.SetScreenPosition(140, 10);
-	scoreText.SetFontHeight(13);
-	scoreText.SetOverlayColor(mUIColor);
-	mainUI.AddScoreText(scoreText);
-
-	UIDynamicText timeText([this](){ return TimeDisplayString();});
-	timeText.LoadFont("HemiFont");
-	timeText.SetScreenPosition(180, 10);
-	timeText.SetFontHeight(13);
-	timeText.SetOverlayColor(mUIColor);
-	mainUI.AddTimeText(timeText);
+	LoadStaticGraphics();
+	LoadStatusStripes();
+	LoadDynamicTexts();
 }
 
 void PursuitController::Update(const Player& player, const Robot& robot){
@@ -85,6 +37,10 @@ void PursuitController::DrawUI(Screen& screen){
 	mainUI.DrawPanel(screen);
 }
 
+void PursuitController::Restart(){
+	gameTime = 0;
+}
+
 void PursuitController::RestartGame(){
 
 }
@@ -98,6 +54,62 @@ void PursuitController::GameOver(bool success){
 		std::cout << "---success---\n";
 	}else{
 		changeStateFunc(GameState::gameOverPanel);
+	}
+}
+
+void PursuitController::LoadStaticGraphics(){
+	SpriteSheet sprites;
+	if(sprites.LoadSprite("ui-static")){
+		std::vector<std::string> spriteNames = sprites.GetSpritestNames();
+		for(auto name : spriteNames){
+
+			BMPImage image;
+			Sprite sprite = sprites.GetSpriteCoordinates(name);
+
+			image.LoadImageFromSpriteSheet(sprites, name);
+
+			if(sprite.flipX){
+				image.FlipImageHorizontal();
+			}
+
+			mainUI.AddStaticImage(image, Vec2D(sprite.screenX, sprite.screenY));
+		}
+	}
+}
+
+void PursuitController::LoadDynamicTexts(){
+	// Dynamic Texts
+	UIDynamicText scoreText([this](){ return ScoreDisplayString();});
+	scoreText.LoadFont("HemiFont");
+	scoreText.SetScreenPosition(140, 10);
+	scoreText.SetFontHeight(13);
+	scoreText.SetOverlayColor(mUIColor);
+	mainUI.AddScoreText(scoreText);
+
+	UIDynamicText timeText([this](){ return TimeDisplayString();});
+	timeText.LoadFont("HemiFont");
+	timeText.SetScreenPosition(180, 10);
+	timeText.SetFontHeight(13);
+	timeText.SetOverlayColor(mUIColor);
+	mainUI.AddTimeText(timeText);
+}
+
+void PursuitController::LoadStatusStripes(){
+	// Player HP and Distance stripes
+	SpriteSheet statusStripes;
+	if(statusStripes.LoadSprite("ui-stripes")){
+		Sprite hpSprite = statusStripes.GetSpriteCoordinates("life_stripe");
+		UIStatusStripe hpBar([this](){return PlayerLifeNormalizedDecimal();});
+		hpBar.LoadImageFromSpriteSheet(statusStripes, "life_stripe");
+		hpBar.SetCoordinates(hpSprite.screenX, hpSprite.screenY, false);
+		mainUI.AddHPStripe(hpBar);
+
+		Sprite distanceSprite = statusStripes.GetSpriteCoordinates("distance_stripe");
+		UIStatusStripe distanceBar([this](){return PlayerDistanceNormalizedDecimal();});
+		distanceBar.LoadImageFromSpriteSheet(statusStripes, "distance_stripe");
+		distanceBar.FlipImageHorizontal();
+		distanceBar.SetCoordinates(distanceSprite.screenX, distanceSprite.screenY, true);
+		mainUI.AddDistanceStripe(distanceBar);
 	}
 }
 

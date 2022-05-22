@@ -46,6 +46,7 @@ void Player::MakeFlushWithEdge(const BoundaryEdge& edge, Vec2D& point, bool limi
 }
 
 void Player::Restart(){
+	mScores = 0;
 	mDirection = 1;
 	SetVerticalVelocity(0);
 	SetHorizontalVelocity(0);
