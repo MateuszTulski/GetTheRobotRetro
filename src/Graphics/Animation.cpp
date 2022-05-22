@@ -19,7 +19,8 @@ Animation::Animation(int speedInFrames) :
 		playReverse(false),
 		stopOnLastFrame(false),
 		maxNumberOfLoops(1),
-		loopsCounter(0){
+		loopsCounter(0),
+		rotation(0){
 }
 
 Animation::Animation(const std::string& spriteFileName, int speedInFrames) : Animation(speedInFrames){
@@ -38,22 +39,20 @@ bool Animation::LoadSprite(const std::string& name){
 }
 
 void Animation::Update(){
-
 	if(isPlaying){
 		if(App::Singleton().GetTime().GetActualFrame() % clipSpeedInFrames == 0){
 			ChangeAnimFrame();
 		}
 	}
+
 }
 
 void Animation::Draw(Screen& screen, const Vec2D& pivotPoint){
-
 	DrawFlipped(screen, pivotPoint, false);
 }
 void Animation::DrawFlipped(Screen& screen, const Vec2D& pivotPoint, bool flipHorizontal){
-
 	if(mFramesNames.size() > 0){
-		mSpriteSheet.DrawSprite(screen, GetDrawPosition(pivotPoint), mFramesNames.at(mActualFrame), flipHorizontal);
+		mSpriteSheet.DrawSprite(screen, GetDrawPosition(pivotPoint), mFramesNames.at(mActualFrame), flipHorizontal, true, rotation);
 	}
 }
 

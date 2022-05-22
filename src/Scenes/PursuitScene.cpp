@@ -1,4 +1,5 @@
 #include "PursuitScene.h"
+#include "MenuScene.h"
 #include "Utils.h"
 #include "BMPImage.h"
 #include "BitmapFont.h"
@@ -7,7 +8,8 @@
 
 #include <stdint.h>
 
-PursuitScene::PursuitScene(){
+PursuitScene::PursuitScene() :
+		mGameState(GameState::pursuit){
 }
 
 void PursuitScene::Init(){
@@ -17,14 +19,21 @@ void PursuitScene::Init(){
 	LoadRobot();
 	SetCamera();
 	InitUI();
+	InitGameOverPanel();
+	mGameState = GameState::pursuit;
 }
 
 void PursuitScene::Update(uint32_t deltaTime){
 	PhysicsWorld::Singleton().Update(deltaTime);
-	mPlayer.Update(deltaTime);
-	mRobot.Update();
-	mCamera->Update(mPlayer);
-	mPursuitController.Update(mPlayer, mRobot);
+	if(mGameState == GameState::pursuit){
+		mPlayer.Update(deltaTime);
+		mRobot.Update(mPursuitController);
+		mCamera->Update(mPlayer);
+		mPursuitController.Update(mPlayer, mRobot);
+	}
+	else if(mGameState == GameState::gameOverPanel){
+
+	}
 }
 
 void PursuitScene::Draw(Screen& screen){
@@ -32,6 +41,11 @@ void PursuitScene::Draw(Screen& screen){
 	mRobot.Draw(screen);
 	mLevelLoader.DrawObjects(screen);
 	mPursuitController.DrawUI(screen);
+
+
+	if(mGameState == GameState::gameOverPanel){
+		gameOverPanel.DrawPanel(screen);
+	}
 }
 
 const std::string& PursuitScene::GetSceneName() const{
@@ -40,18 +54,21 @@ const std::string& PursuitScene::GetSceneName() const{
 }
 
 void PursuitScene::SetGameControls(){
-	// Set GameController
-	ButtonAction jump;
-	jump.key = GameControlsActions::JumpKey();
-	jump.action = [this](uint32_t deltaTime, InputState state){
-
-		mPlayer.JumpTrigger(true);
-
-		if(GameControlsActions::IsReleased(state)){
-			mPlayer.JumpTrigger(false);
+	// SPACE -> JUMP OR SELECT BUTTON
+	ButtonAction space;
+	space.key = GameControlsActions::JumpKey();
+	space.action = [this](uint32_t deltaTime, InputState state){
+		if(mGameState == GameState::pursuit){
+			mPlayer.JumpTrigger(true);
+			if(GameControlsActions::IsReleased(state)){
+				mPlayer.JumpTrigger(false);
+			}
+		}
+		else if(mGameState == GameState::gameOverPanel){
+			gameOverPanel.TriggerActiveButton();
 		}
 	};
-	mGameController.AddInputActionForKey(jump);
+	mGameController.AddInputActionForKey(space);
 
 	// RIGTH ACTION BUTTON
 	ButtonAction right;
@@ -59,7 +76,6 @@ void PursuitScene::SetGameControls(){
 	right.action = [this](uint32_t deltaTime, InputState state){
 
 		mPlayer.RunInput(1);
-
 		if(GameControlsActions::IsReleased(state)){
 			mPlayer.RunInput(1, true);
 		}
@@ -70,14 +86,38 @@ void PursuitScene::SetGameControls(){
 	ButtonAction left;
 	left.key = GameControlsActions::LeftKey();
 	left.action = [this](uint32_t deltaTime, InputState state){
-
 		mPlayer.RunInput(-1);
-
 		if(GameControlsActions::IsReleased(state)){
 			mPlayer.RunInput(-1, true);
 		}
 	};
 	mGameController.AddInputActionForKey(left);
+
+	// UP ARROW KEY
+	ButtonAction upArrow;
+	upArrow.key = GameControlsActions::UpKey();
+	upArrow.action = [this](uint32_t deltaTime, InputState state){
+		if(mGameState == GameState::gameOverPanel){
+			gameOverPanel.ChangeActiveButton(true, false);
+			if(GameControlsActions::IsReleased(state)){
+				gameOverPanel.ChangeActiveButton(true, true);
+			}
+		}
+	};
+	mGameController.AddInputActionForKey(upArrow);
+
+	// DOWN ARROW KEY
+	ButtonAction downArrow;
+	downArrow.key = GameControlsActions::DownKey();
+	downArrow.action = [this](uint32_t deltaTime, InputState state){
+		if(mGameState == GameState::gameOverPanel){
+			gameOverPanel.ChangeActiveButton(false, false);
+			if(GameControlsActions::IsReleased(state)){
+				gameOverPanel.ChangeActiveButton(false, true);
+			}
+		}
+	};
+	mGameController.AddInputActionForKey(downArrow);
 }
 
 void PursuitScene::LoadLevel(){
@@ -94,7 +134,7 @@ void PursuitScene::LoadPlayer(){
 }
 
 void PursuitScene::LoadRobot(){
-	mRobot.Init(Vec2D(100, 150));
+	mRobot.Init();
 }
 
 void PursuitScene::SetCamera(){
@@ -103,5 +143,49 @@ void PursuitScene::SetCamera(){
 }
 
 void PursuitScene::InitUI(){
-	mPursuitController.InitUI();
+	mPursuitController.InitUI([this](GameState newState){SetGameState(newState);});
 }
+
+void PursuitScene::InitGameOverPanel(){
+	Size mButtonSize = {130, 30};
+	unsigned int mButtonsSpace = 10;
+	std::vector<std::string> btnNames = {"Restart", "Exit"};
+
+	float buttonsHeight = (btnNames.size() * mButtonSize.height) + ((btnNames.size()-1) * mButtonsSpace);
+	Vec2D buttonsPos(App::Singleton().GetScreenCenter().GetX(), App::Singleton().GetScreenCenter().GetY() - buttonsHeight/2 + mButtonSize.height/2);
+
+	for(auto name : btnNames){
+		Button btn;
+		btn.InitButton(mButtonSize, name, buttonsPos);
+		btn.SetButtonColors(Color(40, 40, 40, 255), Color(37, 240, 217, 120), Color(180, 180, 180, 255), Color::White());
+		buttonsPos.SetY(buttonsPos.GetY() + mButtonSize.height + mButtonsSpace);
+
+		if(name == "Restart"){
+			Button::ButtonAction acttion = [this](){
+				RestartGame();
+			};
+			btn.SetButtonAction(acttion);
+		}
+		else if(name == "Exit"){
+			Button::ButtonAction acttion = [](){
+				std::unique_ptr<MenuScene> menuScene = std::make_unique<MenuScene>();
+				App::Singleton().PushScene(std::move(menuScene));
+			};
+			btn.SetButtonAction(acttion);
+		}
+		gameOverPanel.AddButton(btn);
+	}
+}
+
+void PursuitScene::RestartGame(){
+	mPlayer.Restart();
+	mRobot.Restart();
+	mGameState = GameState::pursuit;
+}
+
+
+
+
+
+
+

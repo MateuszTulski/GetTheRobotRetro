@@ -7,6 +7,7 @@
 #define SRC_GAMEPLAYCONTROLLERS_PURSUITCONTROLLER_H_
 
 #include <string>
+#include <functional>
 
 #include "UIPanel.h"
 #include "Player.h"
@@ -14,11 +15,13 @@
 
 class Screen;
 
+using ChangeState = std::function<void(GameState)>;
+
 class PursuitController{
 public:
 	PursuitController();
 
-	void InitUI();
+	void InitUI(ChangeState changeStateFunc);
 
 	void Update(const Player& player, const Robot& robot);
 	void DrawUI(Screen& screen);
@@ -29,19 +32,20 @@ public:
 	inline int GetActualScore() const {return playerScores;}
 	inline int GetActualLife() const {return playerHealth;}
 
-	int GetNumberOfSeconds();
-
 private:
+	float gameTime;
+	ChangeState changeStateFunc;
+
 	const float FALL_DOWN_LEVEL = 400;
 
 	const int PLAYER_MAX_HEALTH = 10;
-	const float ROBOT_ESCAPE_DISTANCE = 500.00f;
+	const float ROBOT_ESCAPE_DISTANCE = 1000.00f;
 
 	float playerRobotDistance;
 	int playerScores;
 	int playerHealth;
 
-	float gameStartTime;
+	float lastTimeStamp;
 
 	const Color mUIColor = Color(129, 199, 220, 255);
 	UIPanel mainUI;
@@ -49,6 +53,8 @@ private:
 	void RestartGame();
 	void PauseGame(bool pause);
 	void GameOver(bool success);
+
+	inline int GetNumberOfSeconds() {return static_cast<int>(gameTime);}
 
 	float PlayerLifeNormalizedDecimal();
 	float PlayerDistanceNormalizedDecimal();

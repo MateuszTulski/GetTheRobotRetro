@@ -6,16 +6,13 @@
 
 MenuScene::MenuScene() : mActiveButton(0){
 }
-void MenuScene::Init()
-{
+void MenuScene::Init(){
 	// SET BUTTONS
 
 	std::vector<std::string> btnNames = {"Start", "Options", "Scores", "Exit"};
 
 	float buttonsHeight = (btnNames.size() * mButtonSize.height) + ((btnNames.size()-1) * mButtonsSpace);
-
 	Vec2D buttonsPos(App::Singleton().GetScreenCenter().GetX(), App::Singleton().GetScreenCenter().GetY() - buttonsHeight/2 + mButtonSize.height/2);
-
 
 	for(auto name : btnNames){
 		Button btn;
@@ -28,11 +25,9 @@ void MenuScene::Init()
 	ResetButtons();
 
 	// SET ACTIONS FOR BUTTONS
-	for(auto& btn : mButtons)
-	{
+	for(auto& btn : mButtons){
 		std::string name = btn.GetButtonName();
-		if(name == "Start")
-		{
+		if(name == "Start"){
 			Button::ButtonAction acttion = [](){
 					std::unique_ptr<PursuitScene> pursuitScene = std::make_unique<PursuitScene>();
 					App::Singleton().PushScene(std::move(pursuitScene));
@@ -73,25 +68,20 @@ void MenuScene::Init()
 	mGameController.AddInputActionForKey(executeButton);
 
 }
-void MenuScene::Update(uint32_t dt)
-{
+void MenuScene::Update(uint32_t dt){
 
 }
-void MenuScene::Draw(Screen& theScreen)
-{
-	for(auto& b : mButtons)
-	{
+void MenuScene::Draw(Screen& theScreen){
+	for(auto& b : mButtons){
 		b.Draw(theScreen);
 	}
 }
-const std::string& MenuScene::GetSceneName() const
-{
+const std::string& MenuScene::GetSceneName() const{
 	static const std::string name("Main menu");
 	return name;
 }
 
-void MenuScene::NextButton()
-{
+void MenuScene::NextButton(){
 	mActiveButton ++;
 	if(mActiveButton > mButtons.size()-1){
 		mActiveButton = 0;
@@ -99,8 +89,7 @@ void MenuScene::NextButton()
 	ResetButtons();
 }
 
-void MenuScene::PrevButton()
-{
+void MenuScene::PrevButton(){
 	if(mActiveButton == 0){
 		mActiveButton = mButtons.size();
 	}
@@ -108,8 +97,7 @@ void MenuScene::PrevButton()
 	ResetButtons();
 }
 
-void MenuScene::ResetButtons()
-{
+void MenuScene::ResetButtons(){
 	for(size_t i = 0; i < mButtons.size(); i++)
 	{
 		if(i == mActiveButton){

@@ -33,19 +33,17 @@ void Button::InitButton(const Size& buttonSize, const std::string& text, Vec2D p
 
 void Button::Draw(Screen& screen){
 	if(mIsActive){
-		screen.Draw(mAARect, buttonHighlighted, true, buttonHighlighted);
-		mButtonFont.DrawText(screen, mButtonText, mTextPosition, highlightedText);
+		screen.Draw(mAARect, buttonHighlighted, true, buttonHighlighted, false);
+		mButtonFont.DrawText(screen, mButtonText, mTextPosition, highlightedText, false, false);
 	}else{
-		screen.Draw(mAARect, buttonBase, true, buttonBase);
-		mButtonFont.DrawText(screen, mButtonText, mTextPosition, baseText);
+		screen.Draw(mAARect, buttonBase, true, buttonBase, false);
+		mButtonFont.DrawText(screen, mButtonText, mTextPosition, baseText, false, false);
 	}
 
 }
 
-void Button::ExecuteAction()
-{
-	if(mAction)
-	{
+void Button::ExecuteAction(){
+	if(mAction){
 		mAction();
 	}
 }
@@ -57,7 +55,6 @@ void Button::SetButtonColors(const Color& base, const Color& highlighted, const 
 	this->highlightedText = highlightedText;
 }
 
-void Button::SetButtonActive(const bool& active)
-{
+void Button::SetButtonActive(const bool& active){
 	mIsActive = active;
 }

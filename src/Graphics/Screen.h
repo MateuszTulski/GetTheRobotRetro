@@ -52,7 +52,7 @@ public:
 	void Draw(const Shape& shape, const Color& color, bool fillShape = false, const Color& fillColor = Color::White(), bool globalPosition = true);
 	void Draw(const Circle& circle, const Color& color, bool fillShape = false, const Color& fillColor = Color::White(), bool globalPosition = true);
 
-	void FillPoly(const std::vector<Vec2D>& points, const Color& color);
+	void FillPoly(const std::vector<Vec2D>& points, const Color& color, bool globalPosition);
 
 	Vec2D GetScreenPoint(const Vec2D globalPoint) const;
 

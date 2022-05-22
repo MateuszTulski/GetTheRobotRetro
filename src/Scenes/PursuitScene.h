@@ -23,12 +23,18 @@ public:
 	void Update(uint32_t deltaTime) override;
 	void Draw(Screen& screen) override;
 
+	inline void SetGameState(GameState state){mGameState = state;}
+	inline const GameState& GetGameState() {return mGameState;}
+
 	const std::string& GetSceneName() const override;
 private:
+	GameState mGameState;
+
 	Player mPlayer;
 	Robot mRobot;
 	std::shared_ptr<Camera> mCamera;
 	PursuitController mPursuitController;
+	UIPanel gameOverPanel;
 
 	LevelLoader mLevelLoader;
 
@@ -36,14 +42,15 @@ private:
 	Platform mPlatform;
 
 	void SetGameControls();
+
 	void LoadLevel();
 	void LoadPlayer();
 	void LoadRobot();
 	void SetCamera();
 	void InitUI();
+	void InitGameOverPanel();
 
-
-	void ResetGame();
+	void RestartGame();
 };
 
 

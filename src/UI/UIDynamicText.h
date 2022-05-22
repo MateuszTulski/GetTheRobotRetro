@@ -22,8 +22,10 @@ public:
 	inline void SetOverlayColor(const Color& color) {mOverlayColor = color;}
 
 	void DrawDynamicText(Screen& screen);
+	inline bool IsActive() const {return isActive;}
 
 private:
+	bool isActive;
 	Color mOverlayColor;
 	Vec2D mScreenPosition;
 	GetValue getValueFunc;

@@ -1,22 +1,19 @@
 #include "Robot.h"
 #include "LevelFilesReader.h"
 #include "LevelLoader.h"
+#include "PursuitController.h"
 #include <cassert>
 #include <algorithm>
 
-Robot::Robot() : Robot(Vec2D::Zero){
+Robot::Robot() :
+		mAnimation(),
+		isRunning(true),
+		pathIt(nullptr){
+	mSpeed = RUN_SPEED_MIN;
+	assert(LoadRobotAnimation() && "Couldn't load robot animation!");
 }
 
-Robot::Robot(const Vec2D& startPosition) :
-	mPosition(startPosition),
-	mAnimation(),
-	isRunning(true),
-	pathIt(nullptr){
-		mSpeed = RUN_SPEED_MIN;
-		assert(LoadRobotAnimation() && "Couldn't load robot animation!");
-}
-
-bool Robot::Init(const Vec2D& startPosition){
+bool Robot::Init(){
 
 	bool loadAnim = LoadRobotAnimation();
 	bool loadPath = LoadRobotPath();
@@ -24,16 +21,22 @@ bool Robot::Init(const Vec2D& startPosition){
 	if(loadPath){
 		pathIt = pathToFollow.begin();
 		mPosition = *pathIt;
+		mStartPosition = mPosition;
 		pathIt++;
 	}
 
 	return loadAnim && loadPath;
 }
 
-void Robot::Update(){
+void Robot::Restart(){
+	pathIt = pathToFollow.begin();
+	mPosition = mStartPosition;
+}
+
+void Robot::Update(const PursuitController& controller){
 	mAnimation.Update();
-	UpdateSpeed();
-	MoveTowardsNextPoint();
+	UpdateSpeed(controller.GetPlayerRobotDistance());
+	Move();
 }
 
 void Robot::Draw(Screen& screen){
@@ -53,18 +56,45 @@ bool Robot::LoadRobotAnimation(){
 	return true;
 }
 
-void Robot::UpdateSpeed(){
-
+void Robot::UpdateSpeed(const float& distToPlayer){
+	if(distToPlayer < MAX_SPEED_DIST){
+		mSpeed = RUN_SPEED_MAX;
+	}
+	else if(distToPlayer > MIN_SPEED_DIST){
+		mSpeed = RUN_SPEED_MIN;
+	}
+	else{
+		float speedFactor = (distToPlayer - MAX_SPEED_DIST) / (MIN_SPEED_DIST - MAX_SPEED_DIST);
+		mSpeed = (RUN_SPEED_MAX - RUN_SPEED_MIN) * (1-speedFactor);
+	}
 }
 
-void Robot::MoveTowardsNextPoint(){
+void Robot::Move(){
 	if(pathIt!=pathToFollow.end()){
-		float distance = mPosition.Distance(*pathIt);
-		if(distance < PATH_POINT_MIN_DIST){
+//		float distance = mPosition.Distance(*pathIt);
+//		if(distance < PATH_POINT_MIN_DIST){
+//			pathIt++;
+//		}
+//		float speed = mSpeed * App::Singleton().GetTime().DeltaTime();
+//		mPosition.MoveTowards(*pathIt, speed);
+
+		Vec2D nextPosition = mPosition;
+		if(mPosition.GetX()+mSpeed > pathIt->GetX()){
 			pathIt++;
 		}
-		float speed = mSpeed * App::Singleton().GetTime().DeltaTime();
-		mPosition.MoveTowards(*pathIt, speed);
+			float xOffset, yOffset;
+			xOffset = mSpeed*App::Singleton().GetTime().DeltaTime();
+
+			float xDistBetweenPoints = pathIt->GetX() - mPosition.GetX();
+			float yDistBetweenPoints = pathIt->GetY() - mPosition.GetY();
+
+			float offsetFactor = xOffset / xDistBetweenPoints;
+			yOffset = yDistBetweenPoints * offsetFactor;
+
+			nextPosition.SetX(mPosition.GetX()+xOffset);
+			nextPosition.SetY(mPosition.GetY()+yOffset);
+
+			mPosition = nextPosition;
 	}
 }
 

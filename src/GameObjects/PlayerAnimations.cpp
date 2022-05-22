@@ -25,7 +25,6 @@ bool PlayerAnimations::InitAnimations(){
 
 	Animation run(4);
 	run.LoadSprite("player-run");
-	run.ScaleAnimationSprite(0.9, 0.9);
 	run.SetVerticalAlign(AnimVerticalAlign::Bottom);
 	mAnimator.AddAnimation("run", run);
 

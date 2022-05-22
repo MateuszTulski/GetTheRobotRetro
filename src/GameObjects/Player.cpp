@@ -19,6 +19,7 @@ Player::Player(Player&& other) : mState(std::move(other.mState)), mJumpPressed(s
 
 void Player::Init(const Vec2D& startPosition){
 	// Start position is BOTTOM MIDDLE
+	mStartPosition = startPosition;
 	SetPosition(startPosition);
 	SetGravityScale(1.5f);
 	mLastPosition = startPosition;
@@ -42,6 +43,13 @@ void Player::Draw(Screen& screen){
 
 void Player::MakeFlushWithEdge(const BoundaryEdge& edge, Vec2D& point, bool limitToEdge){
 
+}
+
+void Player::Restart(){
+	mDirection = 1;
+	SetVerticalVelocity(0);
+	SetHorizontalVelocity(0);
+	Init(mStartPosition);
 }
 
 void Player::RunInput(signed int direction, bool released){

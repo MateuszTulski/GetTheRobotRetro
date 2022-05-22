@@ -27,7 +27,7 @@ public:
 	void DrawImage(Screen& screen, const Vec2D& position, bool flipHorizontal = false, bool globalPosition = true) const;
 	void DrawImage(Screen& screen, const Vec2D& position, colorOverlay overlay, bool flipHorizontal = false, bool globalPosition = true) const;
 	void DrawImageSprite(Screen& screen, const Vec2D& position, const Sprite& sprite, bool flipHorizontal = false, bool globalPosition = true) const;
-	void DrawImageSprite(Screen& screen, const Vec2D& position, const Sprite& sprite, colorOverlay overlay, bool flipHorizontal = false, bool globalPosition = true) const;
+	void DrawImageSprite(Screen& screen, const Vec2D& position, const Sprite& sprite, colorOverlay overlay, bool flipHorizontal = false, bool globalPosition = true, const float& rotation = 0);
 
 	const std::vector<Color>& GetPixels() const;
 
@@ -66,6 +66,7 @@ private:
 	Vec2D pivotNormalized;	// 0,0 is TopLeftCorner --- 1,1 is BottomRightCorner
 	float rotation;
 
+	Vec2D GetPivotPoint(const Vec2D& topLeft, float widht, float height) const;
 	Vec2D GetRotatedPointPosition(const Vec2D& imageTopLeftPosition, const Vec2D& pixelPosition) const;
 };
 

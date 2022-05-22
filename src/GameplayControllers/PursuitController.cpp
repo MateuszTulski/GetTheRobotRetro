@@ -4,14 +4,16 @@
 #include "App.h"
 
 PursuitController::PursuitController():
-	playerRobotDistance(0),
-	playerScores(0),
-	playerHealth(PLAYER_MAX_HEALTH){
-
-	gameStartTime = App::Singleton().GetTime().AppTime();
+		gameTime(0.0f),
+		playerRobotDistance(0),
+		playerScores(0),
+		playerHealth(PLAYER_MAX_HEALTH){
+	lastTimeStamp = App::Singleton().GetTime().AppTime();
 }
 
-void PursuitController::InitUI(){
+void PursuitController::InitUI(ChangeState changeStateFunc){
+
+	this->changeStateFunc = changeStateFunc;
 
 	SpriteSheet sprites;
 	if(sprites.LoadSprite("ui-static")){
@@ -69,6 +71,11 @@ void PursuitController::Update(const Player& player, const Robot& robot){
 	playerHealth = player.GetPlayerHP();
 	playerScores = player.GetPlayerScores();
 
+	float timeStamp = App::Singleton().GetTime().AppTime();
+
+	gameTime  += (timeStamp-lastTimeStamp);
+	lastTimeStamp = timeStamp;
+
 	if(PlayerFeld(player.GetPosition().GetY()) || RobotEscaped() || playerHealth<=0){
 		GameOver(false);
 	}
@@ -76,11 +83,6 @@ void PursuitController::Update(const Player& player, const Robot& robot){
 
 void PursuitController::DrawUI(Screen& screen){
 	mainUI.DrawPanel(screen);
-}
-
-int PursuitController::GetNumberOfSeconds(){
-
-	return static_cast<int>(App::Singleton().GetTime().AppTime() - gameStartTime);
 }
 
 void PursuitController::RestartGame(){
@@ -92,12 +94,11 @@ void PursuitController::PauseGame(bool pause){
 }
 
 void PursuitController::GameOver(bool success){
-//	std::cout << "GAME OVER" << std::endl;
-//	if(success){
-//		std::cout << "---success---\n";
-//	}else{
-//		std::cout << "---failed---\n";
-//	}
+	if(success){
+		std::cout << "---success---\n";
+	}else{
+		changeStateFunc(GameState::gameOverPanel);
+	}
 }
 
 float PursuitController::PlayerLifeNormalizedDecimal(){

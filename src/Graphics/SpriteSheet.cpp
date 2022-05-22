@@ -22,12 +22,13 @@ bool SpriteSheet::LoadSprite(const std::string& name){
 	return imageLoaded && spriteSectionsLoaded;
 }
 
-void SpriteSheet::DrawSprite(Screen& screen, const Vec2D& position, const std::string& name, bool flipHorizontal, bool globalPosition){
-	DrawSprite(screen, position, name, [](Color in){return in;}, flipHorizontal, globalPosition);
+void SpriteSheet::DrawSprite(Screen& screen, const Vec2D& position, const std::string& name, bool flipHorizontal, bool globalPosition, const float& rotation){
+	DrawSprite(screen, position, name, [](Color in){return in;}, flipHorizontal, globalPosition, rotation);
 }
 
-void SpriteSheet::DrawSprite(Screen& screen, const Vec2D& position, const std::string& name, colorOverlay overlay, bool flipHorizontal, bool globalPosition){
-	mImage.DrawImageSprite(screen, position, GetSpriteCoordinates(name), overlay, flipHorizontal, globalPosition);
+void SpriteSheet::DrawSprite(Screen& screen, const Vec2D& position, const std::string& name, colorOverlay overlay, bool flipHorizontal, bool globalPosition, const float& rotation){
+
+	mImage.DrawImageSprite(screen, position, GetSpriteCoordinates(name), overlay, flipHorizontal, globalPosition, rotation);
 }
 
 void SpriteSheet::ScaleSpriteSheet(float xScale, float yScale, bool relative){

@@ -128,7 +128,8 @@ void BMPImage::DrawImageSprite(Screen& screen, const Vec2D& position, const Spri
 	DrawImagePixels(screen, position, sprite, [](Color in){return in;}, flipHorizontal, globalPosition);
 }
 
-void BMPImage::DrawImageSprite(Screen& screen, const Vec2D& position, const Sprite& sprite, colorOverlay overlay, bool flipHorizontal, bool globalPosition) const{
+void BMPImage::DrawImageSprite(Screen& screen, const Vec2D& position, const Sprite& sprite, colorOverlay overlay, bool flipHorizontal, bool globalPosition, const float& rotation) {
+	this->rotation = rotation;
 	DrawImagePixels(screen, position, sprite, overlay, flipHorizontal, globalPosition);
 }
 
@@ -234,21 +235,22 @@ void BMPImage::DrawImagePixels(Screen& screen, const Vec2D& position, const Spri
 
 			}else{
 				Vec2D drawPosition(pixelDrawPosX, pixelDrawPosY);
-				Vec2D rotatedPosition = GetRotatedPointPosition(position, drawPosition);
+				Vec2D rotatedPosition = GetRotatedPointPosition(GetPivotPoint(position, columns, rows), drawPosition);
 				screen.DrawPixel(rotatedPosition.GetX(), rotatedPosition.GetY(), color, globalPosition);
 			}
 		}
 	}
 }
 
-Vec2D BMPImage::GetRotatedPointPosition(const Vec2D& imageTopLeftPosition, const Vec2D& pixelPosition) const{
+Vec2D BMPImage::GetPivotPoint(const Vec2D& topLeft, float widht, float height) const{
+	float x = topLeft.GetX() + widht*pivotNormalized.GetX();
+	float y = topLeft.GetY() + height*pivotNormalized.GetY();
+	return Vec2D(x, y);
+}
 
-	float topLeft = imageTopLeftPosition.GetX()*pivotNormalized.GetX();
-	float bottomRight = imageTopLeftPosition.GetY()*pivotNormalized.GetY();
-	Vec2D pivot(topLeft, bottomRight);
-
+Vec2D BMPImage::GetRotatedPointPosition(const Vec2D& rotationPoint, const Vec2D& pixelPosition) const{
 	Vec2D newPosition(pixelPosition);
-	newPosition.RotateDegrees(rotation, pivot);
+	newPosition.RotateDegrees(rotation, rotationPoint);
 
 	return newPosition;
 }

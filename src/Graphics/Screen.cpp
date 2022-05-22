@@ -243,7 +243,7 @@ void Screen::Draw(const Line2D& line, const Color& color, bool globalPosition){
 void Screen::Draw(const Shape& shape, const Color& color, bool fillShape, const Color& fillColor, bool globalPosition){
 
 	if(fillShape){
-		FillPoly(shape.GetPoints(), fillColor);
+		FillPoly(shape.GetPoints(), fillColor, globalPosition);
 	}
 	// Number of segments equals number of points
 	size_t numberOfLines = shape.GetPoints().size();
@@ -287,38 +287,12 @@ void Screen::Draw(const Circle& circle, const Color& color, bool fillShape, cons
 	}
 	// Fill shape
 	if(fillShape){
-		FillPoly(points, fillColor);
+		FillPoly(points, fillColor, globalPosition);
 	}
 
 }
 
-//void Screen::Draw(const BitmapFont& font, const std::string& text, const Vec2D& position, const ColorManipulation& manipulator, bool globalPosition)
-//{
-//	unsigned int xPos = position.GetX();
-//
-//	for(char c : text)
-//	{
-//		if(c == ' '){
-//			xPos += font.GetFontWordSpace();
-//			continue;
-//		}
-//
-//		SpriteSheet spriteSheet = font.GetSpriteSheet();
-//
-//		Draw(spriteSheet, std::string("")+c, Vec2D(xPos, position.GetY()), manipulator, globalPosition);
-//
-//		xPos += spriteSheet.GetSpriteCoordinates(std::string("")+c).width;
-//		xPos += font.GetFontLetterSpace();
-//	}
-//}
-//void Screen::Draw(const BitmapFont& font, const std::string& text, const Vec2D& position, bool globalPosition)
-//{
-//	// Draw text without color manipulation
-//	ColorManipulation manip;
-//	Draw(font, text, position, manip, globalPosition);
-//}
-
-void Screen::FillPoly(const std::vector<Vec2D>& points, const Color& color){
+void Screen::FillPoly(const std::vector<Vec2D>& points, const Color& color, bool globalPosition){
 	if(points.size()<=1){
 		return;
 	}
@@ -390,53 +364,13 @@ void Screen::FillPoly(const std::vector<Vec2D>& points, const Color& color){
 
 				// DRAW each pixel
 				for(int pixelX = nodeXVec[k]; pixelX < nodeXVec[k+1]; pixelX++){
-					DrawPixel(pixelX, pixelY, color, true);
+					DrawPixel(pixelX, pixelY, color, globalPosition);
 				}
 			}
 		}
 	}
 
 }
-
-//void Screen::DrawFlippedImagePixels(const BMPImage& image, const Sprite& sprite, const Vec2D& topLeftCorner, bool flipHorizontal, bool flipVertical, const ColorManipulation& manipulator, bool globalPosition)
-//{
-//	uint32_t rows = sprite.height;
-//	uint32_t columns = sprite.width;
-//
-//	if(rows == 0 && columns == 0){
-//		rows = image.GetImageHeight();
-//		columns = image.GetImageWidth();
-//	}
-//
-//	const std::vector<Color>& pixels = image.GetPixels();
-//
-//	for(uint32_t r = 0; r < rows; ++r)
-//	{
-//		for(uint32_t c = 0; c < columns; ++c)
-//		{
-//			int pixelDrawPosX, pixelDrawPosY;
-//
-//			if(flipHorizontal){
-//				pixelDrawPosX = (topLeftCorner.GetX() + columns) - c;
-//			}else{
-//				pixelDrawPosX = topLeftCorner.GetX() + c;
-//			}
-//
-//			if(flipVertical){
-//				pixelDrawPosX = (topLeftCorner.GetY() + rows) - r;
-//			}else{
-//				pixelDrawPosY = topLeftCorner.GetY() + r;
-//			}
-//
-//			Color color = manipulator.ModifyColor(pixels.at(GetPixelIndex(c + sprite.xPos , r + sprite.yPos , image.GetImageWidth())));
-//			if(color == Color::Black()){
-//				color.SetAlpha(0);
-//			}
-//
-//			DrawPixel(pixelDrawPosX, pixelDrawPosY, color, globalPosition);
-//		}
-//	}
-//}
 
 void Screen::ClearScreen()
 {

@@ -111,7 +111,7 @@ float Vec2D::Distance(const Vec2D& vec2) const{
 }
 
 float Vec2D::Dot(const Vec2D& vec2) const{
-	return mX * vec2.mX + mY * vec2.mY;
+	return mX*vec2.mX + mY*vec2.mY;
 }
 
 float Vec2D::AngleBetween(const Vec2D& vec2) const{

@@ -5,21 +5,27 @@
 #include "App.h"
 #include "Vec2D.h"
 #include "Animation.h"
+#include "Circle.h"
+
+class PursuitController;
 
 class Robot{
 public:
 	Robot();
-	Robot(const Vec2D& startPosition);
-	bool Init(const Vec2D& startPosition);
+	bool Init();
 
-	void Update();
+	void Restart();
+
+	void Update(const PursuitController& controller);
 	void Draw(Screen& screen);
 
 	inline Vec2D GetPosition() const {return mPosition;}
 	inline void SetStartPosition(const Vec2D& newPosition) {mPosition = newPosition;}
 
 private:
+	Vec2D mStartPosition;
 	Vec2D mPosition;
+
 	Animation mAnimation;
 	bool isRunning;
 
@@ -27,8 +33,11 @@ private:
 	std::vector<Vec2D> pathToFollow;
 
 	float mSpeed;
-	const float RUN_SPEED_MIN = 50.0f;
-	const float RUN_SPEED_MAX = 160.0f;
+	const float RUN_SPEED_MIN = 80.0f;
+	const float RUN_SPEED_MAX = 210.0f;
+
+	const float MAX_SPEED_DIST = 10.0f;
+	const float MIN_SPEED_DIST = 600.0f;
 
 	const float PATH_POINT_MIN_DIST = 10.0f;
 
@@ -38,8 +47,8 @@ private:
 
 	bool LoadRobotPath();
 	bool LoadRobotAnimation();
-	void UpdateSpeed();
-	void MoveTowardsNextPoint();
+	void UpdateSpeed(const float& distToPlayer);
+	void Move();
 };
 
 

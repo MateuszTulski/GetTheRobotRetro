@@ -28,7 +28,7 @@ public:
 	Size GetTextSize(const std::string& text) const;
 	Vec2D GetDrawPosition(const std::string& text, const AARectangle& rect, FontHorizontalAlign hAlign=FHA_Left, FontVerticalAlign vAlign=FVA_Top) const;
 
-	void DrawText(Screen& screen, const std::string& text, const Vec2D& position, const Color& color = Color::White(), bool flipHorizontal=false, bool globalPosition=true);
+	void DrawText(Screen& screen, const std::string& text, const Vec2D& position, const Color& color = Color::White(), bool flipHorizontal=false, bool globalPosition=false);
 
 	void SetFontHeight(const unsigned int& heightInPixels);
 

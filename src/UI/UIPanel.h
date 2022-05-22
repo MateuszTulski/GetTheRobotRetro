@@ -9,6 +9,7 @@
 #include "ColorManipulation.h"
 #include "UIStatusStripe.h"
 #include "UIDynamicText.h"
+#include "Button.h"
 
 class Screen;
 class BitmapFont;
@@ -24,6 +25,11 @@ public:
 	void AddDistanceStripe(const UIStatusStripe& stripe);
 	void AddTimeText(const UIDynamicText& text);
 	void AddScoreText(const UIDynamicText& text);
+	void AddRectangleFrame(const AARectangle& frame, const Color& color);
+	void AddButton(const Button& button);
+
+	void TriggerActiveButton();
+	void ChangeActiveButton(bool moveUp, bool changeBtnReleased);
 
 	inline void SetActive(bool active) { isActive = active; }
 
@@ -31,8 +37,12 @@ public:
 
 private:
 	bool isActive;
+	bool changeBtnReleased;
 
 	std::map<BMPImage, Vec2D> mStaticImages;
+	std::vector<std::pair<AARectangle, Color>> mUIFrames;
+	std::vector<Button> mButtons;
+
 	UIStatusStripe mPlayerHP, mDistance;
 	UIDynamicText timeText, scoreText;
 

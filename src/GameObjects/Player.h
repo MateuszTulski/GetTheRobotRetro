@@ -22,6 +22,8 @@ public:
 	void Draw(Screen& screen);
 	void MakeFlushWithEdge(const BoundaryEdge& edge, Vec2D& point, bool limitToEdge);
 
+	void Restart();
+
 	void RunInput(signed int direction, bool released = false);
 	void JumpTrigger(bool jumpPressed);
 
@@ -48,6 +50,7 @@ private:
 	bool secondJumpUsed = false;
 
 	float mSpeed;
+	Vec2D mStartPosition;
 	Vec2D mLastPosition;
 	int mDirection = 1;
 
@@ -58,8 +61,8 @@ private:
 	float resetSpeedDelay = 0.7f;
 
 	const float RUN_SPEED_MIN = 30.0f;
-	const float RUN_SPEED_MAX = 160.0f;
-	const float ACCELERATION = 4.0f;
+	const float RUN_SPEED_MAX = 120.0f;
+	const float ACCELERATION = 3.0f;
 
 	const float MASS = 65.0f;
 	const float WIDTH = 12;

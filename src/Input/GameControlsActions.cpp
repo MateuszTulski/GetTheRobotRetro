@@ -8,8 +8,7 @@ GameControlsActions::GameControlsActions(): mMouseMovedAction(nullptr){
 
 InputAction GameControlsActions::GetActionForKey(InputKey key){
 	for(const auto& buttonAction : mButtonActions){
-		if(key == buttonAction.key)
-		{
+		if(key == buttonAction.key){
 			return buttonAction.action;
 		}
 	}
