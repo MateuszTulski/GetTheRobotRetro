@@ -12,14 +12,22 @@
 #include "SpriteSheet.h"
 #include "Camera.h"
 #include "BitmapFont.h"
+#include "App.h"
 
-Screen::Screen() : mWidth(0), mHeight(0), moptrWindow(nullptr), mnoptrWindowSurface(nullptr), mRenderer(nullptr), mPixelFormat(nullptr), mTexture(nullptr), mFast(true)
-{
-
+Screen::Screen() :
+		mWidth(0),
+		mHeight(0),
+		moptrWindow(nullptr),
+		mnoptrWindowSurface(nullptr),
+		mRenderer(nullptr),
+		mPixelFormat(nullptr),
+		mTexture(nullptr),
+		mFast(true),
+		invertNextFrame(false),
+		invertedFrameNum(0){
 }
 
 Screen::~Screen(){
-
 	if(mPixelFormat){
 		SDL_FreeFormat(mPixelFormat);
 		mPixelFormat = nullptr;
@@ -41,12 +49,10 @@ Screen::~Screen(){
 	SDL_Quit();
 }
 
-SDL_Window* Screen::Init(uint32_t windowWidth, uint32_t windowHeight, uint32_t mag, bool fast)
-{
+SDL_Window* Screen::Init(uint32_t windowWidth, uint32_t windowHeight, uint32_t mag, bool fast){
 	mFast = fast;
 
-	if(SDL_Init(SDL_INIT_VIDEO))
-	{
+	if(SDL_Init(SDL_INIT_VIDEO)){
 		printf("SDL_Init failed: %s\n", SDL_GetError());
 		return nullptr;
 	}
@@ -57,83 +63,65 @@ SDL_Window* Screen::Init(uint32_t windowWidth, uint32_t windowHeight, uint32_t m
 	mHeight = windowHeight;
 
 	// Check that the window was successfully created
-	if (moptrWindow == nullptr)
-	{
+	if (moptrWindow == nullptr){
 		// In the case that the window could not be made...
 		std::cout << "Could not create window: %s\n: " << SDL_GetError() << std::endl;
 		return nullptr;
 	}
 
-	if(moptrWindow)
-	{
+	if(moptrWindow){
 		uint8_t rClear = 0;
 		uint8_t gClear = 0;
 		uint8_t bClear = 0;
 		uint8_t aClear = 255;
 
-		if(mFast)
-		{
+		if(mFast){
 			mRenderer = SDL_CreateRenderer(moptrWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-			if(mRenderer == nullptr)
-			{
+			if(mRenderer == nullptr){
 				std::cout << "Creating renderer faild!" << std::endl;
 			}
 
 			SDL_SetRenderDrawColor(mRenderer, rClear, gClear, bClear, aClear);
 		}
-		else
-		{
+		else{
 			mnoptrWindowSurface = SDL_GetWindowSurface(moptrWindow);
 		}
 
 		mPixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
 
-		if(mFast)
-		{
+		if(mFast){
 			mTexture = SDL_CreateTexture(mRenderer, mPixelFormat->format, SDL_TEXTUREACCESS_STREAMING, windowWidth, windowHeight);
 		}
 
 		Color::InitColorFormat(mPixelFormat);
-
 		mClearColor = Color(rClear, gClear, bClear, aClear);
-
 		mBackBuffer.Init(mPixelFormat->format, mWidth, mHeight);
-
 		mBackBuffer.Clear(mClearColor);
 
 	}
 	return moptrWindow;
 }
 
-void Screen::SwapScreens()
-{
+void Screen::SwapScreens(){
 	assert(moptrWindow);
-	if(moptrWindow)
-	{
+	if(moptrWindow){
 		// Clear front screen
 		ClearScreen();
 
-		if(mFast)
-		{
+		if(mFast){
 			uint8_t* textureData = nullptr;
 			int texturePitch = 0;
 
-			if(SDL_LockTexture(mTexture, nullptr, (void**)&textureData, &texturePitch) >= 0)
-			{
+			if(SDL_LockTexture(mTexture, nullptr, (void**)&textureData, &texturePitch) >= 0){
 				SDL_Surface* surface = mBackBuffer.GetSurface();
-
 				memcpy(textureData, surface->pixels, surface->w* surface->h * mPixelFormat->BytesPerPixel);
-
 				SDL_UnlockTexture(mTexture);
-
 				SDL_RenderCopy(mRenderer, mTexture, nullptr, nullptr);
-
 				SDL_RenderPresent(mRenderer);
 			}
 		}
-		else
-		{
+		else{
 			// Copy pixels from back buffer to front
 			SDL_BlitScaled(mBackBuffer.GetSurface(), nullptr, mnoptrWindowSurface, nullptr);
 			SDL_UpdateWindowSurface(moptrWindow);
@@ -144,23 +132,20 @@ void Screen::SwapScreens()
 	}
 }
 
-void Screen::SetSceneCamera(std::shared_ptr<Camera> camera)
-{
+void Screen::SetSceneCamera(std::shared_ptr<Camera> camera){
 	mCamera = camera;
 }
-void Screen::RemoveSceneCamera()
-{
+void Screen::RemoveSceneCamera(){
 	mCamera = nullptr;
 }
 
-AARectangle Screen::GetScreenRect() const
-{
+AARectangle Screen::GetScreenRect() const{
 	Vec2D topLeft(mCamera->GetCameraPosition());
 	Vec2D bottomRight(mCamera->GetCameraPosition().GetX()+mWidth, mCamera->GetCameraPosition().GetY()+mHeight);
 	return AARectangle(topLeft, bottomRight);
 
 }
-// Draw Shapes
+
 void Screen::DrawPixel(int x, int y, const Color& color, bool globalPosition){
 
 	Vec2D screenPoint(static_cast<float>(x), static_cast<float>(y));
@@ -174,17 +159,22 @@ void Screen::DrawPixel(int x, int y, const Color& color, bool globalPosition){
 		return;
 	}
 
+	Color col;
+	InvertColor() ? col=ModifyColorInvert(color) : col=color;
+
 	assert(moptrWindow);
 	if(moptrWindow){
-		mBackBuffer.SetPixel(color, screenPoint.GetX(), screenPoint.GetY());
+		mBackBuffer.SetPixel(col, screenPoint.GetX(), screenPoint.GetY());
 	}
 }
+
 void Screen::Draw(const Vec2D& vec, const Color& color, bool globalPosition){
 	assert(moptrWindow);
 	if(moptrWindow){
 		mBackBuffer.SetPixel(color, vec.GetX(), vec.GetY());
 	}
 }
+
 void Screen::Draw(const Line2D& line, const Color& color, bool globalPosition){
 	assert(moptrWindow);
 	if(moptrWindow){
@@ -240,6 +230,7 @@ void Screen::Draw(const Line2D& line, const Color& color, bool globalPosition){
 		}
 	}
 }
+
 void Screen::Draw(const Shape& shape, const Color& color, bool fillShape, const Color& fillColor, bool globalPosition){
 
 	if(fillShape){
@@ -258,6 +249,7 @@ void Screen::Draw(const Shape& shape, const Color& color, bool fillShape, const 
 		Draw(line, color, globalPosition);
 	}
 }
+
 void Screen::Draw(const Circle& circle, const Color& color, bool fillShape, const Color& fillColor, bool globalPosition){
 
 	unsigned const int numberOfSegments = 30;
@@ -372,8 +364,7 @@ void Screen::FillPoly(const std::vector<Vec2D>& points, const Color& color, bool
 
 }
 
-void Screen::ClearScreen()
-{
+void Screen::ClearScreen(){
 	if(mFast)
 	{
 		SDL_RenderClear(mRenderer);
@@ -395,4 +386,22 @@ Vec2D Screen::GetScreenPoint(const Vec2D globalPoint) const
 		return Vec2D(globalPoint.GetX(), globalPoint.GetY());
 	}
 
+}
+
+void Screen::InvertNextFrameColor(){
+	invertNextFrame = true;
+	invertedFrameNum = App::Singleton().GetTime().GetActualFrame() + 5;
+}
+
+bool Screen::InvertColor(){
+	if(invertNextFrame){
+		if(App::Singleton().GetTime().GetActualFrame() < invertedFrameNum){
+			return true;
+		}
+		else{
+			invertNextFrame = false;
+			return false;
+		}
+	}
+	return false;
 }

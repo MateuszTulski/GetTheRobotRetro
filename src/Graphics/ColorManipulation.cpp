@@ -16,5 +16,13 @@ Color ModifyColorMultiply(const Color& inColor, const Color& modifier){
 	return col;
 }
 
+Color ModifyColorInvert(const Color& inColor){
+	uint8_t red = 255.0 - inColor.GetRed();
+	uint8_t green = 255.0 - inColor.GetGreen();
+	uint8_t blue = 255.0 - inColor.GetBlue();
+
+	Color col(red, green, blue, inColor.GetAlpha());
+	return col;
+}
 
 

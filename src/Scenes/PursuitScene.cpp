@@ -30,6 +30,7 @@ void PursuitScene::Update(uint32_t deltaTime){
 		mRobot.Update(mPursuitController);
 		mCamera->Update(mPlayer);
 		mPursuitController.Update(mPlayer, mRobot);
+		mLevelLoader.Update();
 	}
 }
 

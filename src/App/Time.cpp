@@ -13,8 +13,7 @@ void Time::UpdateTime(UpdateAction executeFrame){
 
 	currentFrameDuration = currentTickTime - lastTickTime;
 
-	if(currentFrameDuration >= (1000.0f / frameRate))
-	{
+	if(currentFrameDuration >= (1000.0f / frameRate)){
 		executeFrame();
 		prevFrameDuration = currentFrameDuration;
 		lastTickTime = currentTickTime;

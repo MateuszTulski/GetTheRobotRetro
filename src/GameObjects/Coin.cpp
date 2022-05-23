@@ -4,13 +4,14 @@
 Coin::Coin() : Coin(Vec2D::Zero){
 }
 
-Coin::Coin(const Vec2D& position) :	Rigidbody(), isActive(true){
+Coin::Coin(const Vec2D& position) :
+		Rigidbody(), isActive(true){
 	InitRigidbody(AARectangle(Vec2D::Zero, SIZE), 0, false, true);
 	MoveTo(position);
 }
 
 Coin::Coin(const Coin& other) :
-		Rigidbody(other),
+		Rigidbody(),
 		isActive(other.isActive){
 	MoveTo(other.GetAARectangle().GetTopLeft());
 }

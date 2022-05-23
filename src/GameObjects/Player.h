@@ -54,12 +54,14 @@ private:
 	Vec2D mLastPosition;
 	int mDirection = 1;
 
-	int mHP = 10;
+	int mHP;
 	int mScores = 0;
+	bool invertScreenColor;
 
 	float resetSpeedTimer = 0.0f;
 	float resetSpeedDelay = 0.7f;
 
+	const int FULL_HP = 10;
 	const float RUN_SPEED_MIN = 30.0f;
 	const float RUN_SPEED_MAX = 120.0f;
 	const float ACCELERATION = 3.0f;

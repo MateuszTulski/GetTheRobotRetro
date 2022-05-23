@@ -3,22 +3,41 @@
 #include "Screen.h"
 #include "App.h"
 #include "Coin.h"
+#include "Obstacle.h"
 
 #include <cassert>
 
 
-Player::Player() : mState(PlayerState::idle), mJumpPressed(false), mSpeed(RUN_SPEED_MIN){
+Player::Player() :
+		mState(PlayerState::idle),
+		mJumpPressed(false),
+		mSpeed(RUN_SPEED_MIN),
+		mHP(FULL_HP),
+		invertScreenColor(false){
 	Rigidbody::InitRigidbody(PLAYER_RECT, MASS, true, true);
 }
 
-Player::Player(const Player& other) : mState(PlayerState::idle), mJumpPressed(other.mJumpPressed), mSpeed(other.mSpeed){
+Player::Player(const Player& other) :
+		mState(PlayerState::idle),
+		mJumpPressed(other.mJumpPressed),
+		mSpeed(other.mSpeed),
+		mHP(FULL_HP),
+		invertScreenColor(false){
 }
 
-Player::Player(Player&& other) : mState(std::move(other.mState)), mJumpPressed(std::move(other.mJumpPressed)), mSpeed(std::move(other.mSpeed)){
+Player::Player(Player&& other) :
+		mState(std::move(other.mState)),
+		mJumpPressed(std::move(other.mJumpPressed)),
+		mSpeed(std::move(other.mSpeed)),
+		mHP(FULL_HP),
+		invertScreenColor(false){
 }
 
 void Player::Init(const Vec2D& startPosition){
 	// Start position is BOTTOM MIDDLE
+	mScores = 0;
+	mHP = FULL_HP;
+	mDirection = 1;
 	mStartPosition = startPosition;
 	SetPosition(startPosition);
 	SetGravityScale(1.5f);
@@ -39,6 +58,10 @@ void Player::Update(uint32_t deltaTime){
 
 void Player::Draw(Screen& screen){
 	mAnimations.Draw(screen, mLastPosition, mDirection);
+	if(invertScreenColor){
+		invertScreenColor = false;
+		screen.InvertNextFrameColor();
+	}
 }
 
 void Player::MakeFlushWithEdge(const BoundaryEdge& edge, Vec2D& point, bool limitToEdge){
@@ -47,6 +70,7 @@ void Player::MakeFlushWithEdge(const BoundaryEdge& edge, Vec2D& point, bool limi
 
 void Player::Restart(){
 	mScores = 0;
+	mHP = FULL_HP;
 	mDirection = 1;
 	SetVerticalVelocity(0);
 	SetHorizontalVelocity(0);
@@ -89,8 +113,8 @@ Vec2D Player::GetPosition() const{
 }
 
 void Player::HitThePlayer(int damage){
-	// TODO
-	mState = PlayerState::hitted;
+	damage > mHP ? mHP=0 : mHP-=damage;
+	invertScreenColor = true;
 }
 
 void Player::FreezeThePlayer(bool freeze){
@@ -108,6 +132,15 @@ void Player::OnCollision(Rigidbody& outCollider){
 		if(coin != nullptr){
 			coin->SetActive(false);
 			mScores += coin->CollectCoin();
+		}
+	}
+	else if(outCollider.IsOnLayer("obstacle")){
+		Obstacle* obstacle = dynamic_cast<Obstacle*>(&outCollider);
+		if(obstacle != nullptr){
+			int damage = obstacle->GetDamage();
+			if(damage!=0){
+				HitThePlayer(damage);
+			}
 		}
 	}
 }

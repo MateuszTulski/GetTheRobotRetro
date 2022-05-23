@@ -21,7 +21,7 @@ bool LevelLoader::LoadGraphics(){
 }
 
 bool LevelLoader::LoadLevelObjects(){
-	return LoadPlatforms() && LoadCoins();
+	return LoadPlatforms() && LoadCoins() && LoadObstacles();
 }
 
 bool LevelLoader::LoadPlatforms(){
@@ -65,6 +65,33 @@ bool LevelLoader::LoadCoins(){
 	}
 }
 
+bool LevelLoader::LoadObstacles(){
+	LevelFilesReader obstaclesPoints;
+	std::string fileName("level");
+	if(obstaclesPoints.LoadFile(fileName, LOT_Points, 's')){
+		std::vector<Vec2D> points = obstaclesPoints.GetPoints();
+		mObstacles.reserve(points.size());
+		if(points.size() > 0){
+			for(auto p : points){
+				Vec2D position(Vec2D(p.GetX()*LEVEL_GRID_SIZE, (p.GetY() - 1)*LEVEL_GRID_SIZE));
+				mObstacles.emplace_back(position);
+				mObstacles.back().SetPhysicsLayer("obstacle");
+				mObstacles.back().LoadAnimation("storm");
+				mObstacles.back().SetAsTrigger(true);
+			}
+		}
+		return true;
+	}else{
+		return false;
+	}
+}
+
+void LevelLoader::Update(){
+	for(auto& o : mObstacles){
+		o.Update();
+	}
+}
+
 void LevelLoader::DrawObjects(Screen& screen){
 	float rightScreenSide = screen.GetScreenRect().GetBottomRight().GetX();
 	float leftScreenSide = screen.GetScreenRect().GetTopLeft().GetX();
@@ -96,6 +123,8 @@ void LevelLoader::DrawCoins(Screen& screen, float rightScreenSide, float leftScr
 }
 
 void LevelLoader::DrawObstacles(Screen& screen, float rightScreenSide, float leftScreenSide){
-
+	for(auto& o : mObstacles){
+		o.Draw(screen);
+	}
 }
 

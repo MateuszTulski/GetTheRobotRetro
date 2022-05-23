@@ -7,6 +7,7 @@
 #include "Line2D.h"
 #include "Platform.h"
 #include "Coin.h"
+#include "Obstacle.h"
 
 class LevelLoader {
 
@@ -14,6 +15,7 @@ public:
 	bool LoadGraphics();
 	bool LoadLevelObjects();
 
+	void Update();
 	void DrawObjects(Screen& screen);
 
 	void Restart();
@@ -27,9 +29,11 @@ private:
 
 	std::vector<Platform> mPlatforms;
 	std::vector<Coin> mCoins;
+	std::vector<Obstacle> mObstacles;
 
 	bool LoadPlatforms();
 	bool LoadCoins();
+	bool LoadObstacles();
 
 	void DrawPlatforms(Screen& screen, float rightScreenSide, float leftScreenSide);
 	void DrawCoins(Screen& screen, float rightScreenSide, float leftScreenSide);

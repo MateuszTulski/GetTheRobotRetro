@@ -56,6 +56,8 @@ public:
 
 	Vec2D GetScreenPoint(const Vec2D globalPoint) const;
 
+	void InvertNextFrameColor();
+
 private:
 
 	uint32_t mWidth, mHeight;
@@ -73,6 +75,10 @@ private:
 	SDL_Texture* mTexture;
 	bool mFast;
 
+	bool invertNextFrame;
+	unsigned int invertedFrameNum;
+
+	bool InvertColor();
 	void ClearScreen();
 };
 
