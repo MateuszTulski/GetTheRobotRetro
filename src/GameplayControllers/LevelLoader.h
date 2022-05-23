@@ -8,6 +8,7 @@
 #include "Platform.h"
 #include "Coin.h"
 #include "Obstacle.h"
+#include "Background.h"
 
 class LevelLoader {
 
@@ -38,6 +39,7 @@ private:
 	void DrawPlatforms(Screen& screen, float rightScreenSide, float leftScreenSide);
 	void DrawCoins(Screen& screen, float rightScreenSide, float leftScreenSide);
 	void DrawObstacles(Screen& screen, float rightScreenSide, float leftScreenSide);
+
 };
 
 

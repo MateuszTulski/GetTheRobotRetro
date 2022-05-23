@@ -14,6 +14,7 @@ PursuitScene::PursuitScene() :
 
 void PursuitScene::Init(){
 	SetGameControls();
+	LoadBackground();
 	LoadLevel();
 	LoadPlayer();
 	LoadRobot();
@@ -26,6 +27,7 @@ void PursuitScene::Init(){
 void PursuitScene::Update(uint32_t deltaTime){
 	PhysicsWorld::Singleton().Update(deltaTime);
 	if(mGameState == GameState::pursuit){
+		mBackground.Update(*mCamera);
 		mPlayer.Update(deltaTime);
 		mRobot.Update(mPursuitController);
 		mCamera->Update(mPlayer);
@@ -35,6 +37,7 @@ void PursuitScene::Update(uint32_t deltaTime){
 }
 
 void PursuitScene::Draw(Screen& screen){
+	mBackground.Draw(screen);
 	mLevelLoader.DrawObjects(screen);
 	mPursuitController.DrawUI(screen);
 	mRobot.Draw(screen);
@@ -132,6 +135,10 @@ void PursuitScene::LoadPlayer(){
 
 void PursuitScene::LoadRobot(){
 	mRobot.Init();
+}
+
+void PursuitScene::LoadBackground(){
+	mBackground.InitBackground(App::Singleton().GetBasePath() + "Assets/background.bmp");
 }
 
 void PursuitScene::SetCamera(){

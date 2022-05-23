@@ -15,25 +15,23 @@ BMPImage::BMPImage(): mWidth(0),
 					flipVertical(false),
 					globalPosition(false),
 					screenPosition(Vec2D::Zero),
+					blackColorToAlpha(true),
 					pivotNormalized(Vec2D::Zero),
 					rotation(0){
 }
 
 bool BMPImage::LoadImage(const std::string& path){
-
 	SDL_Surface *tempSurface = SDL_LoadBMP(path.c_str());
 	SDL_Surface *bmpSurface;
 	Uint32 rmask, gmask, bmask, amask;
 
-	if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
-	{
+	if(SDL_BYTEORDER == SDL_BIG_ENDIAN){
 		rmask = 0xff000000;
 		gmask = 0x00ff0000;
 		bmask = 0x0000ff00;
 		amask = 0x000000ff;
-
-	}else{
-
+	}
+	else{
 		rmask = 0xff000000;
 		gmask = 0x00ff0000;
 		bmask = 0x0000ff00;
@@ -41,8 +39,7 @@ bool BMPImage::LoadImage(const std::string& path){
 	}
 
 
-	if(tempSurface == nullptr)
-	{
+	if(tempSurface == nullptr){
 		std::cout << "Couldn't open BMP file!" << std::endl;
 		return false;
 	}
@@ -143,6 +140,10 @@ void BMPImage::PinInamgeToScreen(const Vec2D& position){
 	globalPosition = true;
 }
 
+const Color& BMPImage::GetPixelColor(uint32_t col, uint32_t row) const{
+	return mPixels.at(GetPixelIndex(col, row, mWidth));
+}
+
 void BMPImage::ScaleImage(float xScale, float yScale, bool relative){
 
 	uint32_t newWidth, newHeight;
@@ -199,10 +200,9 @@ void BMPImage::FlipImageHorizontal(){
 }
 
 void BMPImage::SetHeight(const float& height, bool autoWidth){
-
-
-
+	// TODO
 }
+
 void BMPImage::SetWidth(const float& width, bool autoHeight){
 	// TODO
 }
@@ -226,7 +226,7 @@ void BMPImage::DrawImagePixels(Screen& screen, const Vec2D& position, const Spri
 
 			Color color = overlay(mPixels.at(GetPixelIndex(c + sprite.xPos , r + sprite.yPos , mWidth)));
 
-			if(color == Color::Black()){
+			if(blackColorToAlpha && IsPixelBlack(color)){
 				color.SetAlpha(0);
 			}
 
@@ -255,7 +255,18 @@ Vec2D BMPImage::GetRotatedPointPosition(const Vec2D& rotationPoint, const Vec2D&
 	return newPosition;
 }
 
+bool BMPImage::IsPixelBlack(const Color& inColor) const{
+	uint8_t r = inColor.GetRed();
+	uint8_t g = inColor.GetGreen();
+	uint8_t b = inColor.GetBlue();
 
+	if((r+g+b)<18){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
 
 
 

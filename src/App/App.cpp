@@ -11,8 +11,7 @@ App& App::Singleton(){
 	static App theApp;
 	return theApp;
 }
-bool App::Init(uint32_t width, uint32_t height, uint32_t mag)
-{
+bool App::Init(uint32_t width, uint32_t height, uint32_t mag){
 	if(!mFont.LoadFont("HemiFont")){
 		return false;
 	}

@@ -41,11 +41,14 @@ private:
 	SpriteSheet platformSpriteTemp;
 	Platform mPlatform;
 
+	Background mBackground;
+
 	void SetGameControls();
 
 	void LoadLevel();
 	void LoadPlayer();
 	void LoadRobot();
+	void LoadBackground();
 	void SetCamera();
 	void InitUI();
 	void InitGameOverPanel();

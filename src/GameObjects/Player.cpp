@@ -220,8 +220,7 @@ void Player::ResetSpeedWhenNotMoving(){
 	if(GetPosition() == mLastPosition){
 		resetSpeedTimer += App::Singleton().GetTime().DeltaTime();
 
-		if(resetSpeedTimer > resetSpeedDelay && mSpeed != RUN_SPEED_MIN)
-		{
+		if(resetSpeedTimer > resetSpeedDelay && mSpeed != RUN_SPEED_MIN){
 			mSpeed = RUN_SPEED_MIN;
 			resetSpeedTimer = 0;
 		}

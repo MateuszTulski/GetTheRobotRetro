@@ -375,17 +375,25 @@ void Screen::ClearScreen(){
 	}
 }
 
-Vec2D Screen::GetScreenPoint(const Vec2D globalPoint) const
-{
-	if(mCamera!=nullptr)
-	{
+Vec2D Screen::GetScreenPoint(const Vec2D& globalPoint) const{
+	if(mCamera!=nullptr){
 		return Vec2D(globalPoint.GetX() - mCamera->GetCameraPosition().GetX(), globalPoint.GetY() - mCamera->GetCameraPosition().GetY());
 	}
-	else
-	{
+	else{
 		return Vec2D(globalPoint.GetX(), globalPoint.GetY());
 	}
+}
 
+Vec2D Screen::GetGlobalPoint(const Vec2D& screenPoint) const{
+	float screenX, screenY;
+
+	screenPoint.GetX() > mWidth ? screenX=mWidth : screenX=screenPoint.GetX();
+	screenPoint.GetX() < 0 ? screenX=0 : screenX=screenPoint.GetX();
+	screenPoint.GetY() > mHeight ? screenY=mHeight : screenY=screenPoint.GetY();
+	screenPoint.GetY() < 0 ? screenY=0 : screenY=screenPoint.GetY();
+
+	Vec2D globalPoint = Vec2D(mCamera->GetCameraPosition().GetX()+screenX, mCamera->GetCameraPosition().GetY()+screenY);
+	return globalPoint;
 }
 
 void Screen::InvertNextFrameColor(){

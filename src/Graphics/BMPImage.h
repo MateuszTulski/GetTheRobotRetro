@@ -37,6 +37,8 @@ public:
 	inline uint32_t GetOriginalImageWidth() const { return originalWidth; }
 	inline uint32_t GetOriginalImageHeight() const { return originalHeight; }
 
+	const Color& GetPixelColor(uint32_t col, uint32_t row) const;
+
 	void PinInamgeToScreen(const Vec2D& position);
 
 	void ScaleImage(float xScale, float yScale, bool relative=true);
@@ -63,11 +65,15 @@ private:
 	bool globalPosition;
 	Vec2D screenPosition;
 
+	bool blackColorToAlpha;
+
 	Vec2D pivotNormalized;	// 0,0 is TopLeftCorner --- 1,1 is BottomRightCorner
 	float rotation;
 
 	Vec2D GetPivotPoint(const Vec2D& topLeft, float widht, float height) const;
 	Vec2D GetRotatedPointPosition(const Vec2D& imageTopLeftPosition, const Vec2D& pixelPosition) const;
+
+	bool IsPixelBlack(const Color& inColor) const;
 };
 
 

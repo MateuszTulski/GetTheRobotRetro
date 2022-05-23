@@ -54,7 +54,8 @@ public:
 
 	void FillPoly(const std::vector<Vec2D>& points, const Color& color, bool globalPosition);
 
-	Vec2D GetScreenPoint(const Vec2D globalPoint) const;
+	Vec2D GetScreenPoint(const Vec2D& globalPoint) const;
+	Vec2D GetGlobalPoint(const Vec2D& screenPoint) const;
 
 	void InvertNextFrameColor();
 
