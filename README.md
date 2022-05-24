@@ -11,3 +11,5 @@ Coins: The player can collect coins, but in this simple demo this doesn't really
 
 **Dependencies**
 To compile you need SDL2 - https://www.libsdl.org
+
+You can read more about this project on my portfolio website: https:://matuesztulski.eu
