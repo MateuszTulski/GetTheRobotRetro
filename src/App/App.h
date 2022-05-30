@@ -17,6 +17,10 @@ struct SDL_Window;
 class App{
 public:
 	static App& Singleton();
+
+	App(const App&) = delete;
+	void operator=(const App&) = delete;
+
 	bool Init(uint32_t width, uint32_t height, uint32_t mag);
 	void Run();
 
@@ -38,6 +42,7 @@ public:
 	void SetSceneCamera(const Vec2D& position, std::shared_ptr<Camera>& cameraPtr);
 
 private:
+	App();
 	Time time;
 	BitmapFont mFont;
 	Screen mScreen;

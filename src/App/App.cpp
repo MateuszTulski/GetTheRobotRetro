@@ -7,6 +7,10 @@
 #include <cassert>
 #include <iostream>
 
+App::App() :
+		mnoptrWindow(nullptr){
+}
+
 App& App::Singleton(){
 	static App theApp;
 	return theApp;
